@@ -14,17 +14,18 @@ work dir. The following config file formats are supported:
 * [HCL](https://github.com/hashicorp/hcl) (`sshproxy.hcl`)
 * [Java .properties](https://en.wikipedia.org/wiki/.properties) (`sshproxy.properties`)
 
-There are a total of 6 configuration options. With the exception of `dir`
+There are a total of 7 configuration options. With the exception of `dir`
 they can all be set via commandline, environment or config file.
 
-| Name     | Commandline      | Environment        | Config    |
-|----------|------------------|--------------------|-----------|
-| API Host | `--apihost` `-H` | `RESIN_API_HOST`   | `apihost` |
-| API Port | `--apiport` `-P` | `RESIN_API_PORT`   | `apiport` |
-| API Key  | `--apikey` `-K`  | `SSHPROXY_API_KEY` | `apikey`  |
-| Dir      | `--dir` `-d`     | `SSHPROXY_DIR`     |           |
-| Port     | `--port` `-p`    | `SSHPROXY_PORT`    | `port`    |
-| Shell    | `--shell` `-s`   | `SSHPROXY_SHELL`   | `shell`   |
+| Name          | Commandline      | Environment        | Config    |
+|---------------|------------------|--------------------|-----------|
+| API Host      | `--apihost` `-H` | `RESIN_API_HOST`   | `apihost` |
+| API Port      | `--apiport` `-P` | `RESIN_API_PORT`   | `apiport` |
+| API Key       | `--apikey` `-K`  | `SSHPROXY_API_KEY` | `apikey`  |
+| Dir           | `--dir` `-d`     | `SSHPROXY_DIR`     |           |
+| Port          | `--port` `-p`    | `SSHPROXY_PORT`    | `port`    |
+| Shell         | `--shell` `-s`   | `SSHPROXY_SHELL`   | `shell`   |
+| Unauth Banner | `--unauth` `-u`  | `SSHPROXY_UNAUTH`  | `unauth`  |
 
 ```
 Usage of sshproxy:
@@ -34,7 +35,13 @@ Usage of sshproxy:
   -d, --dir string       Work dir, holds ssh keys and sshproxy config (default "/etc/sshproxy")
   -p, --port int         Port the ssh service will listen on (default 22)
   -s, --shell string     Path to shell to execute post-authentication (default "shell.sh")
+  -u, --unauth string    Path to template displayed after failed authentication
 ```
+
+## Unauth Template
+
+The 'unauth template' is a template rendered and displayed to the user after failed authentication. It should be a
+[Go template](https://golang.org/pkg/text/template/) has two available properties; `.user` and `.fingerprints`.
 
 ## Example Usage
 
