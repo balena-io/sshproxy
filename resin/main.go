@@ -21,13 +21,17 @@ limitations under the License.
 package main
 
 import (
+	"bytes"
+	"crypto/md5"
 	"crypto/subtle"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path"
 	"strings"
+	"text/template"
 
 	"github.com/resin-io/pinejs-client-go"
 	"github.com/resin-io/sshproxy"
@@ -36,44 +40,106 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-func authHandler(baseURL, apiKey string) func(ssh.ConnMetadata, ssh.PublicKey) (*ssh.Permissions, error) {
-	url := fmt.Sprintf("%s/%s", baseURL, "ewa")
-	client := pinejs.NewClient(url, apiKey)
+type authHandler struct {
+	baseURL, apiKey  string
+	template         string
+	rejectedSessions map[string]int
+}
 
-	handler := func(meta ssh.ConnMetadata, key ssh.PublicKey) (*ssh.Permissions, error) {
-		users := make([]map[string]interface{}, 1)
-		users[0] = make(map[string]interface{})
-		users[0]["pinejs"] = "user__has__public_key"
+func newAuthHandler(baseURL, apiKey string) authHandler {
+	return authHandler{
+		baseURL:          baseURL,
+		apiKey:           apiKey,
+		template:         "",
+		rejectedSessions: map[string]int{},
+	}
+}
 
-		filter := pinejs.QueryOption{
-			Type: pinejs.Filter,
-			Content: []string{fmt.Sprintf("user/any(u:((tolower(u/username)) eq ('%s')))",
-				strings.ToLower(meta.User()))},
-			Raw: true}
-		fields := pinejs.QueryOption{
-			Type:    pinejs.Select,
-			Content: []string{"user", "public_key"},
+func (a *authHandler) getUserKeys(username string) ([]ssh.PublicKey, error) {
+	url := fmt.Sprintf("%s/%s", a.baseURL, "v1")
+	client := pinejs.NewClient(url, a.apiKey)
+
+	users := make([]map[string]interface{}, 1)
+	users[0] = make(map[string]interface{})
+	users[0]["pinejs"] = "user__has__public_key"
+
+	filter := pinejs.QueryOption{
+		Type: pinejs.Filter,
+		Content: []string{fmt.Sprintf("user/any(u:((tolower(u/username)) eq ('%s')))",
+			strings.ToLower(username))},
+		Raw: true}
+	fields := pinejs.QueryOption{
+		Type:    pinejs.Select,
+		Content: []string{"user", "public_key"},
+	}
+	if err := client.List(&users, filter, fields); err != nil {
+		return nil, err
+	} else if len(users) == 0 {
+		return nil, errors.New("Invalid User")
+	}
+
+	keys := make([]ssh.PublicKey, 0)
+	for _, user := range users {
+		if key, _, _, _, err := ssh.ParseAuthorizedKey([]byte(user["public_key"].(string))); err == nil {
+			keys = append(keys, key)
 		}
-		if err := client.List(&users, filter, fields); err != nil {
-			return nil, err
-		} else if len(users) == 0 {
-			return nil, errors.New("Unauthorised")
-		}
+	}
 
-		for _, user := range users {
-			k, _, _, _, err := ssh.ParseAuthorizedKey([]byte(user["public_key"].(string)))
-			if err != nil {
-				return nil, err
-			}
-			if subtle.ConstantTimeCompare(k.Marshal(), key.Marshal()) == 1 {
-				return nil, nil
-			}
-		}
+	return keys, nil
+}
 
+func (a *authHandler) publicKeyCallback(meta ssh.ConnMetadata, key ssh.PublicKey) (*ssh.Permissions, error) {
+	keys, err := a.getUserKeys(meta.User())
+	if err != nil {
 		return nil, errors.New("Unauthorised")
 	}
 
-	return handler
+	for _, k := range keys {
+		if subtle.ConstantTimeCompare(k.Marshal(), key.Marshal()) == 1 {
+			return nil, nil
+		}
+	}
+
+	return nil, errors.New("Unauthorised")
+}
+
+func (a *authHandler) keyboardInteractiveCallback(meta ssh.ConnMetadata, client ssh.KeyboardInteractiveChallenge) (*ssh.Permissions, error) {
+	// check if this session has already been rejected, only send the banner once
+	sessionKey := string(meta.SessionID())
+	if _, ok := a.rejectedSessions[sessionKey]; ok {
+		// this operates on the assumption that `keyboard-interactive` will be attempted three times
+		// and then cleans up the state
+		a.rejectedSessions[sessionKey]++
+		if a.rejectedSessions[sessionKey] == 3 {
+			delete(a.rejectedSessions, sessionKey)
+		}
+		return nil, errors.New("Unauthorised")
+	} else {
+		a.rejectedSessions[sessionKey] = 1
+	}
+
+	// fetch user's keys...
+	keys, err := a.getUserKeys(meta.User())
+	if err != nil {
+		return nil, errors.New("Unauthorised")
+	}
+	// ...and generate their fingerprints
+	fingerprints := make([]string, 0)
+	for _, key := range keys {
+		hash := md5.New()
+		hash.Write(key.Marshal())
+		fingerprint := fmt.Sprintf("%x", hash.Sum(nil))
+		fingerprints = append(fingerprints, fingerprint)
+	}
+
+	tmpl := template.Must(template.New("auth_failed_template").Parse(a.template))
+	msg := bytes.NewBuffer(nil)
+	// pass `user` and `fingerprints` vars to template and render
+	tmpl.Execute(msg, map[string]interface{}{"user": meta.User(), "fingerprints": fingerprints})
+
+	// send the rendered template as an auth challenge with no questions
+	client(meta.User(), msg.String(), nil, nil)
+	return nil, errors.New("Unauthorised")
 }
 
 func init() {
@@ -83,6 +149,7 @@ func init() {
 	pflag.CommandLine.StringP("dir", "d", "/etc/sshproxy", "Work dir, holds ssh keys and sshproxy config")
 	pflag.CommandLine.IntP("port", "p", 22, "Port the ssh service will listen on")
 	pflag.CommandLine.StringP("shell", "s", "shell.sh", "Path to shell to execute post-authentication")
+	pflag.CommandLine.StringP("unauth", "u", "", "Path to template displayed after failed authentication")
 
 	viper.BindPFlags(pflag.CommandLine)
 	viper.SetConfigName("sshproxy")
@@ -93,6 +160,7 @@ func init() {
 	viper.BindEnv("dir")
 	viper.BindEnv("port")
 	viper.BindEnv("shell")
+	viper.BindEnv("unauth")
 }
 
 func main() {
@@ -115,16 +183,33 @@ func main() {
 		os.Exit(2)
 	}
 
-	// if shell is relative, prepend with dir
-	if viper.Get("shell").(string)[0] != '/' {
-		viper.Set("shell", path.Join(viper.GetString("dir"), viper.GetString("shell")))
+	// if paths are relative, prepend with dir and verify files exist
+	fix_path_check_exists := func(key string) {
+		if viper.GetString(key)[0] != '/' {
+			viper.Set(key, path.Join(viper.GetString("dir"), viper.GetString(key)))
+		}
+		if _, err := os.Stat(viper.GetString(key)); err != nil {
+			fmt.Fprintf(os.Stderr, "%s: No such file or directory\n", viper.Get(key))
+			os.Exit(2)
+		}
 	}
-	if _, err := os.Stat(viper.GetString("shell")); err != nil {
-		fmt.Fprintf(os.Stderr, "%s: No such file or directory\n", viper.Get("shell"))
-		os.Exit(2)
+	fix_path_check_exists("shell")
+	if viper.IsSet("unauth") {
+		fix_path_check_exists("unauth")
 	}
 
 	apiURL := fmt.Sprintf("https://%s:%d", viper.GetString("apihost"), viper.GetInt("apiport"))
-	sshConfig := &ssh.ServerConfig{PublicKeyCallback: authHandler(apiURL, viper.GetString("apikey"))}
+	auth := newAuthHandler(apiURL, viper.GetString("apikey"))
+	sshConfig := &ssh.ServerConfig{PublicKeyCallback: auth.publicKeyCallback}
+	if viper.IsSet("unauth") {
+		tmpl, err := ioutil.ReadFile(viper.GetString("unauth"))
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s", err)
+			os.Exit(2)
+		}
+		auth.template = string(tmpl)
+		sshConfig.KeyboardInteractiveCallback = auth.keyboardInteractiveCallback
+	}
+
 	sshproxy.New(viper.GetString("dir"), viper.GetString("shell"), sshConfig).Listen(viper.GetString("port"))
 }
