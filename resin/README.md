@@ -17,27 +17,27 @@ work dir. The following config file formats are supported:
 There are a total of 8 configuration options. With the exception of `dir`
 they can all be set via commandline, environment or config file.
 
-| Name           | Commandline             | Environment                | Config            |
-|----------------|-------------------------|----------------------------|-------------------|
-| API Host       | `--apihost` `-H`        | `RESIN_API_HOST`           | `apihost`         |
-| API Port       | `--apiport` `-P`        | `RESIN_API_PORT`           | `apiport`         |
-| API Key        | `--apikey` `-K`         | `SSHPROXY_API_KEY`         | `apikey`          |
-| Dir            | `--dir` `-d`            | `SSHPROXY_DIR`             |                   |
-| Port           | `--port` `-p`           | `SSHPROXY_PORT`            | `port`            |
-| Shell          | `--shell` `-s`          | `SSHPROXY_SHELL`           | `shell`           |
-| Unauth Banner  | `--unauth` `-u`         | `SSHPROXY_UNAUTH`          | `unauth`          |
-| Max Auth Tries | `--max-auth-tries` `-m` | `SSHPROXY_MAX_AUTH_TRIES`  | `max-auth-tries`  |
+| Name               | Commandline                 | Environment                   | Config               |
+|--------------------|-----------------------------|-------------------------------|----------------------|
+| API Host           | `--apihost` `-H`            | `RESIN_API_HOST`              | `apihost`            |
+| API Port           | `--apiport` `-P`            | `RESIN_API_PORT`              | `apiport`            |
+| API Key            | `--apikey` `-K`             | `SSHPROXY_API_KEY`            | `apikey`             |
+| Dir                | `--dir` `-d`                | `SSHPROXY_DIR`                |                      |
+| Port               | `--port` `-p`               | `SSHPROXY_PORT`               | `port`               |
+| Shell              | `--shell` `-s`              | `SSHPROXY_SHELL`              | `shell`              |
+| Auth Failed Banner | `--auth-failed-banner` `-b` | `SSHPROXY_AUTH_FAILED_BANNER` | `auth-failed-banner` |
+| Max Auth Tries     | `--max-auth-tries` `-m`     | `SSHPROXY_MAX_AUTH_TRIES`     | `max-auth-tries`     |
 
 ```
 Usage of sshproxy:
-  -H, --apihost string       Resin API Host (default "api.resin.io")
-  -K, --apikey string        Resin API Key (required)
-  -P, --apiport string       Resin API Port (default "443")
-  -d, --dir string           Work dir, holds ssh keys and sshproxy config (default "/etc/sshproxy")
-  -p, --port int             Port the ssh service will listen on (default 22)
-  -s, --shell string         Path to shell to execute post-authentication (default "shell.sh")
-  -u, --unauth string        Path to template displayed after failed authentication
-  -m, --max-auth-tries int   Maximum number of authentication attempts per connection (default 0; unlimited)
+  -H, --apihost string              Resin API Host (default "api.resin.io")
+  -K, --apikey string               Resin API Key (required)
+  -P, --apiport string              Resin API Port (default "443")
+  -b, --auth-failed-banner string   Path to template displayed after failed authentication
+  -d, --dir string                  Work dir, holds ssh keys and sshproxy config (default "/etc/sshproxy")
+  -m, --max-auth-tries int          Maximum number of authentication attempts per connection (default 0; unlimited)
+  -p, --port int                    Port the ssh service will listen on (default 22)
+  -s, --shell string                Path to shell to execute post-authentication (default "shell.sh")
 ```
 
 ## Unauth Template

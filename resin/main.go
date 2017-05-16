@@ -149,7 +149,7 @@ func init() {
 	pflag.CommandLine.StringP("dir", "d", "/etc/sshproxy", "Work dir, holds ssh keys and sshproxy config")
 	pflag.CommandLine.IntP("port", "p", 22, "Port the ssh service will listen on")
 	pflag.CommandLine.StringP("shell", "s", "shell.sh", "Path to shell to execute post-authentication")
-	pflag.CommandLine.StringP("unauth", "u", "", "Path to template displayed after failed authentication")
+	pflag.CommandLine.StringP("auth-failed-banner", "b", "", "Path to template displayed after failed authentication")
 	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
 
 	viper.BindPFlags(pflag.CommandLine)
@@ -161,7 +161,7 @@ func init() {
 	viper.BindEnv("dir")
 	viper.BindEnv("port")
 	viper.BindEnv("shell")
-	viper.BindEnv("unauth")
+	viper.BindEnv("auth-failed-banner", "SSHPROXY_AUTH_FAILED_BANNER")
 	viper.BindEnv("max-auth-tries", "SSHPROXY_MAX_AUTH_TRIES")
 }
 
@@ -196,8 +196,8 @@ func main() {
 		}
 	}
 	fix_path_check_exists("shell")
-	if viper.IsSet("unauth") {
-		fix_path_check_exists("unauth")
+	if viper.IsSet("auth-failed-banner") {
+		fix_path_check_exists("auth-failed-banner")
 	}
 
 	apiURL := fmt.Sprintf("https://%s:%d", viper.GetString("apihost"), viper.GetInt("apiport"))
@@ -206,8 +206,8 @@ func main() {
 		PublicKeyCallback: auth.publicKeyCallback,
 		MaxAuthTries:      viper.GetInt("max-auth-tries"),
 	}
-	if viper.IsSet("unauth") {
-		tmpl, err := ioutil.ReadFile(viper.GetString("unauth"))
+	if viper.IsSet("auth-failed-banner") {
+		tmpl, err := ioutil.ReadFile(viper.GetString("auth-failed-banner"))
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s", err)
 			os.Exit(2)
