@@ -150,6 +150,7 @@ func init() {
 	pflag.CommandLine.IntP("port", "p", 22, "Port the ssh service will listen on")
 	pflag.CommandLine.StringP("shell", "s", "shell.sh", "Path to shell to execute post-authentication")
 	pflag.CommandLine.StringP("unauth", "u", "", "Path to template displayed after failed authentication")
+	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
 
 	viper.BindPFlags(pflag.CommandLine)
 	viper.SetConfigName("sshproxy")
@@ -161,6 +162,7 @@ func init() {
 	viper.BindEnv("port")
 	viper.BindEnv("shell")
 	viper.BindEnv("unauth")
+	viper.BindEnv("max-auth-tries", "SSHPROXY_MAX_AUTH_TRIES")
 }
 
 func main() {
@@ -200,7 +202,10 @@ func main() {
 
 	apiURL := fmt.Sprintf("https://%s:%d", viper.GetString("apihost"), viper.GetInt("apiport"))
 	auth := newAuthHandler(apiURL, viper.GetString("apikey"))
-	sshConfig := &ssh.ServerConfig{PublicKeyCallback: auth.publicKeyCallback}
+	sshConfig := &ssh.ServerConfig{
+		PublicKeyCallback: auth.publicKeyCallback,
+		MaxAuthTries:      viper.GetInt("max-auth-tries"),
+	}
 	if viper.IsSet("unauth") {
 		tmpl, err := ioutil.ReadFile(viper.GetString("unauth"))
 		if err != nil {
