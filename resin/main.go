@@ -173,7 +173,7 @@ func main() {
 	viper.ReadInConfig()
 
 	// API Key is required
-	if !viper.IsSet("apikey") || viper.GetString("apikey") == "" {
+	if viper.GetString("apikey") == "" {
 		fmt.Fprintln(os.Stderr, "Error: Resin API Key is required.")
 		pflag.Usage()
 		os.Exit(2)
@@ -196,7 +196,7 @@ func main() {
 		}
 	}
 	fix_path_check_exists("shell")
-	if viper.IsSet("auth-failed-banner") {
+	if viper.GetString("auth-failed-banner") != "" {
 		fix_path_check_exists("auth-failed-banner")
 	}
 
@@ -206,7 +206,7 @@ func main() {
 		PublicKeyCallback: auth.publicKeyCallback,
 		MaxAuthTries:      viper.GetInt("max-auth-tries"),
 	}
-	if viper.IsSet("auth-failed-banner") {
+	if viper.GetString("auth-failed-banner") != "" {
 		tmpl, err := ioutil.ReadFile(viper.GetString("auth-failed-banner"))
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s", err)
