@@ -43,8 +43,8 @@ type Server struct {
 
 // New takes a directory to generate/store server keys, a path to the shell
 // and an ssh.ServerConfig. If no ServerConfig is provided, then
-// ServerConfig.NoClientAuth is set to true. ed25519 and rsa server keys
-// and loaded, and generated if they do not exist. Returns a new Server.
+// ServerConfig.NoClientAuth is set to true. ed25519, rsa, ecdsa and dsa
+// keys are loaded, and generated if they do not exist. Returns a new Server.
 func New(keyDir, shell string, sshConfig *ssh.ServerConfig) *Server {
 	s := &Server{
 		keyDir: keyDir,
@@ -56,7 +56,7 @@ func New(keyDir, shell string, sshConfig *ssh.ServerConfig) *Server {
 			NoClientAuth: true,
 		}
 	}
-	for _, keyType := range []string{"ed25519", "rsa"} {
+	for _, keyType := range []string{"ed25519", "rsa", "ecdsa", "dsa"} {
 		s.addHostKey(keyType)
 	}
 
