@@ -114,9 +114,8 @@ func (a *authHandler) keyboardInteractiveCallback(meta ssh.ConnMetadata, client 
 			delete(a.rejectedSessions, sessionKey)
 		}
 		return nil, errors.New("Unauthorised")
-	} else {
-		a.rejectedSessions[sessionKey] = 1
 	}
+	a.rejectedSessions[sessionKey] = 1
 
 	// fetch user's keys...
 	keys, err := a.getUserKeys(meta.User())
@@ -188,7 +187,7 @@ func main() {
 	}
 
 	// if paths are relative, prepend with dir and verify files exist
-	fix_path_check_exists := func(key string) {
+	fixPathCheckExists := func(key string) {
 		if viper.GetString(key)[0] != '/' {
 			viper.Set(key, path.Join(viper.GetString("dir"), viper.GetString(key)))
 		}
@@ -197,9 +196,9 @@ func main() {
 			os.Exit(2)
 		}
 	}
-	fix_path_check_exists("shell")
+	fixPathCheckExists("shell")
 	if viper.GetString("auth-failed-banner") != "" {
-		fix_path_check_exists("auth-failed-banner")
+		fixPathCheckExists("auth-failed-banner")
 	}
 
 	apiURL := fmt.Sprintf("https://%s:%d", viper.GetString("apihost"), viper.GetInt("apiport"))

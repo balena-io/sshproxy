@@ -166,8 +166,8 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 				// append client env to the command environment
 				keyLen := req.Payload[3]
 				valLen := req.Payload[keyLen+7]
-				key := string(req.Payload[4: keyLen+4])
-				val := string(req.Payload[keyLen+8: keyLen+valLen+8])
+				key := string(req.Payload[4 : keyLen+4])
+				val := string(req.Payload[keyLen+8 : keyLen+valLen+8])
 				env = append(env, fmt.Sprintf("%s=%s", key, val))
 			}
 			req.Reply(s.passEnv, nil)
