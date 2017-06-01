@@ -151,6 +151,7 @@ func init() {
 	pflag.CommandLine.StringP("shell", "s", "shell.sh", "Path to shell to execute post-authentication")
 	pflag.CommandLine.StringP("auth-failed-banner", "b", "", "Path to template displayed after failed authentication")
 	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
+	pflag.CommandLine.BoolP("allow-env", "E", false, "Pass environment from client to shell (default: false) (warning: security implications)")
 
 	viper.BindPFlags(pflag.CommandLine)
 	viper.SetConfigName("sshproxy")
@@ -163,6 +164,7 @@ func init() {
 	viper.BindEnv("shell")
 	viper.BindEnv("auth-failed-banner", "SSHPROXY_AUTH_FAILED_BANNER")
 	viper.BindEnv("max-auth-tries", "SSHPROXY_MAX_AUTH_TRIES")
+	viper.BindEnv("allow-env", "SSHPROXY_ALLOW_ENV")
 }
 
 func main() {
@@ -216,5 +218,5 @@ func main() {
 		sshConfig.KeyboardInteractiveCallback = auth.keyboardInteractiveCallback
 	}
 
-	sshproxy.New(viper.GetString("dir"), viper.GetString("shell"), sshConfig).Listen(viper.GetString("port"))
+	sshproxy.New(viper.GetString("dir"), viper.GetString("shell"), viper.GetBool("allow-env"), sshConfig).Listen(viper.GetString("port"))
 }
