@@ -42,9 +42,9 @@ Usage of sshproxy:
   -s, --shell string                Path to shell to execute post-authentication (default "shell.sh")
 ```
 
-## Unauth Template
+## Auth Failed Banner/Template
 
-The 'unauth template' is a template rendered and displayed to the user after failed authentication. It should be a
+The 'auth failed banner' is a template rendered and displayed to the user after failed authentication. It should be a
 [Go template](https://golang.org/pkg/text/template/) has two available properties; `.user` and `.fingerprints`.
 
 ## Example Usage
@@ -69,3 +69,10 @@ SSH_ORIGINAL_COMMAND=some command
 LC_CTYPE=en_GB.UTF-8
 _=/usr/bin/env
 ```
+
+### Building
+
+The `Makefile` in the project root contains all necessary rules for linting, testing and building sshproxy packages.
+Building via a Docker image can be achieved with, for example:
+`docker run --rm -v $PWD:/go/src/github.com/resin-io/sshproxy golang make -C /go/src/github.com/resin-io/sshproxy lint test release`.
+
