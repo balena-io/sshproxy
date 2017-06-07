@@ -40,7 +40,7 @@ ifndef GITHUB_TOKEN
 endif
 	git describe --exact-match --tags >/dev/null
 
-	git log --format='* %s' --grep=$(VERSION) --invert-grep --no-merges $(shell git describe --tag --abbrev=0 $(VERSION)^)...$(VERSION) | \
+	git log --format='* %s' --grep='change-type:' --regexp-ignore-case $(shell git describe --tag --abbrev=0 $(VERSION)^)...$(VERSION) | \
 		github-release release -u $(USERNAME) -r $(PROJECT) -t $(VERSION) -n $(VERSION) -d - || true
 	$(foreach FILE, $(addsuffix .tar.gz,$(addprefix build/$(EXECUTABLE)-$(VERSION)_,$(subst /,_,$(BUILD_PLATFORMS)))), \
 		github-release upload -u $(USERNAME) -r $(PROJECT) -t $(VERSION) -n $(notdir $(FILE)) -f $(FILE) && \
