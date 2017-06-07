@@ -3,7 +3,7 @@ PROJECT ?= sshproxy
 PACKAGE ?= resin
 EXECUTABLE ?= sshproxy
 VERSION := $(shell git describe --abbrev=0 --tags)
-BUILD_PLATFORMS ?= darwin/amd64 freebsd/amd64 linux/arm linux/arm64 linux/amd64 openbsd/amd64 netbsd/amd64
+BUILD_PLATFORMS ?= darwin/amd64 linux/386 linux/arm linux/arm64 linux/amd64
 SHASUM ?= sha256sum
 
 all: bin/$(EXECUTABLE)

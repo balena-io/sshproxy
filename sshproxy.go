@@ -21,6 +21,7 @@ limitations under the License.
 package sshproxy
 
 import (
+	"encoding/binary"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -30,7 +31,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/kr/pty"
+	"github.com/resin-io-modules/gexpect/pty"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -157,82 +158,97 @@ func (s *Server) handleChannels(chans <-chan ssh.NewChannel, conn *ssh.ServerCon
 // Service requests on given channel
 func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, conn *ssh.ServerConn) {
 	env := make([]string, 0)
-	wantsPty := false
+	var terminal *pty.Terminal
 	for req := range reqs {
-		log.Printf("New SSH request '%s' from %s", req.Type, conn.RemoteAddr())
 		switch req.Type {
 		case "env":
 			if s.passEnv {
 				// append client env to the command environment
 				keyLen := req.Payload[3]
 				valLen := req.Payload[keyLen+7]
-				key := string(req.Payload[4 : keyLen+4])
-				val := string(req.Payload[keyLen+8 : keyLen+valLen+8])
+				key := string(req.Payload[4: keyLen+4])
+				val := string(req.Payload[keyLen+8: keyLen+valLen+8])
 				env = append(env, fmt.Sprintf("%s=%s", key, val))
 			}
 			req.Reply(s.passEnv, nil)
 		case "pty-req":
-			// client has requested a PTY
-			wantsPty = true
-			req.Reply(true, nil)
-		case "shell":
-			// client has not supplied a command, reject
-			req.Reply(false, nil)
+			ok := terminal == nil
+			if ok {
+				var err error
+				terminal, err = pty.NewTerminal()
+				ok = err == nil
+			}
+			if ok {
+				termLen := req.Payload[3]
+				term := req.Payload[4: termLen+4]
+				env = append(env, fmt.Sprintf("TERM=%s", term))
+				w := int(binary.BigEndian.Uint32(req.Payload[termLen+4: termLen+8]))
+				h := int(binary.BigEndian.Uint32(req.Payload[termLen+8: termLen+12]))
+				ok = terminal.SetWinSize(w, h) == nil
+			}
+			req.Reply(ok, nil)
+		case "window-change":
+			if terminal != nil {
+				w := int(binary.BigEndian.Uint32(req.Payload[0:4]))
+				h := int(binary.BigEndian.Uint32(req.Payload[4:8]))
+				terminal.SetWinSize(w, h)
+			}
 		case "exec":
 			// setup is done, parse client exec command
 			cmdLen := req.Payload[3]
-			command := string(req.Payload[4 : cmdLen+4])
-			req.Reply(true, nil)
-			s.handleExec(conn, channel, command, env, wantsPty)
-			log.Printf("Closing SSH channel with %s", conn.RemoteAddr())
-			channel.Close()
-			return
+			command := string(req.Payload[4: cmdLen+4])
+			log.Printf("Handling command '%s' from %s", command, conn.RemoteAddr())
+			cmd := exec.Command(s.shell)
+			cmd.Env = append(cmd.Env, env...)
+			cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_USER=%s", conn.User()))
+			cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_ORIGINAL_COMMAND=%s", command))
+
+			if terminal != nil {
+				err := terminal.Start(cmd)
+				if err != nil {
+					panic(err)
+				}
+
+				go io.Copy(terminal, channel)
+				go io.Copy(channel, terminal)
+			} else {
+				stdout, err := cmd.StdoutPipe()
+				if err != nil {
+					panic(err)
+				}
+
+				stderr, err := cmd.StderrPipe()
+				if err != nil {
+					panic(err)
+				}
+
+				stdin, err := cmd.StdinPipe()
+				if err != nil {
+					panic(err)
+				}
+
+				if err = cmd.Start(); err != nil {
+					panic(err)
+				}
+
+				go io.Copy(stdin, channel)
+				go io.Copy(channel, stdout)
+				go io.Copy(channel.Stderr(), stderr)
+			}
+
+			go func() {
+				cmd.Wait()
+				channel.SendRequest("exit-status", false, []byte{0, 0, 0, 0})
+				if terminal != nil {
+					terminal.Close()
+				}
+				channel.Close()
+			}()
 		default:
 			log.Printf("Discarding request with unknown type '%s'", req.Type)
+			if req.WantReply {
+				req.Reply(false, nil)
+			}
 		}
 	}
-}
-
-// Hand off to shell, creating PTY if requested
-func (s *Server) handleExec(conn *ssh.ServerConn, channel ssh.Channel, command string, env []string, wantsPty bool) {
-	log.Printf("Handling command '%s' from %s", command, conn.RemoteAddr())
-	cmd := exec.Command(s.shell)
-	cmd.Env = append(cmd.Env, env...)
-	cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_USER=%s", conn.User()))
-	cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_ORIGINAL_COMMAND=%s", command))
-
-	if wantsPty {
-		p, err := pty.Start(cmd)
-		if err != nil {
-			panic(err)
-		}
-		go io.Copy(p, channel)
-		io.Copy(channel, p)
-	} else {
-		stdout, err := cmd.StdoutPipe()
-		if err != nil {
-			panic(err)
-		}
-
-		stderr, err := cmd.StderrPipe()
-		if err != nil {
-			panic(err)
-		}
-
-		stdin, err := cmd.StdinPipe()
-		if err != nil {
-			panic(err)
-		}
-
-		if err = cmd.Start(); err != nil {
-			panic(err)
-		}
-
-		go io.Copy(stdin, channel)
-		go io.Copy(channel, stdout)
-		go io.Copy(channel.Stderr(), stderr)
-
-		cmd.Wait()
-	}
-	channel.SendRequest("exit-status", false, []byte{0, 0, 0, 0})
 }
