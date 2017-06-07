@@ -40,10 +40,11 @@ ifndef GITHUB_TOKEN
 endif
 	git describe --exact-match --tags >/dev/null
 
-	git log --format='* %s' --grep=$(VERSION) --invert-grep --no-merges $(shell git describe --tag --abbrev=0 $(VERSION)^)...$(VERSION)
+	git log --format='* %s' --grep=$(VERSION) --invert-grep --no-merges $(shell git describe --tag --abbrev=0 $(VERSION)^)...$(VERSION) | \
+		github-release release -u $(USERNAME) -r $(PROJECT) -t $(VERSION) -n $(VERSION) -d - || true
 	$(foreach FILE, $(addsuffix .tar.gz,$(addprefix build/$(EXECUTABLE)-$(VERSION)_,$(subst /,_,$(BUILD_PLATFORMS)))), \
-		echo github-release upload -u $(USERNAME) -r $(EXECUTABLE) -t $(VERSION) -n $(notdir $(FILE)) -f $(FILE) && \
-		echo github-release upload -u $(USERNAME) -r $(EXECUTABLE) -t $(VERSION) -n $(notdir $(addsuffix .sha256,$(FILE))) -f $(addsuffix .sha256,$(FILE)) ;)
+		github-release upload -u $(USERNAME) -r $(PROJECT) -t $(VERSION) -n $(notdir $(FILE)) -f $(FILE) && \
+		github-release upload -u $(USERNAME) -r $(PROJECT) -t $(VERSION) -n $(notdir $(addsuffix .sha256,$(FILE))) -f $(addsuffix .sha256,$(FILE)) ;)
 
 clean:
 	rm -vrf bin/* build/*
