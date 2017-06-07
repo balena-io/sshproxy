@@ -1,48 +1,64 @@
-PKG := resin
-VERSION := $(shell git describe --abbrev=0 --tags --dirty)
-EXECUTABLE := sshproxy
+USERNAME ?= resin-io
+PROJECT ?= sshproxy
+PACKAGE ?= resin
+EXECUTABLE ?= sshproxy
+VERSION := $(shell git describe --abbrev=0 --tags)
+BUILD_PLATFORMS ?= darwin/amd64 freebsd/amd64 linux/arm linux/arm64 linux/amd64 openbsd/amd64 netbsd/amd64
+SHASUM ?= sha256sum
 
 all: bin/$(EXECUTABLE)
 
-bin/$(EXECUTABLE):
-	go build -o "$@" ./$(PKG)
+dep:
+	go get -v ./...
+	go get github.com/mitchellh/gox
 
-release: release/$(EXECUTABLE)-$(VERSION)_linux_arm5.tar.bz2 \
- release/$(EXECUTABLE)-$(VERSION)_linux_arm7.tar.bz2 \
- release/$(EXECUTABLE)-$(VERSION)_darwin_386.tar.bz2 \
- release/$(EXECUTABLE)-$(VERSION)_linux_386.tar.bz2 \
- release/$(EXECUTABLE)-$(VERSION)_darwin_amd64.tar.bz2 \
- release/$(EXECUTABLE)-$(VERSION)_freebsd_amd64.tar.bz2 \
- release/$(EXECUTABLE)-$(VERSION)_linux_amd64.tar.bz2
+lint-dep: dep
+	go get github.com/golang/lint/golint
+	go get golang.org/x/tools/cmd/goimports
 
-release-sign: release
-	for f in release/*.tar.bz2; do gpg --armor --detach-sign $$f; done
+lint: lint-dep
+	goimports -d .
+	gofmt -e -l -s .
+	golint -set_exit_status ./...
+	go tool vet .
+
+test-dep: dep
+	go test -i -v ./...
+
+test: test-dep
+	go test -v ./...
+
+release: $(addsuffix .tar.gz,$(addprefix build/$(EXECUTABLE)-$(VERSION)_,$(subst /,_,$(BUILD_PLATFORMS))))
+release: $(addsuffix .tar.gz.sha256,$(addprefix build/$(EXECUTABLE)-$(VERSION)_,$(subst /,_,$(BUILD_PLATFORMS))))
+
+upload-dep:
+	go get github.com/aktau/github-release
+
+upload: lint test upload-dep
+ifndef GITHUB_TOKEN
+		$(error GITHUB_TOKEN is undefined)
+endif
+	git describe --exact-match --tags >/dev/null
+
+	git log --format='* %s' --grep=$(VERSION) --invert-grep --no-merges $(shell git describe --tag --abbrev=0 $(VERSION)^)...$(VERSION)
+	$(foreach FILE, $(addsuffix .tar.gz,$(addprefix build/$(EXECUTABLE)-$(VERSION)_,$(subst /,_,$(BUILD_PLATFORMS)))), \
+		echo github-release upload -u $(USERNAME) -r $(EXECUTABLE) -t $(VERSION) -n $(notdir $(FILE)) -f $(FILE) && \
+		echo github-release upload -u $(USERNAME) -r $(EXECUTABLE) -t $(VERSION) -n $(notdir $(addsuffix .sha256,$(FILE))) -f $(addsuffix .sha256,$(FILE)) ;)
 
 clean:
-	rm -vrf bin/* build/* release/*
+	rm -vrf bin/* build/*
 
-# arm
-build/linux_arm5/$(EXECUTABLE):
-	GOARM=5 GOARCH=arm GOOS=linux go build -o "$@" ./$(PKG)
-build/linux_arm7/$(EXECUTABLE):
-	GOARM=7 GOARCH=arm GOOS=linux go build -o "$@" ./$(PKG)
-
-# 386
-build/darwin_386/$(EXECUTABLE):
-	GOARCH=386 GOOS=darwin go build -o "$@" ./$(PKG)
-build/linux_386/$(EXECUTABLE):
-	GOARCH=386 GOOS=linux go build -o "$@" ./$(PKG)
-
-# amd64
-build/darwin_amd64/$(EXECUTABLE):
-	GOARCH=amd64 GOOS=darwin go build -o "$@" ./$(PKG)
-build/freebsd_amd64/$(EXECUTABLE):
-	GOARCH=amd64 GOOS=freebsd go build -o "$@" ./$(PKG)
-build/linux_amd64/$(EXECUTABLE):
-	GOARCH=amd64 GOOS=linux go build -o "$@" ./$(PKG)
-
+# binary
+bin/$(EXECUTABLE): dep
+	go build -o "$@" -v ./$(PACKAGE)
+# release binaries
+build/%/$(EXECUTABLE): dep
+	gox -parallel=1 -osarch=$(subst _,/,$(subst build/,,$(@:/$(EXECUTABLE)=))) -output="build/{{.OS}}_{{.Arch}}/$(EXECUTABLE)" ./$(PACKAGE)
 # compressed artifacts
-release/$(EXECUTABLE)-$(VERSION)_%.tar.bz2: build/%/$(EXECUTABLE)
-	tar -jcvf "$@" -C "`dirname $<`" $(EXECUTABLE)
+build/$(EXECUTABLE)-$(VERSION)_%.tar.gz: build/%/$(EXECUTABLE)
+	tar -zcf "$@" -C "$(dir $<)" $(EXECUTABLE)
+# signed artifacts
+%.sha256: %
+	cd $(dir $<) && $(SHASUM) $(notdir $<) > $(addsuffix .sha256,$(notdir $<))
 
-.PHONY: clean release-sign
+.PHONY: dep lint-dep lint test-dep test release upload-dep upload clean

@@ -14,7 +14,7 @@ work dir. The following config file formats are supported:
 * [HCL](https://github.com/hashicorp/hcl) (`sshproxy.hcl`)
 * [Java .properties](https://en.wikipedia.org/wiki/.properties) (`sshproxy.properties`)
 
-There are a total of 8 configuration options. With the exception of `dir`
+There are a total of 9 configuration options. With the exception of `dir`
 they can all be set via commandline, environment or config file.
 
 | Name               | Commandline                 | Environment                   | Config               |
@@ -27,9 +27,11 @@ they can all be set via commandline, environment or config file.
 | Shell              | `--shell` `-s`              | `SSHPROXY_SHELL`              | `shell`              |
 | Auth Failed Banner | `--auth-failed-banner` `-b` | `SSHPROXY_AUTH_FAILED_BANNER` | `auth-failed-banner` |
 | Max Auth Tries     | `--max-auth-tries` `-m`     | `SSHPROXY_MAX_AUTH_TRIES`     | `max-auth-tries`     |
+| Allow Env          | `--allow-env` `-E`          | `SSHPROXY_ALLOW_ENV`          | `allow-env`          |
 
 ```
 Usage of sshproxy:
+  -E, --allow-env                   Pass environment from client to shell (default: false) (warning: security implications)
   -H, --apihost string              Resin API Host (default "api.resin.io")
   -K, --apikey string               Resin API Key (required)
   -P, --apiport string              Resin API Port (default "443")
@@ -40,9 +42,9 @@ Usage of sshproxy:
   -s, --shell string                Path to shell to execute post-authentication (default "shell.sh")
 ```
 
-## Unauth Template
+## Auth Failed Banner/Template
 
-The 'unauth template' is a template rendered and displayed to the user after failed authentication. It should be a
+The 'auth failed banner' is a template rendered and displayed to the user after failed authentication. It should be a
 [Go template](https://golang.org/pkg/text/template/) has two available properties; `.user` and `.fingerprints`.
 
 ## Example Usage
@@ -67,3 +69,10 @@ SSH_ORIGINAL_COMMAND=some command
 LC_CTYPE=en_GB.UTF-8
 _=/usr/bin/env
 ```
+
+### Building
+
+The `Makefile` in the project root contains all necessary rules for linting, testing and building sshproxy packages.
+Building via a Docker image can be achieved with, for example:
+`docker run --rm -v $PWD:/go/src/github.com/resin-io/sshproxy golang make -C /go/src/github.com/resin-io/sshproxy lint test release`.
+

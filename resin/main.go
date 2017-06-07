@@ -114,9 +114,8 @@ func (a *authHandler) keyboardInteractiveCallback(meta ssh.ConnMetadata, client 
 			delete(a.rejectedSessions, sessionKey)
 		}
 		return nil, errors.New("Unauthorised")
-	} else {
-		a.rejectedSessions[sessionKey] = 1
 	}
+	a.rejectedSessions[sessionKey] = 1
 
 	// fetch user's keys...
 	keys, err := a.getUserKeys(meta.User())
@@ -151,6 +150,7 @@ func init() {
 	pflag.CommandLine.StringP("shell", "s", "shell.sh", "Path to shell to execute post-authentication")
 	pflag.CommandLine.StringP("auth-failed-banner", "b", "", "Path to template displayed after failed authentication")
 	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
+	pflag.CommandLine.BoolP("allow-env", "E", false, "Pass environment from client to shell (default: false) (warning: security implications)")
 
 	viper.BindPFlags(pflag.CommandLine)
 	viper.SetConfigName("sshproxy")
@@ -163,6 +163,7 @@ func init() {
 	viper.BindEnv("shell")
 	viper.BindEnv("auth-failed-banner", "SSHPROXY_AUTH_FAILED_BANNER")
 	viper.BindEnv("max-auth-tries", "SSHPROXY_MAX_AUTH_TRIES")
+	viper.BindEnv("allow-env", "SSHPROXY_ALLOW_ENV")
 }
 
 func main() {
@@ -186,7 +187,7 @@ func main() {
 	}
 
 	// if paths are relative, prepend with dir and verify files exist
-	fix_path_check_exists := func(key string) {
+	fixPathCheckExists := func(key string) {
 		if viper.GetString(key)[0] != '/' {
 			viper.Set(key, path.Join(viper.GetString("dir"), viper.GetString(key)))
 		}
@@ -195,9 +196,9 @@ func main() {
 			os.Exit(2)
 		}
 	}
-	fix_path_check_exists("shell")
+	fixPathCheckExists("shell")
 	if viper.GetString("auth-failed-banner") != "" {
-		fix_path_check_exists("auth-failed-banner")
+		fixPathCheckExists("auth-failed-banner")
 	}
 
 	apiURL := fmt.Sprintf("https://%s:%d", viper.GetString("apihost"), viper.GetInt("apiport"))
@@ -216,5 +217,5 @@ func main() {
 		sshConfig.KeyboardInteractiveCallback = auth.keyboardInteractiveCallback
 	}
 
-	sshproxy.New(viper.GetString("dir"), viper.GetString("shell"), sshConfig).Listen(viper.GetString("port"))
+	sshproxy.New(viper.GetString("dir"), viper.GetString("shell"), viper.GetBool("allow-env"), sshConfig).Listen(viper.GetString("port"))
 }

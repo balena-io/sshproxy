@@ -36,20 +36,22 @@ import (
 
 // Server holds server specific configuration data.
 type Server struct {
-	keyDir string
-	config *ssh.ServerConfig
-	shell  string
+	keyDir  string
+	config  *ssh.ServerConfig
+	shell   string
+	passEnv bool
 }
 
 // New takes a directory to generate/store server keys, a path to the shell
 // and an ssh.ServerConfig. If no ServerConfig is provided, then
 // ServerConfig.NoClientAuth is set to true. ed25519, rsa, ecdsa and dsa
 // keys are loaded, and generated if they do not exist. Returns a new Server.
-func New(keyDir, shell string, sshConfig *ssh.ServerConfig) *Server {
+func New(keyDir, shell string, passEnv bool, sshConfig *ssh.ServerConfig) *Server {
 	s := &Server{
-		keyDir: keyDir,
-		config: sshConfig,
-		shell:  shell,
+		keyDir:  keyDir,
+		config:  sshConfig,
+		shell:   shell,
+		passEnv: passEnv,
 	}
 	if s.config == nil {
 		s.config = &ssh.ServerConfig{
@@ -160,13 +162,15 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 		log.Printf("New SSH request '%s' from %s", req.Type, conn.RemoteAddr())
 		switch req.Type {
 		case "env":
-			// append client env to the command environment
-			keyLen := req.Payload[3]
-			valLen := req.Payload[keyLen+7]
-			key := string(req.Payload[4 : keyLen+4])
-			val := string(req.Payload[keyLen+8 : keyLen+valLen+8])
-			env = append(env, fmt.Sprintf("%s=%s", key, val))
-			req.Reply(true, nil)
+			if s.passEnv {
+				// append client env to the command environment
+				keyLen := req.Payload[3]
+				valLen := req.Payload[keyLen+7]
+				key := string(req.Payload[4 : keyLen+4])
+				val := string(req.Payload[keyLen+8 : keyLen+valLen+8])
+				env = append(env, fmt.Sprintf("%s=%s", key, val))
+			}
+			req.Reply(s.passEnv, nil)
 		case "pty-req":
 			// client has requested a PTY
 			wantsPty = true
