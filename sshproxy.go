@@ -30,6 +30,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"syscall"
 	"time"
 
 	"github.com/resin-io-modules/gexpect/pty"
@@ -260,9 +261,21 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 						break Loop
 					}
 				}
-				if _, err := channel.SendRequest("exit-status", false, []byte{0, 0, 0, 0}); err != nil {
+
+				exitStatusPayload := make([]byte, 4)
+				exitStatus := uint32(1)
+				if cmd.ProcessState != nil {
+					if sysProcState := cmd.ProcessState.Sys(); sysProcState != nil {
+						if cmdWaitStatus, ok := sysProcState.(syscall.WaitStatus); ok {
+							exitStatus = uint32(cmdWaitStatus.ExitStatus())
+						}
+					}
+				}
+				binary.BigEndian.PutUint32(exitStatusPayload, uint32(exitStatus))
+				if _, err := channel.SendRequest("exit-status", false, exitStatusPayload); err != nil {
 					s.handleError(err, nil)
 				}
+
 				if terminal != nil {
 					if err := terminal.Close(); err != nil {
 						s.handleError(err, nil)
