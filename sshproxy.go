@@ -30,6 +30,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"time"
 
 	"github.com/resin-io-modules/gexpect/pty"
 	"golang.org/x/crypto/ssh"
@@ -180,12 +181,6 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 	var terminal *pty.Terminal
 	var cmd *exec.Cmd
 
-	ioCopy := func(dst io.Writer, src io.Reader) {
-		if _, err := io.Copy(dst, src); err != nil {
-			s.handleError(err, nil)
-		}
-	}
-
 	for req := range reqs {
 		switch req.Type {
 		case "env":
@@ -193,8 +188,8 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 				// append client env to the command environment
 				keyLen := req.Payload[3]
 				valLen := req.Payload[keyLen+7]
-				key := string(req.Payload[4: keyLen+4])
-				val := string(req.Payload[keyLen+8: keyLen+valLen+8])
+				key := string(req.Payload[4 : keyLen+4])
+				val := string(req.Payload[keyLen+8 : keyLen+valLen+8])
 				env = append(env, fmt.Sprintf("%s=%s", key, val))
 			}
 			if err := req.Reply(s.passEnv, nil); err != nil {
@@ -209,10 +204,10 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 				}
 
 				termLen := req.Payload[3]
-				term := req.Payload[4: termLen+4]
+				term := req.Payload[4 : termLen+4]
 				env = append(env, fmt.Sprintf("TERM=%s", term))
-				w := int(binary.BigEndian.Uint32(req.Payload[termLen+4: termLen+8]))
-				h := int(binary.BigEndian.Uint32(req.Payload[termLen+8: termLen+12]))
+				w := int(binary.BigEndian.Uint32(req.Payload[termLen+4 : termLen+8]))
+				h := int(binary.BigEndian.Uint32(req.Payload[termLen+8 : termLen+12]))
 				if err := terminal.SetWinSize(w, h); err != nil {
 					return err
 				}
@@ -231,49 +226,39 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 		case "exec":
 			// setup is done, parse client exec command
 			cmdLen := req.Payload[3]
-			command := string(req.Payload[4: cmdLen+4])
+			command := string(req.Payload[4 : cmdLen+4])
 			log.Printf("Handling command '%s' from %s", command, conn.RemoteAddr())
 			cmd = exec.Command(s.shell)
 			cmd.Env = append(cmd.Env, env...)
 			cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_USER=%s", conn.User()))
 			cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_ORIGINAL_COMMAND=%s", command))
 
-			if terminal != nil {
-				err := terminal.Start(cmd)
-				if err != nil {
-					return err
-				}
-
-				go ioCopy(terminal, channel)
-				go ioCopy(channel, terminal)
-			} else {
-				stdout, err := cmd.StdoutPipe()
-				if err != nil {
-					return err
-				}
-
-				stderr, err := cmd.StderrPipe()
-				if err != nil {
-					return err
-				}
-
-				stdin, err := cmd.StdinPipe()
-				if err != nil {
-					return err
-				}
-
-				if err = cmd.Start(); err != nil {
-					return err
-				}
-
-				go ioCopy(stdin, channel)
-				go ioCopy(channel, stdout)
-				go ioCopy(channel.Stderr(), stderr)
+			if err := s.launchCommand(channel, cmd, terminal); err != nil {
+				s.handleError(err, nil)
 			}
 
 			go func() {
-				if err := cmd.Wait(); err != nil {
-					s.handleError(err, nil)
+				done := make(chan error, 1)
+				go func() {
+					done <- cmd.Wait()
+				}()
+			Loop:
+				for {
+					select {
+					case <-time.After(10 * time.Second):
+						if _, err := channel.SendRequest("ping", false, []byte{}); err != nil {
+							// Channel is dead, kill process
+							if err := cmd.Process.Kill(); err != nil {
+								s.handleError(err, nil)
+							}
+							break Loop
+						}
+					case err := <-done:
+						if err != nil {
+							s.handleError(err, nil)
+						}
+						break Loop
+					}
 				}
 				if _, err := channel.SendRequest("exit-status", false, []byte{0, 0, 0, 0}); err != nil {
 					s.handleError(err, nil)
@@ -297,6 +282,49 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 				}
 			}
 		}
+	}
+
+	return nil
+}
+
+func (s *Server) launchCommand(channel ssh.Channel, cmd *exec.Cmd, terminal *pty.Terminal) error {
+	ioCopy := func(dst io.Writer, src io.Reader) {
+		if _, err := io.Copy(dst, src); err != nil {
+			s.handleError(err, nil)
+		}
+	}
+
+	if terminal != nil {
+		err := terminal.Start(cmd)
+		if err != nil {
+			return err
+		}
+
+		go ioCopy(terminal, channel)
+		go ioCopy(channel, terminal)
+	} else {
+		stdout, err := cmd.StdoutPipe()
+		if err != nil {
+			return err
+		}
+
+		stderr, err := cmd.StderrPipe()
+		if err != nil {
+			return err
+		}
+
+		stdin, err := cmd.StdinPipe()
+		if err != nil {
+			return err
+		}
+
+		if err = cmd.Start(); err != nil {
+			return err
+		}
+
+		go ioCopy(stdin, channel)
+		go ioCopy(channel, stdout)
+		go ioCopy(channel.Stderr(), stderr)
 	}
 
 	return nil
