@@ -13,6 +13,7 @@ dep:
 	go get github.com/mitchellh/gox
 
 lint-dep: dep
+	go get github.com/kisielk/errcheck
 	go get github.com/golang/lint/golint
 	go get golang.org/x/tools/cmd/goimports
 
@@ -21,6 +22,7 @@ lint: lint-dep
 	gofmt -e -l -s .
 	golint -set_exit_status ./...
 	go tool vet .
+	errcheck -verbose ./...
 
 test-dep: dep
 	go test -i -v ./...

@@ -21,125 +21,18 @@ limitations under the License.
 package main
 
 import (
-	"bytes"
-	"crypto/md5"
-	"crypto/subtle"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"path"
-	"strings"
-	"text/template"
 
-	"github.com/resin-io/pinejs-client-go"
+	"github.com/getsentry/raven-go"
 	"github.com/resin-io/sshproxy"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/ssh"
 )
-
-type authHandler struct {
-	baseURL, apiKey  string
-	template         string
-	rejectedSessions map[string]int
-}
-
-func newAuthHandler(baseURL, apiKey string) authHandler {
-	return authHandler{
-		baseURL:          baseURL,
-		apiKey:           apiKey,
-		template:         "",
-		rejectedSessions: map[string]int{},
-	}
-}
-
-func (a *authHandler) getUserKeys(username string) ([]ssh.PublicKey, error) {
-	url := fmt.Sprintf("%s/%s", a.baseURL, "v1")
-	client := pinejs.NewClient(url, a.apiKey)
-
-	users := make([]map[string]interface{}, 1)
-	users[0] = make(map[string]interface{})
-	users[0]["pinejs"] = "user__has__public_key"
-
-	filter := pinejs.QueryOption{
-		Type: pinejs.Filter,
-		Content: []string{fmt.Sprintf("user/any(u:((tolower(u/username)) eq ('%s')))",
-			strings.ToLower(username))},
-		Raw: true}
-	fields := pinejs.QueryOption{
-		Type:    pinejs.Select,
-		Content: []string{"user", "public_key"},
-	}
-	if err := client.List(&users, filter, fields); err != nil {
-		return nil, err
-	} else if len(users) == 0 {
-		return nil, errors.New("Invalid User")
-	}
-
-	keys := make([]ssh.PublicKey, 0)
-	for _, user := range users {
-		if key, _, _, _, err := ssh.ParseAuthorizedKey([]byte(user["public_key"].(string))); err == nil {
-			keys = append(keys, key)
-		}
-	}
-
-	return keys, nil
-}
-
-func (a *authHandler) publicKeyCallback(meta ssh.ConnMetadata, key ssh.PublicKey) (*ssh.Permissions, error) {
-	keys, err := a.getUserKeys(meta.User())
-	if err != nil {
-		return nil, errors.New("Unauthorised")
-	}
-
-	for _, k := range keys {
-		if subtle.ConstantTimeCompare(k.Marshal(), key.Marshal()) == 1 {
-			return nil, nil
-		}
-	}
-
-	return nil, errors.New("Unauthorised")
-}
-
-func (a *authHandler) keyboardInteractiveCallback(meta ssh.ConnMetadata, client ssh.KeyboardInteractiveChallenge) (*ssh.Permissions, error) {
-	// check if this session has already been rejected, only send the banner once
-	sessionKey := string(meta.SessionID())
-	if _, ok := a.rejectedSessions[sessionKey]; ok {
-		// this operates on the assumption that `keyboard-interactive` will be attempted three times
-		// and then cleans up the state
-		a.rejectedSessions[sessionKey]++
-		if a.rejectedSessions[sessionKey] == 3 {
-			delete(a.rejectedSessions, sessionKey)
-		}
-		return nil, errors.New("Unauthorised")
-	}
-	a.rejectedSessions[sessionKey] = 1
-
-	// fetch user's keys...
-	keys, err := a.getUserKeys(meta.User())
-	if err != nil {
-		return nil, errors.New("Unauthorised")
-	}
-	// ...and generate their fingerprints
-	fingerprints := make([]string, 0)
-	for _, key := range keys {
-		hash := md5.New()
-		hash.Write(key.Marshal())
-		fingerprint := fmt.Sprintf("%x", hash.Sum(nil))
-		fingerprints = append(fingerprints, fingerprint)
-	}
-
-	tmpl := template.Must(template.New("auth_failed_template").Parse(a.template))
-	msg := bytes.NewBuffer(nil)
-	// pass `user` and `fingerprints` vars to template and render
-	tmpl.Execute(msg, map[string]interface{}{"user": meta.User(), "fingerprints": fingerprints})
-
-	// send the rendered template as an auth challenge with no questions
-	client(meta.User(), msg.String(), nil, nil)
-	return nil, errors.New("Unauthorised")
-}
 
 func init() {
 	pflag.CommandLine.StringP("apihost", "H", "api.resin.io", "Resin API Host")
@@ -151,19 +44,49 @@ func init() {
 	pflag.CommandLine.StringP("auth-failed-banner", "b", "", "Path to template displayed after failed authentication")
 	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
 	pflag.CommandLine.BoolP("allow-env", "E", false, "Pass environment from client to shell (default: false) (warning: security implications)")
+	pflag.CommandLine.StringP("sentry-dsn", "S", "", "Sentry DSN for error reporting")
 
-	viper.BindPFlags(pflag.CommandLine)
 	viper.SetConfigName("sshproxy")
 	viper.SetEnvPrefix("SSHPROXY")
-	viper.BindEnv("apihost", "RESIN_API_HOST")
-	viper.BindEnv("apiport", "RESIN_API_PORT")
-	viper.BindEnv("apikey", "SSHPROXY_API_KEY")
-	viper.BindEnv("dir")
-	viper.BindEnv("port")
-	viper.BindEnv("shell")
-	viper.BindEnv("auth-failed-banner", "SSHPROXY_AUTH_FAILED_BANNER")
-	viper.BindEnv("max-auth-tries", "SSHPROXY_MAX_AUTH_TRIES")
-	viper.BindEnv("allow-env", "SSHPROXY_ALLOW_ENV")
+	err := func() error {
+		if err := viper.BindPFlags(pflag.CommandLine); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("apihost", "RESIN_API_HOST"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("apiport", "RESIN_API_PORT"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("apikey", "SSHPROXY_API_KEY"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("dir"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("port"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("shell"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("auth-failed-banner", "SSHPROXY_AUTH_FAILED_BANNER"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("max-auth-tries", "SSHPROXY_MAX_AUTH_TRIES"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("allow-env", "SSHPROXY_ALLOW_ENV"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("sentry-dsn", "SSHPROXY_SENTRY_DSN"); err != nil {
+			return err
+		}
+		return nil
+	}()
+	if err != nil {
+		log.Fatal("Initialisation failed", err)
+	}
 }
 
 func main() {
@@ -171,7 +94,7 @@ func main() {
 	pflag.Parse()
 	viper.AddConfigPath(viper.GetString("dir"))
 	viper.AddConfigPath("/etc")
-	viper.ReadInConfig()
+	_ = viper.ReadInConfig()
 
 	// API Key is required
 	if viper.GetString("apikey") == "" {
@@ -217,5 +140,25 @@ func main() {
 		sshConfig.KeyboardInteractiveCallback = auth.keyboardInteractiveCallback
 	}
 
-	sshproxy.New(viper.GetString("dir"), viper.GetString("shell"), viper.GetBool("allow-env"), sshConfig).Listen(viper.GetString("port"))
+	if viper.GetString("sentry-dsn") != "" {
+		if err := raven.SetDSN(viper.GetString("sentry-dsn")); err != nil {
+			log.Fatal("Sentry initialisation failed", err)
+		}
+	}
+
+	server, err := sshproxy.New(
+		viper.GetString("dir"),
+		viper.GetString("shell"),
+		viper.GetBool("allow-env"),
+		sshConfig,
+		func(err error, tags map[string]string) {
+			log.Printf("ERROR: %s", err)
+			raven.CaptureError(err, tags)
+		})
+	if err != nil {
+		log.Fatal("Error creating Server instance", err)
+	}
+	if err := server.Listen(viper.GetString("port")); err != nil {
+		log.Fatal("Error binding to port", err)
+	}
 }

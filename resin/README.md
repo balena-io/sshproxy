@@ -28,6 +28,7 @@ they can all be set via commandline, environment or config file.
 | Auth Failed Banner | `--auth-failed-banner` `-b` | `SSHPROXY_AUTH_FAILED_BANNER` | `auth-failed-banner` |
 | Max Auth Tries     | `--max-auth-tries` `-m`     | `SSHPROXY_MAX_AUTH_TRIES`     | `max-auth-tries`     |
 | Allow Env          | `--allow-env` `-E`          | `SSHPROXY_ALLOW_ENV`          | `allow-env`          |
+| Sentry DSN         | `--sentry-dsn` `-S`         | `SSHPROXY_SENTRY_DSN`         | `sentry-dsn`         |
 
 ```
 Usage of sshproxy:
@@ -39,6 +40,7 @@ Usage of sshproxy:
   -d, --dir string                  Work dir, holds ssh keys and sshproxy config (default "/etc/sshproxy")
   -m, --max-auth-tries int          Maximum number of authentication attempts per connection (default 0; unlimited)
   -p, --port int                    Port the ssh service will listen on (default 22)
+  -S, --sentry-dsn string           Sentry DSN for error reporting
   -s, --shell string                Path to shell to execute post-authentication (default "shell.sh")
 ```
 
