@@ -21,6 +21,7 @@ limitations under the License.
 package sshproxy
 
 import (
+	"encoding/binary"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -29,29 +30,36 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"syscall"
+	"time"
 
-	"github.com/kr/pty"
+	"github.com/resin-io-modules/gexpect/pty"
 	"golang.org/x/crypto/ssh"
 )
 
 // Server holds server specific configuration data.
 type Server struct {
-	keyDir  string
-	config  *ssh.ServerConfig
-	shell   string
-	passEnv bool
+	keyDir       string
+	config       *ssh.ServerConfig
+	shell        string
+	passEnv      bool
+	errorHandler ErrorHandler
 }
+
+// ErrorHandler is passed any non-fatal errors for reporting.
+type ErrorHandler func(error, map[string]string)
 
 // New takes a directory to generate/store server keys, a path to the shell
 // and an ssh.ServerConfig. If no ServerConfig is provided, then
 // ServerConfig.NoClientAuth is set to true. ed25519, rsa, ecdsa and dsa
 // keys are loaded, and generated if they do not exist. Returns a new Server.
-func New(keyDir, shell string, passEnv bool, sshConfig *ssh.ServerConfig) *Server {
+func New(keyDir, shell string, passEnv bool, sshConfig *ssh.ServerConfig, errorHandler ErrorHandler) (*Server, error) {
 	s := &Server{
-		keyDir:  keyDir,
-		config:  sshConfig,
-		shell:   shell,
-		passEnv: passEnv,
+		keyDir:       keyDir,
+		config:       sshConfig,
+		shell:        shell,
+		passEnv:      passEnv,
+		errorHandler: errorHandler,
 	}
 	if s.config == nil {
 		s.config = &ssh.ServerConfig{
@@ -59,52 +67,62 @@ func New(keyDir, shell string, passEnv bool, sshConfig *ssh.ServerConfig) *Serve
 		}
 	}
 	for _, keyType := range []string{"ed25519", "rsa", "ecdsa", "dsa"} {
-		s.addHostKey(keyType)
+		if err := s.addHostKey(keyType); err != nil {
+			return nil, err
+		}
 	}
 
-	return s
+	return s, nil
+}
+
+func (s *Server) handleError(err error, tags map[string]string) {
+	if s.errorHandler != nil {
+		s.errorHandler(err, tags)
+	}
 }
 
 // Wraps ServerConfig.AddHostKey to create parent directories and keys if they do not already exist
-func (s *Server) addHostKey(keyType string) {
+func (s *Server) addHostKey(keyType string) error {
 	keyPath := filepath.Join(s.keyDir, fmt.Sprintf("id_%s", keyType))
 	if _, err := os.Stat(keyPath); os.IsNotExist(err) {
 		// create keyPath parent directories
-		os.MkdirAll(filepath.Dir(keyPath), os.ModePerm)
+		if err := os.MkdirAll(filepath.Dir(keyPath), os.ModePerm); err != nil {
+			return err
+		}
 		// generate ssh server keys
 		log.Printf("Generating private key... (%s)", keyType)
 		err := exec.Command("ssh-keygen", "-f", keyPath, "-t", "rsa", "-N", "").Run()
 		if err != nil {
-			panic(fmt.Sprintf("Failed to generate private key: %s\n%v", keyPath, err))
+			return err
 		}
 	}
 
 	log.Printf("Loading private key... (%s)", keyPath)
 	raw, err := ioutil.ReadFile(keyPath)
 	if err != nil {
-		panic(fmt.Sprintf("Failed to read private key: %s\n%v", keyPath, err))
+		return err
 	}
 	pkey, err := ssh.ParsePrivateKey(raw)
 	if err != nil {
-		panic(fmt.Sprintf("Failed to parse private key: %s\n%v", keyPath, err))
+		return err
 	}
 
 	s.config.AddHostKey(pkey)
+	return nil
 }
 
 // Listen for new ssh connections on the specified port.
-func (s *Server) Listen(port string) {
+func (s *Server) Listen(port string) error {
 	hostPort := net.JoinHostPort("0.0.0.0", port)
 	listener, err := net.Listen("tcp", hostPort)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	log.Printf("Listening on ssh://%s\n", hostPort)
 
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			// TODO: handle failed connection
 			continue
 		}
 		log.Printf("New TCP connection from %s", conn.RemoteAddr())
@@ -123,7 +141,9 @@ func (s *Server) upgradeConnection(conn net.Conn) {
 	log.Printf("New SSH connection from %s (%s)", conn.RemoteAddr(), sshConn.ClientVersion())
 
 	defer func() {
-		conn.Close()
+		if err := conn.Close(); err != nil {
+			s.handleError(err, nil)
+		}
 		log.Printf("Closed connection to %s", conn.RemoteAddr())
 	}()
 	go ssh.DiscardRequests(reqs)
@@ -135,7 +155,9 @@ func (s *Server) handleChannels(chans <-chan ssh.NewChannel, conn *ssh.ServerCon
 	for newChannel := range chans {
 		log.Printf("New SSH channel from %s", conn.RemoteAddr())
 		if chanType := newChannel.ChannelType(); chanType != "session" {
-			newChannel.Reject(ssh.Prohibited, fmt.Sprintf("Unsupported channel type: %s", chanType))
+			if err := newChannel.Reject(ssh.Prohibited, fmt.Sprintf("Unsupported channel type: %s", chanType)); err != nil {
+				s.handleError(err, nil)
+			}
 			continue
 		}
 
@@ -145,21 +167,22 @@ func (s *Server) handleChannels(chans <-chan ssh.NewChannel, conn *ssh.ServerCon
 			continue
 		}
 
-		defer func() {
-			channel.Close()
-			log.Printf("Closed SSH channel with %s", conn.RemoteAddr())
-		}()
 		// Do not block handling requests so we can service new channels
-		go s.handleRequests(reqs, channel, conn)
+		go func() {
+			if err := s.handleRequests(reqs, channel, conn); err != nil {
+				s.handleError(err, nil)
+			}
+		}()
 	}
 }
 
 // Service requests on given channel
-func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, conn *ssh.ServerConn) {
+func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, conn *ssh.ServerConn) error {
 	env := make([]string, 0)
-	wantsPty := false
+	var terminal *pty.Terminal
+	var cmd *exec.Cmd
+
 	for req := range reqs {
-		log.Printf("New SSH request '%s' from %s", req.Type, conn.RemoteAddr())
 		switch req.Type {
 		case "env":
 			if s.passEnv {
@@ -170,69 +193,152 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 				val := string(req.Payload[keyLen+8 : keyLen+valLen+8])
 				env = append(env, fmt.Sprintf("%s=%s", key, val))
 			}
-			req.Reply(s.passEnv, nil)
+			if err := req.Reply(s.passEnv, nil); err != nil {
+				return err
+			}
 		case "pty-req":
-			// client has requested a PTY
-			wantsPty = true
-			req.Reply(true, nil)
-		case "shell":
-			// client has not supplied a command, reject
-			req.Reply(false, nil)
+			if terminal == nil {
+				var err error
+				terminal, err = pty.NewTerminal()
+				if err != nil {
+					return err
+				}
+
+				termLen := req.Payload[3]
+				term := req.Payload[4 : termLen+4]
+				env = append(env, fmt.Sprintf("TERM=%s", term))
+				w := int(binary.BigEndian.Uint32(req.Payload[termLen+4 : termLen+8]))
+				h := int(binary.BigEndian.Uint32(req.Payload[termLen+8 : termLen+12]))
+				if err := terminal.SetWinSize(w, h); err != nil {
+					return err
+				}
+			}
+			if err := req.Reply(terminal != nil, nil); err != nil {
+				return err
+			}
+		case "window-change":
+			if terminal != nil {
+				w := int(binary.BigEndian.Uint32(req.Payload[0:4]))
+				h := int(binary.BigEndian.Uint32(req.Payload[4:8]))
+				if err := terminal.SetWinSize(w, h); err != nil {
+					return err
+				}
+			}
 		case "exec":
 			// setup is done, parse client exec command
 			cmdLen := req.Payload[3]
 			command := string(req.Payload[4 : cmdLen+4])
-			req.Reply(true, nil)
-			s.handleExec(conn, channel, command, env, wantsPty)
-			log.Printf("Closing SSH channel with %s", conn.RemoteAddr())
-			channel.Close()
-			return
+			log.Printf("Handling command '%s' from %s", command, conn.RemoteAddr())
+			cmd = exec.Command(s.shell)
+			cmd.Env = append(cmd.Env, env...)
+			cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_USER=%s", conn.User()))
+			cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_ORIGINAL_COMMAND=%s", command))
+
+			if err := s.launchCommand(channel, cmd, terminal); err != nil {
+				s.handleError(err, nil)
+			}
+
+			go func() {
+				done := make(chan error, 1)
+				go func() {
+					done <- cmd.Wait()
+				}()
+			Loop:
+				for {
+					select {
+					case <-time.After(10 * time.Second):
+						if _, err := channel.SendRequest("ping", false, []byte{}); err != nil {
+							// Channel is dead, kill process
+							if err := cmd.Process.Kill(); err != nil {
+								s.handleError(err, nil)
+							}
+							break Loop
+						}
+					case err := <-done:
+						if err != nil {
+							s.handleError(err, nil)
+						}
+						break Loop
+					}
+				}
+
+				exitStatusPayload := make([]byte, 4)
+				exitStatus := uint32(1)
+				if cmd.ProcessState != nil {
+					if sysProcState := cmd.ProcessState.Sys(); sysProcState != nil {
+						if cmdWaitStatus, ok := sysProcState.(syscall.WaitStatus); ok {
+							exitStatus = uint32(cmdWaitStatus.ExitStatus())
+						}
+					}
+				}
+				binary.BigEndian.PutUint32(exitStatusPayload, uint32(exitStatus))
+				if _, err := channel.SendRequest("exit-status", false, exitStatusPayload); err != nil {
+					s.handleError(err, nil)
+				}
+
+				if terminal != nil {
+					if err := terminal.Close(); err != nil {
+						s.handleError(err, nil)
+					}
+				}
+				if err := channel.Close(); err != nil {
+					s.handleError(err, nil)
+				}
+				log.Printf("Closed SSH channel with %s", conn.RemoteAddr())
+			}()
+
 		default:
 			log.Printf("Discarding request with unknown type '%s'", req.Type)
+			if req.WantReply {
+				if err := req.Reply(false, nil); err != nil {
+					return err
+				}
+			}
 		}
 	}
+
+	return nil
 }
 
-// Hand off to shell, creating PTY if requested
-func (s *Server) handleExec(conn *ssh.ServerConn, channel ssh.Channel, command string, env []string, wantsPty bool) {
-	log.Printf("Handling command '%s' from %s", command, conn.RemoteAddr())
-	cmd := exec.Command(s.shell)
-	cmd.Env = append(cmd.Env, env...)
-	cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_USER=%s", conn.User()))
-	cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_ORIGINAL_COMMAND=%s", command))
-
-	if wantsPty {
-		p, err := pty.Start(cmd)
-		if err != nil {
-			panic(err)
+func (s *Server) launchCommand(channel ssh.Channel, cmd *exec.Cmd, terminal *pty.Terminal) error {
+	ioCopy := func(dst io.Writer, src io.Reader) {
+		if _, err := io.Copy(dst, src); err != nil {
+			s.handleError(err, nil)
 		}
-		go io.Copy(p, channel)
-		io.Copy(channel, p)
+	}
+
+	if terminal != nil {
+		err := terminal.Start(cmd)
+		if err != nil {
+			return err
+		}
+
+		go ioCopy(terminal, channel)
+		go ioCopy(channel, terminal)
 	} else {
 		stdout, err := cmd.StdoutPipe()
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		stderr, err := cmd.StderrPipe()
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		stdin, err := cmd.StdinPipe()
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		if err = cmd.Start(); err != nil {
-			panic(err)
+			return err
 		}
 
-		go io.Copy(stdin, channel)
-		go io.Copy(channel, stdout)
-		go io.Copy(channel.Stderr(), stderr)
-
-		cmd.Wait()
+		go ioCopy(stdin, channel)
+		go ioCopy(channel, stdout)
+		go ioCopy(channel.Stderr(), stderr)
 	}
-	channel.SendRequest("exit-status", false, []byte{0, 0, 0, 0})
+
+	return nil
 }

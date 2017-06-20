@@ -3,7 +3,7 @@ PROJECT ?= sshproxy
 PACKAGE ?= resin
 EXECUTABLE ?= sshproxy
 VERSION := $(shell git describe --abbrev=0 --tags)
-BUILD_PLATFORMS ?= darwin/amd64 freebsd/amd64 linux/arm linux/arm64 linux/amd64 openbsd/amd64 netbsd/amd64
+BUILD_PLATFORMS ?= darwin/amd64 linux/386 linux/arm linux/arm64 linux/amd64
 SHASUM ?= sha256sum
 
 all: bin/$(EXECUTABLE)
@@ -13,6 +13,7 @@ dep:
 	go get github.com/mitchellh/gox
 
 lint-dep: dep
+	go get github.com/kisielk/errcheck
 	go get github.com/golang/lint/golint
 	go get golang.org/x/tools/cmd/goimports
 
@@ -21,6 +22,7 @@ lint: lint-dep
 	gofmt -e -l -s .
 	golint -set_exit_status ./...
 	go tool vet .
+	errcheck -verbose ./...
 
 test-dep: dep
 	go test -i -v ./...
@@ -40,7 +42,7 @@ ifndef GITHUB_TOKEN
 endif
 	git describe --exact-match --tags >/dev/null
 
-	git log --format='* %s' --grep=$(VERSION) --invert-grep --no-merges $(shell git describe --tag --abbrev=0 $(VERSION)^)...$(VERSION) | \
+	git log --format='* %s' --grep='change-type:' --regexp-ignore-case $(shell git describe --tag --abbrev=0 $(VERSION)^)...$(VERSION) | \
 		github-release release -u $(USERNAME) -r $(PROJECT) -t $(VERSION) -n $(VERSION) -d - || true
 	$(foreach FILE, $(addsuffix .tar.gz,$(addprefix build/$(EXECUTABLE)-$(VERSION)_,$(subst /,_,$(BUILD_PLATFORMS)))), \
 		github-release upload -u $(USERNAME) -r $(PROJECT) -t $(VERSION) -n $(notdir $(FILE)) -f $(FILE) && \
