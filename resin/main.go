@@ -26,6 +26,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"syscall"
 
 	"github.com/getsentry/raven-go"
 	"github.com/resin-io/sshproxy"
@@ -41,6 +42,8 @@ func init() {
 	pflag.CommandLine.StringP("dir", "d", "/etc/sshproxy", "Work dir, holds ssh keys and sshproxy config")
 	pflag.CommandLine.IntP("port", "p", 22, "Port the ssh service will listen on")
 	pflag.CommandLine.StringP("shell", "s", "shell.sh", "Path to shell to execute post-authentication")
+	pflag.CommandLine.Int64P("shell-uid", "u", -1, "User to run shell as (default: current uid)")
+	pflag.CommandLine.Int64P("shell-gid", "g", -1, "Group to run shell as (default: current gid)")
 	pflag.CommandLine.StringP("auth-failed-banner", "b", "", "Path to template displayed after failed authentication")
 	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
 	pflag.CommandLine.BoolP("allow-env", "E", false, "Pass environment from client to shell (default: false) (warning: security implications)")
@@ -68,6 +71,12 @@ func init() {
 			return err
 		}
 		if err := viper.BindEnv("shell"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("shell-uid", "SSHPROXY_SHELL_UID"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("shell-gid", "SSHPROXY_SHELL_GID"); err != nil {
 			return err
 		}
 		if err := viper.BindEnv("auth-failed-banner", "SSHPROXY_AUTH_FAILED_BANNER"); err != nil {
@@ -124,6 +133,14 @@ func main() {
 		fixPathCheckExists("auth-failed-banner")
 	}
 
+	shellCreds := &syscall.Credential{}
+	if viper.GetInt64("shell-uid") > 0 {
+		shellCreds.Uid = uint32(viper.GetInt64("shell-uid"))
+	}
+	if viper.GetInt64("shell-gid") > 0 {
+		shellCreds.Gid = uint32(viper.GetInt64("shell-gid"))
+	}
+
 	apiURL := fmt.Sprintf("https://%s:%d", viper.GetString("apihost"), viper.GetInt("apiport"))
 	auth := newAuthHandler(apiURL, viper.GetString("apikey"))
 	sshConfig := &ssh.ServerConfig{
@@ -150,6 +167,7 @@ func main() {
 		viper.GetString("dir"),
 		viper.GetString("shell"),
 		viper.GetBool("allow-env"),
+		shellCreds,
 		sshConfig,
 		func(err error, tags map[string]string) {
 			log.Printf("ERROR: %s", err)
