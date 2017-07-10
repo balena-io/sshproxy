@@ -42,6 +42,7 @@ type Server struct {
 	keyDir       string
 	config       *ssh.ServerConfig
 	shell        string
+	shellCreds   *syscall.Credential
 	passEnv      bool
 	errorHandler ErrorHandler
 }
@@ -53,11 +54,12 @@ type ErrorHandler func(error, map[string]string)
 // and an ssh.ServerConfig. If no ServerConfig is provided, then
 // ServerConfig.NoClientAuth is set to true. ed25519, rsa, ecdsa and dsa
 // keys are loaded, and generated if they do not exist. Returns a new Server.
-func New(keyDir, shell string, passEnv bool, sshConfig *ssh.ServerConfig, errorHandler ErrorHandler) (*Server, error) {
+func New(keyDir, shell string, passEnv bool, shellCreds *syscall.Credential, sshConfig *ssh.ServerConfig, errorHandler ErrorHandler) (*Server, error) {
 	s := &Server{
 		keyDir:       keyDir,
 		config:       sshConfig,
 		shell:        shell,
+		shellCreds:   shellCreds,
 		passEnv:      passEnv,
 		errorHandler: errorHandler,
 	}
@@ -305,6 +307,10 @@ func (s *Server) launchCommand(channel ssh.Channel, cmd *exec.Cmd, terminal *pty
 		if _, err := io.Copy(dst, src); err != nil {
 			s.handleError(err, nil)
 		}
+	}
+
+	if s.shellCreds != nil {
+		cmd.SysProcAttr = &syscall.SysProcAttr{Credential: s.shellCreds}
 	}
 
 	if terminal != nil {

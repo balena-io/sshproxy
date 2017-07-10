@@ -25,6 +25,8 @@ they can all be set via commandline, environment or config file.
 | Dir                | `--dir` `-d`                | `SSHPROXY_DIR`                |                      |
 | Port               | `--port` `-p`               | `SSHPROXY_PORT`               | `port`               |
 | Shell              | `--shell` `-s`              | `SSHPROXY_SHELL`              | `shell`              |
+| Shell Uid          | `--shell-uid` `-u`          | `SSHPROXY_SHELL_UID`          | `shell-uid`          |
+| Shell Gid          | `--shell-gid` `-g`          | `SSHPROXY_SHELL_GID`          | `shell-gid`          |
 | Auth Failed Banner | `--auth-failed-banner` `-b` | `SSHPROXY_AUTH_FAILED_BANNER` | `auth-failed-banner` |
 | Max Auth Tries     | `--max-auth-tries` `-m`     | `SSHPROXY_MAX_AUTH_TRIES`     | `max-auth-tries`     |
 | Allow Env          | `--allow-env` `-E`          | `SSHPROXY_ALLOW_ENV`          | `allow-env`          |
@@ -42,6 +44,8 @@ Usage of sshproxy:
   -p, --port int                    Port the ssh service will listen on (default 22)
   -S, --sentry-dsn string           Sentry DSN for error reporting
   -s, --shell string                Path to shell to execute post-authentication (default "shell.sh")
+  -g, --shell-gid int               Group to run shell as (default: current gid)
+  -u, --shell-uid int               User to run shell as (default: current uid)
 ```
 
 ## Auth Failed Banner/Template
