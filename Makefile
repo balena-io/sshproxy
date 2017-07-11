@@ -53,10 +53,10 @@ clean:
 
 # binary
 bin/$(EXECUTABLE): dep
-	go build -o "$@" -v ./$(PACKAGE)
+	go build -ldflags="-X main.version=$(VERSION)" -o "$@" -v ./$(PACKAGE)
 # release binaries
 build/%/$(EXECUTABLE): dep
-	gox -parallel=1 -osarch=$(subst _,/,$(subst build/,,$(@:/$(EXECUTABLE)=))) -output="build/{{.OS}}_{{.Arch}}/$(EXECUTABLE)" ./$(PACKAGE)
+	gox -parallel=1 -osarch=$(subst _,/,$(subst build/,,$(@:/$(EXECUTABLE)=))) -ldflags="-X main.version=$(VERSION)" -output="build/{{.OS}}_{{.Arch}}/$(EXECUTABLE)" ./$(PACKAGE)
 # compressed artifacts
 build/$(EXECUTABLE)-$(VERSION)_%.tar.gz: build/%/$(EXECUTABLE)
 	tar -zcf "$@" -C "$(dir $<)" $(EXECUTABLE)

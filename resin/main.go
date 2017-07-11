@@ -26,6 +26,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"runtime"
 	"syscall"
 
 	"github.com/getsentry/raven-go"
@@ -34,6 +35,8 @@ import (
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/ssh"
 )
+
+var version string
 
 func init() {
 	pflag.CommandLine.StringP("apihost", "H", "api.resin.io", "Resin API Host")
@@ -48,6 +51,7 @@ func init() {
 	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
 	pflag.CommandLine.BoolP("allow-env", "E", false, "Pass environment from client to shell (default: false) (warning: security implications)")
 	pflag.CommandLine.StringP("sentry-dsn", "S", "", "Sentry DSN for error reporting")
+	pflag.CommandLine.BoolP("version", "", false, "Display version and exit")
 
 	viper.SetConfigName("sshproxy")
 	viper.SetEnvPrefix("SSHPROXY")
@@ -104,6 +108,11 @@ func main() {
 	viper.AddConfigPath(viper.GetString("dir"))
 	viper.AddConfigPath("/etc")
 	_ = viper.ReadInConfig()
+
+	if viper.GetBool("version") {
+		fmt.Printf("sshproxy %s (%s)\n", version, runtime.Version())
+		return
+	}
 
 	// API Key is required
 	if viper.GetString("apikey") == "" {
