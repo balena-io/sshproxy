@@ -46,6 +46,7 @@ Usage of sshproxy:
   -s, --shell string                Path to shell to execute post-authentication (default "shell.sh")
   -g, --shell-gid int               Group to run shell as (default: current gid)
   -u, --shell-uid int               User to run shell as (default: current uid)
+      --version                     Display version and exit
 ```
 
 ## Auth Failed Banner/Template
