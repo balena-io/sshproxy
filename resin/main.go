@@ -92,10 +92,7 @@ func init() {
 		if err := viper.BindEnv("allow-env", "SSHPROXY_ALLOW_ENV"); err != nil {
 			return err
 		}
-		if err := viper.BindEnv("sentry-dsn", "SSHPROXY_SENTRY_DSN"); err != nil {
-			return err
-		}
-		return nil
+		return viper.BindEnv("sentry-dsn", "SSHPROXY_SENTRY_DSN")
 	}()
 	if err != nil {
 		log.Fatal("Initialisation failed", err)
