@@ -30,6 +30,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sync"
 	"syscall"
 	"time"
 
@@ -154,6 +155,7 @@ func (s *Server) upgradeConnection(conn net.Conn) {
 
 // After successful handshake, handle new channels. Only the "session" type is supported.
 func (s *Server) handleChannels(chans <-chan ssh.NewChannel, conn *ssh.ServerConn) {
+	var wg = sync.WaitGroup
 	for newChannel := range chans {
 		log.Printf("New SSH channel from %s", conn.RemoteAddr())
 		if chanType := newChannel.ChannelType(); chanType != "session" {
@@ -171,15 +173,18 @@ func (s *Server) handleChannels(chans <-chan ssh.NewChannel, conn *ssh.ServerCon
 
 		// Do not block handling requests so we can service new channels
 		go func() {
-			if err := s.handleRequests(reqs, channel, conn); err != nil {
+			wg.Add(1)
+			if err := s.handleRequests(reqs, channel, conn, wg); err != nil {
 				s.handleError(err, nil)
 			}
 		}()
 	}
+	wg.Wait()
 }
 
 // Service requests on given channel
-func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, conn *ssh.ServerConn) error {
+func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, conn *ssh.ServerConn, wg sync.WaitGroup) error {
+	defer wg.Done()
 	env := make([]string, 0)
 	var terminal *pty.Terminal
 	var cmd *exec.Cmd
