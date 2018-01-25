@@ -144,9 +144,7 @@ func (s *Server) upgradeConnection(conn net.Conn) {
 	log.Printf("New SSH connection from %s (%s)", conn.RemoteAddr(), sshConn.ClientVersion())
 
 	defer func() {
-		if err := conn.Close(); err != nil {
-			s.handleError(err, nil)
-		}
+		conn.Close()
 		log.Printf("Closed connection to %s", conn.RemoteAddr())
 	}()
 	go ssh.DiscardRequests(reqs)
@@ -261,10 +259,7 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 							}
 							break Loop
 						}
-					case err := <-done:
-						if err != nil {
-							s.handleError(err, nil)
-						}
+					case <-done:
 						break Loop
 					}
 				}
@@ -308,12 +303,6 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 }
 
 func (s *Server) launchCommand(channel ssh.Channel, cmd *exec.Cmd, terminal *pty.Terminal) error {
-	ioCopy := func(dst io.Writer, src io.Reader) {
-		if _, err := io.Copy(dst, src); err != nil {
-			s.handleError(err, nil)
-		}
-	}
-
 	if s.shellCreds != nil {
 		cmd.SysProcAttr = &syscall.SysProcAttr{Credential: s.shellCreds}
 	}
@@ -324,8 +313,8 @@ func (s *Server) launchCommand(channel ssh.Channel, cmd *exec.Cmd, terminal *pty
 			return err
 		}
 
-		go ioCopy(terminal, channel)
-		go ioCopy(channel, terminal)
+		go io.Copy(terminal, channel)
+		go io.Copy(channel, terminal)
 	} else {
 		stdout, err := cmd.StdoutPipe()
 		if err != nil {
@@ -346,9 +335,9 @@ func (s *Server) launchCommand(channel ssh.Channel, cmd *exec.Cmd, terminal *pty
 			return err
 		}
 
-		go ioCopy(stdin, channel)
-		go ioCopy(channel, stdout)
-		go ioCopy(channel.Stderr(), stderr)
+		go io.Copy(stdin, channel)
+		go io.Copy(channel, stdout)
+		go io.Copy(channel.Stderr(), stderr)
 	}
 
 	return nil

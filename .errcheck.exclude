@@ -1,0 +1,2 @@
+io.Copy
+(net.Conn).Close
