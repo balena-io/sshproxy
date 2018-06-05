@@ -243,6 +243,12 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 				s.handleError(err, nil)
 			}
 
+			if req.WantReply {
+				if err := req.Reply(true, nil); err != nil {
+					return err
+				}
+			}
+
 			go func() {
 				done := make(chan error, 1)
 				go func() {
