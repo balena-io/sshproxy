@@ -1,2 +1,4 @@
 io.Copy
 (net.Conn).Close
+fmt.Fprintf
+fmt.Fprintln
