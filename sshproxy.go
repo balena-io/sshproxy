@@ -212,6 +212,8 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 	var cmd *exec.Cmd
 
 	for req := range reqs {
+		log.Printf("[PAGE] got a request: %s", req.Type)
+		log.Printf("[PAGE] %s", req.Payload)
 		switch req.Type {
 		case "env":
 			// append client env to the command environment
