@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Resin.io
+Copyright 2017 Balena Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/resin-io/pinejs-client-go"
+	"github.com/balena-io/pinejs-client-go"
 	"golang.org/x/crypto/ssh"
 )
 

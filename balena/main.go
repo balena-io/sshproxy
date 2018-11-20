@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Resin.io
+Copyright 2017 Balena Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// A "resin-ready" binary which handles authentication via resin api,
+// A "balena-ready" binary which handles authentication via balena api,
 // requiring minimal configuration.
 //
-// See https://github.com/resin-io/sshproxy/tree/master/resin#readme
+// See https://github.com/balena-io/sshproxy/tree/master/balena#readme
 package main
 
 import (
@@ -29,8 +29,8 @@ import (
 	"runtime"
 	"syscall"
 
+	"github.com/balena-io/sshproxy"
 	"github.com/getsentry/raven-go"
-	"github.com/resin-io/sshproxy"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/ssh"
@@ -39,9 +39,9 @@ import (
 var version string
 
 func init() {
-	pflag.CommandLine.StringP("apihost", "H", "api.resin.io", "Resin API Host")
-	pflag.CommandLine.StringP("apiport", "P", "443", "Resin API Port")
-	pflag.CommandLine.StringP("apikey", "K", "", "Resin API Key (required)")
+	pflag.CommandLine.StringP("apihost", "H", "api.balena-cloud.com", "Balena API Host")
+	pflag.CommandLine.StringP("apiport", "P", "443", "Balena API Port")
+	pflag.CommandLine.StringP("apikey", "K", "", "Balena API Key (required)")
 	pflag.CommandLine.StringP("dir", "d", "/etc/sshproxy", "Work dir, holds ssh keys and sshproxy config")
 	pflag.CommandLine.IntP("port", "p", 22, "Port the ssh service will listen on")
 	pflag.CommandLine.StringP("shell", "s", "shell.sh", "Path to shell to execute post-authentication")
@@ -59,10 +59,10 @@ func init() {
 		if err := viper.BindPFlags(pflag.CommandLine); err != nil {
 			return err
 		}
-		if err := viper.BindEnv("apihost", "RESIN_API_HOST"); err != nil {
+		if err := viper.BindEnv("apihost", "BALENA_API_HOST"); err != nil {
 			return err
 		}
-		if err := viper.BindEnv("apiport", "RESIN_API_PORT"); err != nil {
+		if err := viper.BindEnv("apiport", "BALENA_API_PORT"); err != nil {
 			return err
 		}
 		if err := viper.BindEnv("apikey", "SSHPROXY_API_KEY"); err != nil {
@@ -113,7 +113,7 @@ func main() {
 
 	// API Key is required
 	if viper.GetString("apikey") == "" {
-		fmt.Fprintln(os.Stderr, "Error: Resin API Key is required.")
+		fmt.Fprintln(os.Stderr, "Error: Balena API Key is required.")
 		pflag.Usage()
 		os.Exit(2)
 	}
