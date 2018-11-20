@@ -192,8 +192,8 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 		case "env":
 			if s.passEnv {
 				// append client env to the command environment
-				keyLen := req.Payload[3]
-				valLen := req.Payload[keyLen+7]
+				keyLen := binary.BigEndian.Uint32(req.Payload[:4])
+				valLen := binary.BigEndian.Uint32(req.Payload[keyLen+4 : keyLen+8])
 				key := string(req.Payload[4 : keyLen+4])
 				val := string(req.Payload[keyLen+8 : keyLen+valLen+8])
 				env = append(env, fmt.Sprintf("%s=%s", key, val))
@@ -209,7 +209,7 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 					return err
 				}
 
-				termLen := req.Payload[3]
+				termLen := binary.BigEndian.Uint32(req.Payload[:4])
 				term := req.Payload[4 : termLen+4]
 				env = append(env, fmt.Sprintf("TERM=%s", term))
 				w := int(binary.BigEndian.Uint32(req.Payload[termLen+4 : termLen+8]))
@@ -231,7 +231,7 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 			}
 		case "exec":
 			// setup is done, parse client exec command
-			cmdLen := req.Payload[3]
+			cmdLen := binary.BigEndian.Uint32(req.Payload[:4])
 			command := string(req.Payload[4 : cmdLen+4])
 			log.Printf("Handling command '%s' from %s", command, conn.RemoteAddr())
 			cmd = exec.Command(s.shell)
