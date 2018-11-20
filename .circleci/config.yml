@@ -2,7 +2,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /go/src/github.com/resin-io/sshproxy
+    working_directory: /go/src/github.com/balena-io/sshproxy
     docker:
       - image: golang:1.11.2
     steps:

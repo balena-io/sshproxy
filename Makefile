@@ -1,6 +1,6 @@
-USERNAME ?= resin-io
+USERNAME ?= balena-io
 PROJECT ?= sshproxy
-PACKAGE ?= resin
+PACKAGE ?= balena
 EXECUTABLE ?= sshproxy
 VERSION := $(shell git describe --abbrev=0 --tags)
 BUILD_PLATFORMS ?= darwin/amd64 linux/386 linux/arm linux/arm64 linux/amd64

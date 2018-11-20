@@ -1,6 +1,6 @@
-# sshproxy/resin
+# sshproxy/balena
 
-A "resin-ready" binary, requiring minimal configuration.
+A "balena-ready" binary, requiring minimal configuration.
 
 Configuration is possible via commandline flags, environment variables
 and config files.
@@ -19,8 +19,8 @@ they can all be set via commandline, environment or config file.
 
 | Name               | Commandline                 | Environment                   | Config               |
 |--------------------|-----------------------------|-------------------------------|----------------------|
-| API Host           | `--apihost` `-H`            | `RESIN_API_HOST`              | `apihost`            |
-| API Port           | `--apiport` `-P`            | `RESIN_API_PORT`              | `apiport`            |
+| API Host           | `--apihost` `-H`            | `BALENA_API_HOST`             | `apihost`            |
+| API Port           | `--apiport` `-P`            | `BALENA_API_PORT`             | `apiport`            |
 | API Key            | `--apikey` `-K`             | `SSHPROXY_API_KEY`            | `apikey`             |
 | Dir                | `--dir` `-d`                | `SSHPROXY_DIR`                |                      |
 | Port               | `--port` `-p`               | `SSHPROXY_PORT`               | `port`               |
@@ -35,9 +35,9 @@ they can all be set via commandline, environment or config file.
 ```
 Usage of sshproxy:
   -E, --allow-env                   Pass environment from client to shell (default: false) (warning: security implications)
-  -H, --apihost string              Resin API Host (default "api.resin.io")
-  -K, --apikey string               Resin API Key (required)
-  -P, --apiport string              Resin API Port (default "443")
+  -H, --apihost string              Balena API Host (default "api.balena-cloud.com")
+  -K, --apikey string               Balena API Key (required)
+  -P, --apiport string              Balena API Port (default "443")
   -b, --auth-failed-banner string   Path to template displayed after failed authentication
   -d, --dir string                  Work dir, holds ssh keys and sshproxy config (default "/etc/sshproxy")
   -m, --max-auth-tries int          Maximum number of authentication attempts per connection (default 0; unlimited)
@@ -57,18 +57,18 @@ The 'auth failed banner' is a template rendered and displayed to the user after 
 ## Example Usage
 
 ```
-% go get github.com/resin-io/sshproxy/resin
+% go get github.com/balena-io/sshproxy/balena
 % export SSHPROXY_DIR=$(mktemp -d /tmp/sshproxy.XXXXXXXX)
 % echo -e '#!/usr/bin/env bash\nenv' > ${SSHPROXY_DIR}/shell.sh && chmod +x ${SSHPROXY_DIR}/shell.sh
   SSHPROXY_PORT=2222 \
   SSHPROXY_API_KEY=... \
-  go run ${GOPATH}/src/github.com/resin-io/sshproxy/resin/main.go
+  go run ${GOPATH}/src/github.com/balena-io/sshproxy/balena/main.go
 ...
 % ssh -o 'StrictHostKeyChecking=no' \
       -o 'UserKnownHostsFile=/dev/null' \
-    resin@localhost -p2222 -- some command
+    balena@localhost -p2222 -- some command
 Warning: Permanently added '[localhost]:2222' (RSA) to the list of known hosts.
-SSH_USER=resin
+SSH_USER=balena
 PWD=...
 LANG=en_GB.UTF-8
 SHLVL=1
@@ -81,5 +81,5 @@ _=/usr/bin/env
 
 The `Makefile` in the project root contains all necessary rules for linting, testing and building sshproxy packages.
 Building via a Docker image can be achieved with, for example:
-`docker run --rm -v $PWD:/go/src/github.com/resin-io/sshproxy golang make -C /go/src/github.com/resin-io/sshproxy lint test release`.
+`docker run --rm -v $PWD:/go/src/github.com/balena-io/sshproxy golang make -C /go/src/github.com/balena-io/sshproxy lint test release`.
 
