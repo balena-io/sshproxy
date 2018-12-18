@@ -54,7 +54,7 @@ func (a *authHandler) getUserKeys(username string) ([]ssh.PublicKey, error) {
 
 	filter := pinejs.QueryOption{
 		Type: pinejs.Filter,
-		Content: []string{fmt.Sprintf("user/any(u:((tolower(u/username)) eq ('%s')))",
+		Content: []string{fmt.Sprintf("user/any(u:tolower(u/username) eq '%s')",
 			strings.ToLower(username))},
 		Raw: true}
 	fields := pinejs.QueryOption{
