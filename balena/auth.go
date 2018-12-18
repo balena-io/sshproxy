@@ -45,7 +45,7 @@ func newAuthHandler(baseURL, apiKey string) authHandler {
 }
 
 func (a *authHandler) getUserKeys(username string) ([]ssh.PublicKey, error) {
-	url := fmt.Sprintf("%s/%s", a.baseURL, "v1")
+	url := fmt.Sprintf("%s/%s", a.baseURL, "v5")
 	client := pinejs.NewClient(url, a.apiKey)
 
 	users := make([]map[string]interface{}, 1)
