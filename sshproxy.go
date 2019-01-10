@@ -128,7 +128,6 @@ func (s *Server) Listen(port string) error {
 		if err != nil {
 			continue
 		}
-		log.Printf("New TCP connection from %s", conn.RemoteAddr())
 
 		go s.upgradeConnection(conn)
 	}
@@ -138,7 +137,9 @@ func (s *Server) Listen(port string) error {
 func (s *Server) upgradeConnection(conn net.Conn) {
 	sshConn, chans, reqs, err := ssh.NewServerConn(conn, s.config)
 	if err != nil {
-		log.Printf("Handshake with %s failed (%s)", conn.RemoteAddr(), err)
+		if err.Error() != "EOF" {
+			log.Printf("Handshake with %s failed (%s)", conn.RemoteAddr(), err)
+		}
 		return
 	}
 	log.Printf("New SSH connection from %s (%s)", conn.RemoteAddr(), sshConn.ClientVersion())
