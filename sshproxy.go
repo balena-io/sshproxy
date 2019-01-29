@@ -46,6 +46,7 @@ type Server struct {
 	shellCreds   *syscall.Credential
 	passEnv      bool
 	errorHandler ErrorHandler
+	verbosity    int
 }
 
 // ErrorHandler is passed any non-fatal errors for reporting.
@@ -55,7 +56,7 @@ type ErrorHandler func(error, map[string]string)
 // and an ssh.ServerConfig. If no ServerConfig is provided, then
 // ServerConfig.NoClientAuth is set to true. ed25519, rsa, ecdsa and dsa
 // keys are loaded, and generated if they do not exist. Returns a new Server.
-func New(keyDir, shell string, passEnv bool, shellCreds *syscall.Credential, sshConfig *ssh.ServerConfig, errorHandler ErrorHandler) (*Server, error) {
+func New(keyDir, shell string, passEnv bool, shellCreds *syscall.Credential, verbosity int, sshConfig *ssh.ServerConfig, errorHandler ErrorHandler) (*Server, error) {
 	s := &Server{
 		keyDir:       keyDir,
 		config:       sshConfig,
@@ -63,6 +64,7 @@ func New(keyDir, shell string, passEnv bool, shellCreds *syscall.Credential, ssh
 		shellCreds:   shellCreds,
 		passEnv:      passEnv,
 		errorHandler: errorHandler,
+		verbosity:    verbosity,
 	}
 	if s.config == nil {
 		s.config = &ssh.ServerConfig{
@@ -93,14 +95,18 @@ func (s *Server) addHostKey(keyType string) error {
 			return err
 		}
 		// generate ssh server keys
-		log.Printf("Generating private key... (%s)", keyType)
+		if s.verbosity >= 1 {
+			log.Printf("Generating private key... (%s)", keyType)
+		}
 		err := exec.Command("ssh-keygen", "-f", keyPath, "-t", keyType, "-N", "").Run()
 		if err != nil {
 			return err
 		}
 	}
 
-	log.Printf("Loading private key... (%s)", keyPath)
+	if s.verbosity >= 1 {
+		log.Printf("Loading private key... (%s)", keyPath)
+	}
 	raw, err := ioutil.ReadFile(keyPath)
 	if err != nil {
 		return err
@@ -128,7 +134,9 @@ func (s *Server) Listen(port string) error {
 		if err != nil {
 			continue
 		}
-		log.Printf("New TCP connection from %s", conn.RemoteAddr())
+		if s.verbosity >= 3 {
+			log.Printf("New TCP connection from %s", conn.RemoteAddr())
+		}
 
 		go s.upgradeConnection(conn)
 	}
@@ -138,14 +146,20 @@ func (s *Server) Listen(port string) error {
 func (s *Server) upgradeConnection(conn net.Conn) {
 	sshConn, chans, reqs, err := ssh.NewServerConn(conn, s.config)
 	if err != nil {
-		log.Printf("Handshake with %s failed (%s)", conn.RemoteAddr(), err)
+		if (s.verbosity >= 1 && err.Error() != "EOF") || (err.Error() == "EOF" && s.verbosity >= 3) {
+			log.Printf("Handshake with %s failed (%s)", conn.RemoteAddr(), err)
+		}
 		return
 	}
-	log.Printf("New SSH connection from %s (%s)", conn.RemoteAddr(), sshConn.ClientVersion())
+	if (s.verbosity >= 2) {
+		log.Printf("New SSH connection from %s (%s)", conn.RemoteAddr(), sshConn.ClientVersion())
+	}
 
 	defer func() {
 		conn.Close()
-		log.Printf("Closed connection to %s", conn.RemoteAddr())
+		if (s.verbosity >= 2) {
+			log.Printf("Closed connection to %s", conn.RemoteAddr())
+		}
 	}()
 	go ssh.DiscardRequests(reqs)
 	s.handleChannels(chans, sshConn)
@@ -155,7 +169,9 @@ func (s *Server) upgradeConnection(conn net.Conn) {
 func (s *Server) handleChannels(chans <-chan ssh.NewChannel, conn *ssh.ServerConn) {
 	var wg sync.WaitGroup
 	for newChannel := range chans {
-		log.Printf("New SSH channel from %s", conn.RemoteAddr())
+		if (s.verbosity >= 2) {
+			log.Printf("New SSH channel from %s", conn.RemoteAddr())
+		}
 		if chanType := newChannel.ChannelType(); chanType != "session" {
 			if err := newChannel.Reject(ssh.Prohibited, fmt.Sprintf("Unsupported channel type: %s", chanType)); err != nil {
 				s.handleError(err, nil)
@@ -165,7 +181,9 @@ func (s *Server) handleChannels(chans <-chan ssh.NewChannel, conn *ssh.ServerCon
 
 		channel, reqs, err := newChannel.Accept()
 		if err != nil {
-			log.Printf("Could not accept channel request (%s)", err)
+			if (s.verbosity >= 1) {
+				log.Printf("Could not accept channel request (%s)", err)
+			}
 			continue
 		}
 
@@ -233,7 +251,9 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 			// setup is done, parse client exec command
 			cmdLen := binary.BigEndian.Uint32(req.Payload[:4])
 			command := string(req.Payload[4 : cmdLen+4])
-			log.Printf("Handling command '%s' from %s", command, conn.RemoteAddr())
+			if s.verbosity >= 1 {
+				log.Printf("Handling command '%s' from %s", command, conn.RemoteAddr())
+			}
 			cmd = exec.Command(s.shell)
 			cmd.Env = append(cmd.Env, env...)
 			cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_USER=%s", conn.User()))
@@ -292,11 +312,15 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 				if err := channel.Close(); err != nil {
 					s.handleError(err, nil)
 				}
-				log.Printf("Closed SSH channel with %s", conn.RemoteAddr())
+				if s.verbosity >= 2 {
+					log.Printf("Closed SSH channel with %s", conn.RemoteAddr())
+				}
 			}()
 
 		default:
-			log.Printf("Discarding request with unknown type '%s'", req.Type)
+			if s.verbosity >= 3 {
+				log.Printf("Discarding request with unknown type '%s'", req.Type)
+			}
 			if req.WantReply {
 				if err := req.Reply(false, nil); err != nil {
 					return err

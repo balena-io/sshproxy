@@ -51,6 +51,7 @@ func init() {
 	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
 	pflag.CommandLine.BoolP("allow-env", "E", false, "Pass environment from client to shell (default: false) (warning: security implications)")
 	pflag.CommandLine.StringP("sentry-dsn", "S", "", "Sentry DSN for error reporting")
+	pflag.CommandLine.IntP("verbosity", "v", 1, "Set verbosity level (0 = quiet, 1 = normal, 2 = verbose, 3 = debug, default: 1)")
 	pflag.CommandLine.BoolP("version", "", false, "Display version and exit")
 
 	viper.SetConfigName("sshproxy")
@@ -77,6 +78,9 @@ func init() {
 		if err := viper.BindEnv("shell"); err != nil {
 			return err
 		}
+		if err := viper.BindEnv("verbosity"); err != nil {
+			return err
+		}
 		if err := viper.BindEnv("shell-uid", "SSHPROXY_SHELL_UID"); err != nil {
 			return err
 		}
@@ -92,7 +96,10 @@ func init() {
 		if err := viper.BindEnv("allow-env", "SSHPROXY_ALLOW_ENV"); err != nil {
 			return err
 		}
-		return viper.BindEnv("sentry-dsn", "SSHPROXY_SENTRY_DSN")
+		if err := viper.BindEnv("sentry-dsn", "SSHPROXY_SENTRY_DSN"); err != nil {
+			return err
+		}
+		return nil
 	}()
 	if err != nil {
 		log.Fatal("Initialisation failed", err)
@@ -174,6 +181,7 @@ func main() {
 		viper.GetString("shell"),
 		viper.GetBool("allow-env"),
 		shellCreds,
+		viper.GetInt("verbosity"),
 		sshConfig,
 		func(err error, tags map[string]string) {
 			log.Printf("ERROR: %s", err)
