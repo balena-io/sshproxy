@@ -25,7 +25,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/balena-io/pinejs-client-go"
+	pinejs "github.com/balena-io/pinejs-client-go"
 	"golang.org/x/crypto/ssh"
 )
 

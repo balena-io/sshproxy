@@ -30,7 +30,7 @@ import (
 	"syscall"
 
 	"github.com/balena-io/sshproxy"
-	"github.com/getsentry/raven-go"
+	raven "github.com/getsentry/raven-go"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/ssh"

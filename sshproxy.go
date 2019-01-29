@@ -151,13 +151,13 @@ func (s *Server) upgradeConnection(conn net.Conn) {
 		}
 		return
 	}
-	if (s.verbosity >= 2) {
+	if s.verbosity >= 2 {
 		log.Printf("New SSH connection from %s (%s)", conn.RemoteAddr(), sshConn.ClientVersion())
 	}
 
 	defer func() {
 		conn.Close()
-		if (s.verbosity >= 2) {
+		if s.verbosity >= 2 {
 			log.Printf("Closed connection to %s", conn.RemoteAddr())
 		}
 	}()
@@ -169,7 +169,7 @@ func (s *Server) upgradeConnection(conn net.Conn) {
 func (s *Server) handleChannels(chans <-chan ssh.NewChannel, conn *ssh.ServerConn) {
 	var wg sync.WaitGroup
 	for newChannel := range chans {
-		if (s.verbosity >= 2) {
+		if s.verbosity >= 2 {
 			log.Printf("New SSH channel from %s", conn.RemoteAddr())
 		}
 		if chanType := newChannel.ChannelType(); chanType != "session" {
@@ -181,7 +181,7 @@ func (s *Server) handleChannels(chans <-chan ssh.NewChannel, conn *ssh.ServerCon
 
 		channel, reqs, err := newChannel.Accept()
 		if err != nil {
-			if (s.verbosity >= 1) {
+			if s.verbosity >= 1 {
 				log.Printf("Could not accept channel request (%s)", err)
 			}
 			continue
