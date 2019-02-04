@@ -27,12 +27,21 @@ import (
 
 	pinejs "github.com/balena-io/pinejs-client-go"
 	"golang.org/x/crypto/ssh"
+	"golang.org/x/sync/syncmap"
 )
 
 type authHandler struct {
 	baseURL, apiKey  string
 	template         string
-	rejectedSessions map[string]int
+	rejectedSessions syncmap.Map
+}
+
+func parseInt(i interface{}) (int, error) {
+	n, ok := i.(int)
+	if !ok {
+		return 0, errors.New("invalid number")
+	}
+	return n, nil
 }
 
 func newAuthHandler(baseURL, apiKey string) authHandler {
@@ -40,7 +49,7 @@ func newAuthHandler(baseURL, apiKey string) authHandler {
 		baseURL:          baseURL,
 		apiKey:           apiKey,
 		template:         "",
-		rejectedSessions: map[string]int{},
+		rejectedSessions: syncmap.Map{},
 	}
 }
 
@@ -95,16 +104,21 @@ func (a *authHandler) publicKeyCallback(meta ssh.ConnMetadata, key ssh.PublicKey
 func (a *authHandler) keyboardInteractiveCallback(meta ssh.ConnMetadata, client ssh.KeyboardInteractiveChallenge) (*ssh.Permissions, error) {
 	// check if this session has already been rejected, only send the banner once
 	sessionKey := string(meta.SessionID())
-	if _, ok := a.rejectedSessions[sessionKey]; ok {
+	if i, ok := a.rejectedSessions.Load(sessionKey); ok {
+		n, err := parseInt(i)
+		if err != nil {
+			return nil, errors.New("Unauthorised")
+		}
 		// this operates on the assumption that `keyboard-interactive` will be attempted three times
 		// and then cleans up the state
-		a.rejectedSessions[sessionKey]++
-		if a.rejectedSessions[sessionKey] == 3 {
-			delete(a.rejectedSessions, sessionKey)
+		if n == 3 {
+			a.rejectedSessions.Delete(sessionKey)
+		} else {
+			a.rejectedSessions.Store(sessionKey, n+1)
 		}
 		return nil, errors.New("Unauthorised")
 	}
-	a.rejectedSessions[sessionKey] = 1
+	a.rejectedSessions.Store(sessionKey, 1)
 
 	// fetch user's keys...
 	keys, err := a.getUserKeys(meta.User())
