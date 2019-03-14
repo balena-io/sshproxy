@@ -1,4 +1,16 @@
 - commits:
+    - subject: 'versionbot: Remove `v` version prefix in CHANGELOG.yml'
+      hash: 51d4bfc96e2d5a99c2279fc418deb0c1a71b977a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 2.1.5
+  date: 2019-03-14T14:12:27.430Z
+- commits:
     - subject: update to Go v1.12
       hash: 0e1b4572b6b4954c080c7dcd925c28956261885a
       body: ''
