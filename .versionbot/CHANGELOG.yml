@@ -1,4 +1,16 @@
 - commits:
+    - subject: use syncmap to track keyboardInteractive auth attempts
+      hash: 9b9ed6f5a43d25b51afab826174f44fa4859da1f
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 2.2.0
+  date: 2019-03-14T09:29:13.062Z
+- commits:
     - subject: 'versionbot: Add CHANGELOG.yml (for nested changelogs)'
       hash: 57b584e008bcf2275a3442d4bbbc277bbbedcd09
       body: ''
