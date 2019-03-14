@@ -39,7 +39,7 @@
       hash: 502131a8eb3165f4845d810f0ed470593d3821c4
       subject: update to Go v1.11.5
   date: '2019-01-29T09:55:27Z'
-  version: v2.1.2
+  version: 2.1.2
 - commits:
     - author: Will Boyce
       footers:
@@ -48,7 +48,7 @@
       hash: 04ebb1df3b8b078e257ef5453b745b1a0926ad56
       subject: Add verbosity flag with 4 levels (0-3)
   date: '2019-01-29T09:30:31Z'
-  version: v2.1.1
+  version: 2.1.1
 - commits:
     - author: Will Boyce
       footers:
@@ -63,7 +63,7 @@
       hash: cd75b7cf6c81f31bf7fc8fbae3988ee7fefb7297
       subject: use Balena api v5 endpoints
   date: '2018-12-18T22:20:27Z'
-  version: v2.1.0
+  version: 2.1.0
 - commits:
     - author: Pagan Gazzard
       footers:
@@ -71,7 +71,7 @@
       hash: 80f8463b9c234d34c0c9340cb1f77a93987789a5
       subject: Remove unnecessary brackets from filter
   date: '2018-12-18T16:57:29Z'
-  version: v2.0.1
+  version: 2.0.1
 - commits:
     - author: Will Boyce
       footers:
@@ -86,7 +86,7 @@
       hash: e1ba5f9e36db000190e3aabcd19ed64e76e802f1
       subject: 'rename: s/resin/balena'
   date: '2018-11-20T14:54:15Z'
-  version: v2.0.0
+  version: 2.0.0
 - commits:
     - author: Will Boyce
       footers:
@@ -96,7 +96,7 @@
       hash: a4840bf0d278f5752a64d09c35d6298db6ab15da
       subject: fix incorrect parsing of payload lengths
   date: '2018-11-20T13:53:06Z'
-  version: v1.5.0
+  version: 1.5.0
 - commits:
     - author: Gergely Imreh
       footers:
@@ -105,7 +105,7 @@
       hash: e7d9e4ae64d3f1dfddc9f6b55e507e91fa06cdb3
       subject: let exec sessions also send replies to the client if requested
   date: '2018-06-11T15:28:59Z'
-  version: v1.4.5
+  version: 1.4.5
 - commits:
     - author: Gergely Imreh
       body: |-
@@ -118,7 +118,7 @@
       hash: b70441bbbb08564b11fe0ae62b8bb152e1e9e230
       subject: moving to golang 1.10.2 and update testing setup
   date: '2018-06-11T15:18:12Z'
-  version: v1.4.4
+  version: 1.4.4
 - commits:
     - author: Alexis Svinartchouk
       body: >-
@@ -136,7 +136,7 @@
       hash: 7e5ddb97c7d63f59005c90ebbca86663f16b58ab
       subject: Remove excessively verbose logging
   date: '2018-02-02T19:05:19Z'
-  version: v1.4.3
+  version: 1.4.3
 - commits:
     - author: Andreas Fitzek
       footers:
@@ -146,7 +146,7 @@
       hash: 6946659c3b8356c00dd7423f9f28a7bca37c8b63
       subject: Use keyType during key generation to create correct key type
   date: '2017-11-30T08:59:25Z'
-  version: v1.4.2
+  version: 1.4.2
 - commits:
     - author: Will Boyce
       footers:
@@ -154,7 +154,7 @@
       hash: 3d8cfcaf161093bf6791cc1e67e656b6d98d7475
       subject: expose version information to build and add --version flag
   date: '2017-07-11T15:20:47Z'
-  version: v1.4.1
+  version: 1.4.1
 - commits:
     - author: Will Boyce
       body: |-
@@ -163,7 +163,7 @@
       hash: 5af8666e4da0b096c9642823b18ff13298295f5d
       subject: Add support for running shell with alternative credentials
   date: '2017-07-10T11:38:08Z'
-  version: v1.4.0
+  version: 1.4.0
 - commits:
     - author: Will Boyce
       body: |-
@@ -206,7 +206,7 @@
       hash: aa6e2c45ff7a3b0e0a977454710101cbf255a47d
       subject: Reflect command exit status in 'exit-status' request
   date: '2017-06-20T10:48:47Z'
-  version: v1.3.0
+  version: 1.3.0
 - commits:
     - author: Will Boyce
       body: |-
@@ -215,7 +215,7 @@
       hash: e3d9e309e61965c01b05676719261af2d5ed1d55
       subject: Remove debug code from Makefile
   date: '2017-06-07T13:11:39Z'
-  version: v1.2.1
+  version: 1.2.1
 - commits:
     - author: Will Boyce
       body: |-
@@ -240,7 +240,7 @@
       hash: 2929e916ae189c96bd2848c5ef20059098384475
       subject: Update README
   date: '2017-06-07T12:48:37Z'
-  version: v1.2.0
+  version: 1.2.0
 - commits:
     - author: Will Boyce
       body: |-
@@ -249,7 +249,7 @@
       hash: 0a2981e93c51a53d455aaef1143ea9b09c72c7a0
       subject: Also use ecdsa and dsa host keys
   date: '2017-05-18T17:06:50Z'
-  version: v1.1.2
+  version: 1.1.2
 - commits:
     - author: Will Boyce
       body: |-
@@ -270,7 +270,7 @@
       hash: ca98bff77837816e261bdcf410c300d3d99d2b28
       subject: fix issue where sshproxy would fail to start if no banner was specified
   date: '2017-05-17T18:16:51Z'
-  version: v1.1.1
+  version: 1.1.1
 - commits:
     - author: Will Boyce
       body: |-
@@ -279,4 +279,4 @@
       hash: a2e65d12d44c1814d81f9d258b404f5a7df0f439
       subject: add support for displaying a banner to user after failed authentication
   date: '2017-05-15T11:44:09Z'
-  version: v1.1.0
+  version: 1.1.0
