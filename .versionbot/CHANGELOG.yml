@@ -1,4 +1,25 @@
 - commits:
+    - subject: update to Go v1.12
+      hash: 0e1b4572b6b4954c080c7dcd925c28956261885a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+    - subject: add CODEOWNERS @wrboyce @hedss @Page-
+      hash: e70e6a1df4a4cd91273fa00e6eab6bceab2a65e6
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 2.1.4
+  date: 2019-03-14T09:28:57.999Z
+- commits:
     - subject: 'versionbot: Add CHANGELOG.yml (for nested changelogs)'
       hash: 57b584e008bcf2275a3442d4bbbc277bbbedcd09
       body: ''
