@@ -1,246 +1,261 @@
 - commits:
-  - author: Will Boyce
-    footers:
-      change-type: patch
-      signed-off-by: Will Boyce <will@balena.io>
-    hash: 502131a8eb3165f4845d810f0ed470593d3821c4
-    subject: update to Go v1.11.5
-  date: "2019-01-29T09:55:27Z"
+    - subject: 'versionbot: Add CHANGELOG.yml (for nested changelogs)'
+      hash: 57b584e008bcf2275a3442d4bbbc277bbbedcd09
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 2.1.3
+  date: 2019-03-13T15:41:12.871Z
+- commits:
+    - author: Will Boyce
+      footers:
+        change-type: patch
+        signed-off-by: Will Boyce <will@balena.io>
+      hash: 502131a8eb3165f4845d810f0ed470593d3821c4
+      subject: update to Go v1.11.5
+  date: '2019-01-29T09:55:27Z'
   version: v2.1.2
 - commits:
-  - author: Will Boyce
-    footers:
-      change-type: patch
-      signed-off-by: Will Boyce <will@balena.io>
-    hash: 04ebb1df3b8b078e257ef5453b745b1a0926ad56
-    subject: Add verbosity flag with 4 levels (0-3)
-  date: "2019-01-29T09:30:31Z"
+    - author: Will Boyce
+      footers:
+        change-type: patch
+        signed-off-by: Will Boyce <will@balena.io>
+      hash: 04ebb1df3b8b078e257ef5453b745b1a0926ad56
+      subject: Add verbosity flag with 4 levels (0-3)
+  date: '2019-01-29T09:30:31Z'
   version: v2.1.1
 - commits:
-  - author: Will Boyce
-    footers:
-      change-type: patch
-      signed-off-by: Will Boyce <will@balena.io>
-    hash: da644f15a11c0ff4cc63c5567420fb9862a5721c
-    subject: update to Go v1.11.4
-  - author: Will Boyce
-    footers:
-      change-type: minor
-      signed-off-by: Will Boyce <will@balena.io>
-    hash: cd75b7cf6c81f31bf7fc8fbae3988ee7fefb7297
-    subject: use Balena api v5 endpoints
-  date: "2018-12-18T22:20:27Z"
+    - author: Will Boyce
+      footers:
+        change-type: patch
+        signed-off-by: Will Boyce <will@balena.io>
+      hash: da644f15a11c0ff4cc63c5567420fb9862a5721c
+      subject: update to Go v1.11.4
+    - author: Will Boyce
+      footers:
+        change-type: minor
+        signed-off-by: Will Boyce <will@balena.io>
+      hash: cd75b7cf6c81f31bf7fc8fbae3988ee7fefb7297
+      subject: use Balena api v5 endpoints
+  date: '2018-12-18T22:20:27Z'
   version: v2.1.0
 - commits:
-  - author: Pagan Gazzard
-    footers:
-      change-type: patch
-    hash: 80f8463b9c234d34c0c9340cb1f77a93987789a5
-    subject: Remove unnecessary brackets from filter
-  date: "2018-12-18T16:57:29Z"
+    - author: Pagan Gazzard
+      footers:
+        change-type: patch
+      hash: 80f8463b9c234d34c0c9340cb1f77a93987789a5
+      subject: Remove unnecessary brackets from filter
+  date: '2018-12-18T16:57:29Z'
   version: v2.0.1
 - commits:
-  - author: Will Boyce
-    footers:
-      change-type: patch
-      signed-off-by: Will Boyce <will@balena.io>
-    hash: e7706b0fe46758ad82c5fdbe781090dd5ad32ee1
-    subject: 'golang: update to Go v1.11.2'
-  - author: Will Boyce
-    footers:
-      change-type: major
-      signed-off-by: Will Boyce <will@balena.io>
-    hash: e1ba5f9e36db000190e3aabcd19ed64e76e802f1
-    subject: 'rename: s/resin/balena'
-  date: "2018-11-20T14:54:15Z"
+    - author: Will Boyce
+      footers:
+        change-type: patch
+        signed-off-by: Will Boyce <will@balena.io>
+      hash: e7706b0fe46758ad82c5fdbe781090dd5ad32ee1
+      subject: 'golang: update to Go v1.11.2'
+    - author: Will Boyce
+      footers:
+        change-type: major
+        signed-off-by: Will Boyce <will@balena.io>
+      hash: e1ba5f9e36db000190e3aabcd19ed64e76e802f1
+      subject: 'rename: s/resin/balena'
+  date: '2018-11-20T14:54:15Z'
   version: v2.0.0
 - commits:
-  - author: Will Boyce
-    footers:
-      change-type: minor
-      connects-to: '#37'
-      signed-off-by: Will Boyce <will@balena.io>
-    hash: a4840bf0d278f5752a64d09c35d6298db6ab15da
-    subject: fix incorrect parsing of payload lengths
-  date: "2018-11-20T13:53:06Z"
+    - author: Will Boyce
+      footers:
+        change-type: minor
+        connects-to: '#37'
+        signed-off-by: Will Boyce <will@balena.io>
+      hash: a4840bf0d278f5752a64d09c35d6298db6ab15da
+      subject: fix incorrect parsing of payload lengths
+  date: '2018-11-20T13:53:06Z'
   version: v1.5.0
 - commits:
-  - author: Gergely Imreh
-    footers:
-      change-type: patch
-      signed-off-by: Gergely Imreh <imrehg@gmail.com>
-    hash: e7d9e4ae64d3f1dfddc9f6b55e507e91fa06cdb3
-    subject: let exec sessions also send replies to the client if requested
-  date: "2018-06-11T15:28:59Z"
+    - author: Gergely Imreh
+      footers:
+        change-type: patch
+        signed-off-by: Gergely Imreh <imrehg@gmail.com>
+      hash: e7d9e4ae64d3f1dfddc9f6b55e507e91fa06cdb3
+      subject: let exec sessions also send replies to the client if requested
+  date: '2018-06-11T15:28:59Z'
   version: v1.4.5
 - commits:
-  - author: Gergely Imreh
-    body: |-
-      * use newer gloang image (the current 1.8.3 version is out of date)
-      * move CircleCI config to its proper v2 place
-      and the package won't compile with that)
-      * add some of printing functions to the errorcheck ignore list
-    footers:
-      change-type: patch
-    hash: b70441bbbb08564b11fe0ae62b8bb152e1e9e230
-    subject: moving to golang 1.10.2 and update testing setup
-  date: "2018-06-11T15:18:12Z"
+    - author: Gergely Imreh
+      body: |-
+        * use newer gloang image (the current 1.8.3 version is out of date)
+        * move CircleCI config to its proper v2 place
+        and the package won't compile with that)
+        * add some of printing functions to the errorcheck ignore list
+      footers:
+        change-type: patch
+      hash: b70441bbbb08564b11fe0ae62b8bb152e1e9e230
+      subject: moving to golang 1.10.2 and update testing setup
+  date: '2018-06-11T15:18:12Z'
   version: v1.4.4
 - commits:
-  - author: Alexis Svinartchouk
-    body: |-
-      Connects to #30
-      Change-Type: patch
-      Changelog-Entry: Wait until all channels/requests have been serviced before closing connection
-    hash: d60d43c8c5f8068db44175d8503c08efeb8ef7da
-    subject: Wait before closing connection
-  - author: Will Boyce
-    footers:
-      change-type: patch
-    hash: 7e5ddb97c7d63f59005c90ebbca86663f16b58ab
-    subject: Remove excessively verbose logging
-  date: "2018-02-02T19:05:19Z"
+    - author: Alexis Svinartchouk
+      body: >-
+        Connects to #30
+
+        Change-Type: patch
+
+        Changelog-Entry: Wait until all channels/requests have been serviced
+        before closing connection
+      hash: d60d43c8c5f8068db44175d8503c08efeb8ef7da
+      subject: Wait before closing connection
+    - author: Will Boyce
+      footers:
+        change-type: patch
+      hash: 7e5ddb97c7d63f59005c90ebbca86663f16b58ab
+      subject: Remove excessively verbose logging
+  date: '2018-02-02T19:05:19Z'
   version: v1.4.3
 - commits:
-  - author: Andreas Fitzek
-    footers:
-      change-type: patch
-      connects-to: '#27'
-      signed-off-by: Andreas Fitzek <andreas@resin.io>
-    hash: 6946659c3b8356c00dd7423f9f28a7bca37c8b63
-    subject: Use keyType during key generation to create correct key type
-  date: "2017-11-30T08:59:25Z"
+    - author: Andreas Fitzek
+      footers:
+        change-type: patch
+        connects-to: '#27'
+        signed-off-by: Andreas Fitzek <andreas@resin.io>
+      hash: 6946659c3b8356c00dd7423f9f28a7bca37c8b63
+      subject: Use keyType during key generation to create correct key type
+  date: '2017-11-30T08:59:25Z'
   version: v1.4.2
 - commits:
-  - author: Will Boyce
-    footers:
-      change-type: patch
-    hash: 3d8cfcaf161093bf6791cc1e67e656b6d98d7475
-    subject: expose version information to build and add --version flag
-  date: "2017-07-11T15:20:47Z"
+    - author: Will Boyce
+      footers:
+        change-type: patch
+      hash: 3d8cfcaf161093bf6791cc1e67e656b6d98d7475
+      subject: expose version information to build and add --version flag
+  date: '2017-07-11T15:20:47Z'
   version: v1.4.1
 - commits:
-  - author: Will Boyce
-    body: |-
-      Fixes #23
-      Change-Type: minor
-    hash: 5af8666e4da0b096c9642823b18ff13298295f5d
-    subject: Add support for running shell with alternative credentials
-  date: "2017-07-10T11:38:08Z"
+    - author: Will Boyce
+      body: |-
+        Fixes #23
+        Change-Type: minor
+      hash: 5af8666e4da0b096c9642823b18ff13298295f5d
+      subject: Add support for running shell with alternative credentials
+  date: '2017-07-10T11:38:08Z'
   version: v1.4.0
 - commits:
-  - author: Will Boyce
-    body: |-
-      * add CircleCI build status badge
-      * fix line wrapping
-    hash: 8335a0dce12c4fa5db18bfb3fa2e12095c51ce03
-    subject: update README
-  - author: Will Boyce
-    body: |-
-      * only use commits tagged with `Change-Type` to generate release notes
-      * no longer require `-stretch` golang Docker image
-    hash: 13b970c5d6958a08ff1b016075b466d24e95579e
-    subject: generate cleaner release changelogs
-  - author: Will Boyce
-    body: |-
-      * Correctly assign TERM env var
-      * Set initial terminal size as requested
-      * Respond to window-change requests
-    footers:
-      change-type: minor
-      fixes: '#22'
-    hash: 8e81debd0228dba7d1ed27a185cd1592971ff0cd
-    subject: Improve pseudo-terminal handling
-  - author: Will Boyce
-    footers:
-      change-type: minor
-      fixes: '#9'
-    hash: 79c60b5a02927f71ad22eb6858fa8230256a039f
-    subject: Improve error handling
-  - author: Will Boyce
-    footers:
-      change-type: minor
-      fixes: '#14'
-    hash: c4544b9eb1a429c5e4d0a91ce6885673332039b9
-    subject: Kill running command if requesting channel dies
-  - author: Will Boyce
-    footers:
-      change-type: patch
-      fixes: '#21'
-    hash: aa6e2c45ff7a3b0e0a977454710101cbf255a47d
-    subject: Reflect command exit status in 'exit-status' request
-  date: "2017-06-20T10:48:47Z"
+    - author: Will Boyce
+      body: |-
+        * add CircleCI build status badge
+        * fix line wrapping
+      hash: 8335a0dce12c4fa5db18bfb3fa2e12095c51ce03
+      subject: update README
+    - author: Will Boyce
+      body: |-
+        * only use commits tagged with `Change-Type` to generate release notes
+        * no longer require `-stretch` golang Docker image
+      hash: 13b970c5d6958a08ff1b016075b466d24e95579e
+      subject: generate cleaner release changelogs
+    - author: Will Boyce
+      body: |-
+        * Correctly assign TERM env var
+        * Set initial terminal size as requested
+        * Respond to window-change requests
+      footers:
+        change-type: minor
+        fixes: '#22'
+      hash: 8e81debd0228dba7d1ed27a185cd1592971ff0cd
+      subject: Improve pseudo-terminal handling
+    - author: Will Boyce
+      footers:
+        change-type: minor
+        fixes: '#9'
+      hash: 79c60b5a02927f71ad22eb6858fa8230256a039f
+      subject: Improve error handling
+    - author: Will Boyce
+      footers:
+        change-type: minor
+        fixes: '#14'
+      hash: c4544b9eb1a429c5e4d0a91ce6885673332039b9
+      subject: Kill running command if requesting channel dies
+    - author: Will Boyce
+      footers:
+        change-type: patch
+        fixes: '#21'
+      hash: aa6e2c45ff7a3b0e0a977454710101cbf255a47d
+      subject: Reflect command exit status in 'exit-status' request
+  date: '2017-06-20T10:48:47Z'
   version: v1.3.0
 - commits:
-  - author: Will Boyce
-    body: |-
-      Fixes #16
-      Change-Type: patch
-    hash: e3d9e309e61965c01b05676719261af2d5ed1d55
-    subject: Remove debug code from Makefile
-  date: "2017-06-07T13:11:39Z"
+    - author: Will Boyce
+      body: |-
+        Fixes #16
+        Change-Type: patch
+      hash: e3d9e309e61965c01b05676719261af2d5ed1d55
+      subject: Remove debug code from Makefile
+  date: '2017-06-07T13:11:39Z'
   version: v1.2.1
 - commits:
-  - author: Will Boyce
-    body: |-
-      Connects to #17
-      Change-Type: minor
-    hash: e765b32cf38fe4b5581d734f48aa74eb9717a6af
-    subject: Do not pass env vars from client to shell by default
-  - author: Will Boyce
-    footers:
-      change-type: patch
-    hash: 804dac248fe3e58fd3826c2504b9c1dd1175080b
-    subject: lint fixes
-  - author: Will Boyce
-    body: |-
-      Connects to #16
-      Change-Type: patch
-    hash: cb3d0e37ceb4cdb722b5e5de92f5c0bfdfbc5da9
-    subject: update Makefile and add circleci config
-  - author: Will Boyce
-    footers:
-      change-type: patch
-    hash: 2929e916ae189c96bd2848c5ef20059098384475
-    subject: Update README
-  date: "2017-06-07T12:48:37Z"
+    - author: Will Boyce
+      body: |-
+        Connects to #17
+        Change-Type: minor
+      hash: e765b32cf38fe4b5581d734f48aa74eb9717a6af
+      subject: Do not pass env vars from client to shell by default
+    - author: Will Boyce
+      footers:
+        change-type: patch
+      hash: 804dac248fe3e58fd3826c2504b9c1dd1175080b
+      subject: lint fixes
+    - author: Will Boyce
+      body: |-
+        Connects to #16
+        Change-Type: patch
+      hash: cb3d0e37ceb4cdb722b5e5de92f5c0bfdfbc5da9
+      subject: update Makefile and add circleci config
+    - author: Will Boyce
+      footers:
+        change-type: patch
+      hash: 2929e916ae189c96bd2848c5ef20059098384475
+      subject: Update README
+  date: '2017-06-07T12:48:37Z'
   version: v1.2.0
 - commits:
-  - author: Will Boyce
-    body: |-
-      Connects to #11
-      Change-Type: patch
-    hash: 0a2981e93c51a53d455aaef1143ea9b09c72c7a0
-    subject: Also use ecdsa and dsa host keys
-  date: "2017-05-18T17:06:50Z"
+    - author: Will Boyce
+      body: |-
+        Connects to #11
+        Change-Type: patch
+      hash: 0a2981e93c51a53d455aaef1143ea9b09c72c7a0
+      subject: Also use ecdsa and dsa host keys
+  date: '2017-05-18T17:06:50Z'
   version: v1.1.2
 - commits:
-  - author: Will Boyce
-    body: |-
-      Connects to #8
-      Change-Type: patch
-    hash: 6aa41b44c4c9a65c22fc996f71de138dd4df8495
-    subject: add configuration option for setting MaxAuthTries
-  - author: Will Boyce
-    body: |-
-      Connects to #6
-      Change-Type: patch
-    hash: b4f233ed7bd60aaf30796b2fb33309e293e1ccc7
-    subject: rename ambiguous "unauth" config variable to "auth-failed-banner"
-  - author: Will Boyce
-    body: |-
-      Connects to #6
-      Change-Type: patch
-    hash: ca98bff77837816e261bdcf410c300d3d99d2b28
-    subject: fix issue where sshproxy would fail to start if no banner was specified
-  date: "2017-05-17T18:16:51Z"
+    - author: Will Boyce
+      body: |-
+        Connects to #8
+        Change-Type: patch
+      hash: 6aa41b44c4c9a65c22fc996f71de138dd4df8495
+      subject: add configuration option for setting MaxAuthTries
+    - author: Will Boyce
+      body: |-
+        Connects to #6
+        Change-Type: patch
+      hash: b4f233ed7bd60aaf30796b2fb33309e293e1ccc7
+      subject: rename ambiguous "unauth" config variable to "auth-failed-banner"
+    - author: Will Boyce
+      body: |-
+        Connects to #6
+        Change-Type: patch
+      hash: ca98bff77837816e261bdcf410c300d3d99d2b28
+      subject: fix issue where sshproxy would fail to start if no banner was specified
+  date: '2017-05-17T18:16:51Z'
   version: v1.1.1
 - commits:
-  - author: Will Boyce
-    body: |-
-      Connects to #6
-      Change-Type: minor
-    hash: a2e65d12d44c1814d81f9d258b404f5a7df0f439
-    subject: add support for displaying a banner to user after failed authentication
-  date: "2017-05-15T11:44:09Z"
+    - author: Will Boyce
+      body: |-
+        Connects to #6
+        Change-Type: minor
+      hash: a2e65d12d44c1814d81f9d258b404f5a7df0f439
+      subject: add support for displaying a banner to user after failed authentication
+  date: '2017-05-15T11:44:09Z'
   version: v1.1.0
