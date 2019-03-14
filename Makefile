@@ -21,7 +21,7 @@ lint: lint-dep
 	goimports -d .
 	gofmt -e -l -s .
 	golint -set_exit_status ./...
-	go tool vet .
+	go vet .
 	errcheck -exclude .errcheck.exclude -verbose ./...
 
 test-dep: dep
