@@ -1,4 +1,5 @@
 io.Copy
+(*os.Process).Kill
 (net.Conn).Close
 fmt.Fprintf
 fmt.Fprintln

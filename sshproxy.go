@@ -272,24 +272,21 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 			go func() {
 				done := make(chan error, 1)
 				go func() {
-					done <- cmd.Wait()
-				}()
-			Loop:
-				for {
-					select {
-					case <-time.After(10 * time.Second):
-						if _, err := channel.SendRequest("ping", false, []byte{}); err != nil {
-							// Channel is dead, kill process
-							if err := cmd.Process.Kill(); err != nil {
-								s.handleError(err, nil)
+					for {
+						select {
+						case <-time.After(10 * time.Second):
+							if _, err := channel.SendRequest("ping", false, []byte{}); err != nil {
+								// Channel is dead, attempt to kill process
+								cmd.Process.Kill()
+								break
 							}
-							break Loop
+						case <-done:
+							break
 						}
-					case <-done:
-						break Loop
 					}
-				}
+				}()
 
+				done <- cmd.Wait()
 				exitStatusPayload := make([]byte, 4)
 				exitStatus := uint32(1)
 				if cmd.ProcessState != nil {
