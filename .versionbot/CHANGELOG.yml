@@ -1,4 +1,16 @@
 - commits:
+    - subject: update to Go v1.12.4
+      hash: 81ca621e164d6df9504027bc6aa5b2fe189b271f
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 2.1.7
+  date: 2019-04-24T15:58:45.738Z
+- commits:
     - subject: update to Go v1.12.1
       hash: e48f09efc60fe777ab09cac24ed2d2fa738c85ec
       body: ''
