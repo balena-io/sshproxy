@@ -1,4 +1,16 @@
 - commits:
+    - subject: do not pass EOF errors to handler
+      hash: c8b3030a9b24c07410390e16ee0a5be7ea2d4d4d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 2.1.8
+  date: 2019-05-02T12:58:54.743Z
+- commits:
     - subject: update to Go v1.12.4
       hash: 81ca621e164d6df9504027bc6aa5b2fe189b271f
       body: ''
