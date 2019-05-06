@@ -81,7 +81,7 @@ func New(keyDir, shell string, passEnv bool, shellCreds *syscall.Credential, ver
 }
 
 func (s *Server) handleError(err error, tags map[string]string) {
-	if s.errorHandler != nil {
+	if s.errorHandler != nil && err.Error() != "EOF" {
 		s.errorHandler(err, tags)
 	}
 }
