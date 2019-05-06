@@ -1,4 +1,18 @@
 - commits:
+    - subject: fix possible race condition in (*os.Cmd).Wait()
+      hash: 11da2b2e0521c6372ed8524902b154705a191181
+      body: ''
+      footer:
+        Connects-to: '#33'
+        connects-to: '#33'
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 2.1.9
+  date: 2019-05-06T16:37:36.694Z
+- commits:
     - subject: do not pass EOF errors to handler
       hash: c8b3030a9b24c07410390e16ee0a5be7ea2d4d4d
       body: ''
