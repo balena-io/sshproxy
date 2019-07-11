@@ -30,6 +30,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -146,7 +147,9 @@ func (s *Server) Listen(port string) error {
 func (s *Server) upgradeConnection(conn net.Conn) {
 	sshConn, chans, reqs, err := ssh.NewServerConn(conn, s.config)
 	if err != nil {
-		if (s.verbosity >= 1 && err.Error() != "EOF") || (err.Error() == "EOF" && s.verbosity >= 3) {
+		// very rarely do we care about this, and more often than not they are simply healthchecks (or port scans)
+		errIsVerbose := err.Error() == "EOF" || strings.HasSuffix(err.Error(), "read: connection reset by peer")
+		if (s.verbosity >= 1 && !errIsVerbose) || (s.verbosity >= 3 && errIsVerbose) {
 			log.Printf("Handshake with %s failed (%s)", conn.RemoteAddr(), err)
 		}
 		return
