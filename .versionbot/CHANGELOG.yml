@@ -1,4 +1,25 @@
 - commits:
+    - subject: update to Go v1.12.7
+      hash: f187e72ea4b53f0ba16bed7af10fe88f6cd41126
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+    - subject: ignore common tcp errors at low verbosity levels
+      hash: ebd640d11e1beb14216468e05104fcb0bdd3a32e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 2.1.9
+  date: 2019-07-11T13:03:14.729Z
+- commits:
     - subject: do not pass EOF errors to handler
       hash: c8b3030a9b24c07410390e16ee0a5be7ea2d4d4d
       body: ''
