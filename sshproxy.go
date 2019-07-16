@@ -99,7 +99,7 @@ func (s *Server) addHostKey(keyType string) error {
 		if s.verbosity >= 1 {
 			log.Printf("Generating private key... (%s)", keyType)
 		}
-		err := exec.Command("ssh-keygen", "-f", keyPath, "-t", keyType, "-N", "").Run()
+		err := exec.Command("ssh-keygen", "-f", keyPath, "-t", keyType, "-N", "", "-m", "PEM").Run()
 		if err != nil {
 			return err
 		}
