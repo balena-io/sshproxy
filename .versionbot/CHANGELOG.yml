@@ -1,4 +1,18 @@
 - commits:
+    - subject: default to PEM format when calling ssh-keygen
+      hash: c24dd88a1cd403fcdcdccff7058ed3e109d7e60f
+      body: ''
+      footer:
+        Connects-to: '#56'
+        connects-to: '#56'
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 2.1.10
+  date: 2019-07-16T14:16:33.148Z
+- commits:
     - subject: update to Go v1.12.7
       hash: f187e72ea4b53f0ba16bed7af10fe88f6cd41126
       body: ''
