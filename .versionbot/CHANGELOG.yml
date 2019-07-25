@@ -1,4 +1,16 @@
 - commits:
+    - subject: allow specifying a whitelist of env vars to pass from client
+      hash: a987f393909888154daaf07fb8a90468454990e7
+      body: ''
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 3.0.0
+  date: 2019-07-25T12:44:17.191Z
+- commits:
     - subject: default to PEM format when calling ssh-keygen
       hash: c24dd88a1cd403fcdcdccff7058ed3e109d7e60f
       body: ''
