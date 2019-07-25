@@ -45,7 +45,7 @@ type Server struct {
 	config       *ssh.ServerConfig
 	shell        string
 	shellCreds   *syscall.Credential
-	passEnv      bool
+	envWhitelist map[string]bool
 	errorHandler ErrorHandler
 	verbosity    int
 }
@@ -57,13 +57,13 @@ type ErrorHandler func(error, map[string]string)
 // and an ssh.ServerConfig. If no ServerConfig is provided, then
 // ServerConfig.NoClientAuth is set to true. ed25519, rsa, ecdsa and dsa
 // keys are loaded, and generated if they do not exist. Returns a new Server.
-func New(keyDir, shell string, passEnv bool, shellCreds *syscall.Credential, verbosity int, sshConfig *ssh.ServerConfig, errorHandler ErrorHandler) (*Server, error) {
+func New(keyDir, shell string, envWhitelist []string, shellCreds *syscall.Credential, verbosity int, sshConfig *ssh.ServerConfig, errorHandler ErrorHandler) (*Server, error) {
 	s := &Server{
 		keyDir:       keyDir,
 		config:       sshConfig,
 		shell:        shell,
 		shellCreds:   shellCreds,
-		passEnv:      passEnv,
+		envWhitelist: make(map[string]bool),
 		errorHandler: errorHandler,
 		verbosity:    verbosity,
 	}
@@ -71,6 +71,9 @@ func New(keyDir, shell string, passEnv bool, shellCreds *syscall.Credential, ver
 		s.config = &ssh.ServerConfig{
 			NoClientAuth: true,
 		}
+	}
+	for _, envKey := range envWhitelist {
+		s.envWhitelist[envKey] = true
 	}
 	for _, keyType := range []string{"ed25519", "rsa", "ecdsa", "dsa"} {
 		if err := s.addHostKey(keyType); err != nil {
@@ -211,15 +214,16 @@ func (s *Server) handleRequests(reqs <-chan *ssh.Request, channel ssh.Channel, c
 	for req := range reqs {
 		switch req.Type {
 		case "env":
-			if s.passEnv {
-				// append client env to the command environment
-				keyLen := binary.BigEndian.Uint32(req.Payload[:4])
-				valLen := binary.BigEndian.Uint32(req.Payload[keyLen+4 : keyLen+8])
-				key := string(req.Payload[4 : keyLen+4])
+			// append client env to the command environment
+			keyLen := binary.BigEndian.Uint32(req.Payload[:4])
+			valLen := binary.BigEndian.Uint32(req.Payload[keyLen+4 : keyLen+8])
+			key := string(req.Payload[4 : keyLen+4])
+			_, ok := s.envWhitelist[key]
+			if ok {
 				val := string(req.Payload[keyLen+8 : keyLen+valLen+8])
 				env = append(env, fmt.Sprintf("%s=%s", key, val))
 			}
-			if err := req.Reply(s.passEnv, nil); err != nil {
+			if err := req.Reply(ok, nil); err != nil {
 				return err
 			}
 		case "pty-req":

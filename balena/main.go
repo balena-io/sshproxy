@@ -27,6 +27,7 @@ import (
 	"os"
 	"path"
 	"runtime"
+	"strings"
 	"syscall"
 
 	"github.com/balena-io/sshproxy"
@@ -49,7 +50,7 @@ func init() {
 	pflag.CommandLine.Int64P("shell-gid", "g", -1, "Group to run shell as (default: current gid)")
 	pflag.CommandLine.StringP("auth-failed-banner", "b", "", "Path to template displayed after failed authentication")
 	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
-	pflag.CommandLine.BoolP("allow-env", "E", false, "Pass environment from client to shell (default: false) (warning: security implications)")
+	pflag.CommandLine.StringP("allow-env", "E", "", "List of environment variables to pass from client to shell (default: None)")
 	pflag.CommandLine.StringP("sentry-dsn", "S", "", "Sentry DSN for error reporting")
 	pflag.CommandLine.IntP("verbosity", "v", 1, "Set verbosity level (0 = quiet, 1 = normal, 2 = verbose, 3 = debug, default: 1)")
 	pflag.CommandLine.BoolP("version", "", false, "Display version and exit")
@@ -179,7 +180,7 @@ func main() {
 	server, err := sshproxy.New(
 		viper.GetString("dir"),
 		viper.GetString("shell"),
-		viper.GetBool("allow-env"),
+		strings.Split(viper.GetString("allow-env"), ","),
 		shellCreds,
 		viper.GetInt("verbosity"),
 		sshConfig,
