@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update to Go v1.12.9
+      hash: bc55a3d59f30e9af538fa414ed2896ba9900ec7d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 3.0.1
+  date: 2019-08-19T11:03:50.646Z
+- commits:
     - subject: allow specifying a whitelist of env vars to pass from client
       hash: a987f393909888154daaf07fb8a90468454990e7
       body: ''
