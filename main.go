@@ -26,6 +26,7 @@ import (
 	"runtime"
 	"strings"
 	"syscall"
+	"time"
 
 	raven "github.com/getsentry/raven-go"
 	"github.com/gliderlabs/ssh"
@@ -45,6 +46,7 @@ func init() {
 	pflag.CommandLine.StringP("shell", "s", "shell.sh", "Path to shell to execute post-authentication")
 	pflag.CommandLine.Int64P("shell-uid", "u", -1, "User to run shell as (default: current uid)")
 	pflag.CommandLine.Int64P("shell-gid", "g", -1, "Group to run shell as (default: current gid)")
+	pflag.CommandLine.IntP("idle-timeout", "i", 0, "Idle timeout (seconds, 0 = none)")
 	pflag.CommandLine.StringP("auth-failed-banner", "B", "", "Path to template displayed after failed authentication")
 	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
 	pflag.CommandLine.StringP("allow-env", "E", "", "List of environment variables to pass from client to shell (default: None)")
@@ -169,6 +171,9 @@ func main() {
 		Addr:                 viper.GetString("bind"),
 		PublicKeyHandler:     auth.publicKeyHandler,
 		ServerConfigCallback: func(session ssh.Context) *gossh.ServerConfig { return sshConfig },
+	}
+	if viper.GetInt("idle-timeout") > 0 {
+		server.IdleTimeout = time.Duration(viper.GetInt("idle-timeout"))
 	}
 	for _, keyType := range []string{"ed25519", "rsa", "ecdsa", "dsa"} {
 		if err := addHostKey(&server, viper.GetString("dir"), keyType); err != nil {
