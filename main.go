@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
 	"os"
 	"path"
 	"runtime"
@@ -30,6 +31,7 @@ import (
 
 	raven "github.com/getsentry/raven-go"
 	"github.com/gliderlabs/ssh"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	gossh "golang.org/x/crypto/ssh"
@@ -50,6 +52,7 @@ func init() {
 	pflag.CommandLine.StringP("auth-failed-banner", "B", "", "Path to template displayed after failed authentication")
 	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
 	pflag.CommandLine.StringP("allow-env", "E", "", "List of environment variables to pass from client to shell (default: None)")
+	pflag.CommandLine.StringP("metrics-bind", "M", "", "Address the prometheus metrics server should bind to (default: disabled)")
 	pflag.CommandLine.StringP("sentry-dsn", "S", "", "Sentry DSN for error reporting")
 	pflag.CommandLine.IntP("verbosity", "v", 1, "Set verbosity level (0 = quiet, 1 = normal, 2 = verbose, 3 = debug, default: 1)")
 	pflag.CommandLine.BoolP("version", "", false, "Display version and exit")
@@ -94,6 +97,9 @@ func init() {
 			return err
 		}
 		if err := viper.BindEnv("allow-env", "SSHPROXY_ALLOW_ENV"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("metrics-bind", "SSHPROXY_METRICS_BIND"); err != nil {
 			return err
 		}
 		if err := viper.BindEnv("sentry-dsn", "SSHPROXY_SENTRY_DSN"); err != nil {
@@ -195,6 +201,9 @@ func main() {
 		if verbosity >= 2 {
 			log.Printf("inbound connection from %s", conn.RemoteAddr())
 		}
+		remoteAddrParts := strings.Split(conn.RemoteAddr().String(), ":")
+		ip := strings.Join(remoteAddrParts[0:len(remoteAddrParts)-1], ":")
+		totalConnections.With(prometheus.Labels{"ip": ip}).Inc()
 		return conn
 	}
 
@@ -204,6 +213,13 @@ func main() {
 		strings.Split(viper.GetString("allow-env"), ","),
 		verbosity,
 	))
+
+	if metricsBind := viper.GetString("metrics-bind"); metricsBind != "" {
+		if verbosity >= 1 {
+			log.Printf("starting metrics server on %s", metricsBind)
+		}
+		go serveMetrics(metricsBind)
+	}
 
 	if verbosity >= 1 {
 		log.Printf("starting ssh server on %s", viper.GetString("bind"))

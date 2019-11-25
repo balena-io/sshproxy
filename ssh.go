@@ -29,6 +29,7 @@ import (
 
 	"github.com/balena-io-modules/gexpect/pty"
 	"github.com/gliderlabs/ssh"
+	"github.com/prometheus/client_golang/prometheus"
 	gossh "golang.org/x/crypto/ssh"
 )
 
@@ -72,8 +73,13 @@ func makeHandler(
 		}
 
 		activeSessions.Inc()
-		totalSessions.Inc()
 		defer activeSessions.Dec()
+		remoteAddrParts := strings.Split(session.RemoteAddr().String(), ":")
+		ip := strings.Join(remoteAddrParts[0:len(remoteAddrParts)-1], ":")
+		totalSessions.With(prometheus.Labels{
+			"user": session.User(),
+			"ip":   ip,
+		}).Inc()
 
 		if len(envKeysWhitelist) > 0 {
 			envWhitelist := make(map[string]bool)

@@ -12,7 +12,7 @@ work dir. The following config file formats are supported:
 * [HCL](https://github.com/hashicorp/hcl) (`sshproxy.hcl`)
 * [Java .properties](https://en.wikipedia.org/wiki/.properties) (`sshproxy.properties`)
 
-There are a total of 14 configuration options and with the exception of `dir`
+There are a total of 15 configuration options and with the exception of `dir`
 they can all be set via commandline, environment or config file.
 
 | Name               | Commandline                 | Environment                   | Config               |
@@ -31,6 +31,7 @@ they can all be set via commandline, environment or config file.
 | Allow Env          | `--allow-env` `-E`          | `SSHPROXY_ALLOW_ENV`          | `allow-env`          |
 | Sentry DSN         | `--sentry-dsn` `-S`         | `SSHPROXY_SENTRY_DSN`         | `sentry-dsn`         |
 | Verbosity          | `--verbosity`, `-v`         | `SSHPROXY_VERBOSITY`          | `verbosity`	 	  |
+| Metrics Port       | `--metrics-port`, `-M`      | `SSHPROXY_METRICS_PORT`       | `metrics-port`       |
 
 ```
 Usage of sshproxy:
