@@ -14,10 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// A "balena-ready" binary which handles authentication via balena api,
-// requiring minimal configuration.
-//
-// See https://github.com/balena-io/sshproxy/tree/master/balena#readme
+// See https://github.com/balena-io/sshproxy#readme
 package main
 
 import (
@@ -30,11 +27,11 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/balena-io/sshproxy"
 	raven "github.com/getsentry/raven-go"
+	"github.com/gliderlabs/ssh"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"golang.org/x/crypto/ssh"
+	gossh "golang.org/x/crypto/ssh"
 )
 
 var version string
@@ -44,11 +41,11 @@ func init() {
 	pflag.CommandLine.StringP("apiport", "P", "443", "Balena API Port")
 	pflag.CommandLine.StringP("apikey", "K", "", "Balena API Key (required)")
 	pflag.CommandLine.StringP("dir", "d", "/etc/sshproxy", "Work dir, holds ssh keys and sshproxy config")
-	pflag.CommandLine.IntP("port", "p", 22, "Port the ssh service will listen on")
+	pflag.CommandLine.StringP("bind", "b", ":22", "Address the ssh service will bind to")
 	pflag.CommandLine.StringP("shell", "s", "shell.sh", "Path to shell to execute post-authentication")
 	pflag.CommandLine.Int64P("shell-uid", "u", -1, "User to run shell as (default: current uid)")
 	pflag.CommandLine.Int64P("shell-gid", "g", -1, "Group to run shell as (default: current gid)")
-	pflag.CommandLine.StringP("auth-failed-banner", "b", "", "Path to template displayed after failed authentication")
+	pflag.CommandLine.StringP("auth-failed-banner", "B", "", "Path to template displayed after failed authentication")
 	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
 	pflag.CommandLine.StringP("allow-env", "E", "", "List of environment variables to pass from client to shell (default: None)")
 	pflag.CommandLine.StringP("sentry-dsn", "S", "", "Sentry DSN for error reporting")
@@ -73,7 +70,7 @@ func init() {
 		if err := viper.BindEnv("dir"); err != nil {
 			return err
 		}
-		if err := viper.BindEnv("port"); err != nil {
+		if err := viper.BindEnv("bind"); err != nil {
 			return err
 		}
 		if err := viper.BindEnv("shell"); err != nil {
@@ -156,10 +153,28 @@ func main() {
 	}
 
 	apiURL := fmt.Sprintf("https://%s:%d", viper.GetString("apihost"), viper.GetInt("apiport"))
+
+	if viper.GetString("sentry-dsn") != "" {
+		if err := raven.SetDSN(viper.GetString("sentry-dsn")); err != nil {
+			log.Fatal("Sentry initialisation failed", err)
+		}
+	}
+
+	verbosity := viper.GetInt("verbosity")
 	auth := newAuthHandler(apiURL, viper.GetString("apikey"))
-	sshConfig := &ssh.ServerConfig{
-		PublicKeyCallback: auth.publicKeyCallback,
-		MaxAuthTries:      viper.GetInt("max-auth-tries"),
+	sshConfig := &gossh.ServerConfig{
+		MaxAuthTries: viper.GetInt("max-auth-tries"),
+	}
+	server := ssh.Server{
+		Addr:                 viper.GetString("bind"),
+		PublicKeyHandler:     auth.publicKeyHandler,
+		ServerConfigCallback: func(session ssh.Context) *gossh.ServerConfig { return sshConfig },
+	}
+	for _, keyType := range []string{"ed25519", "rsa", "ecdsa", "dsa"} {
+		if err := addHostKey(&server, viper.GetString("dir"), keyType); err != nil {
+			fmt.Fprintf(os.Stderr, "%s", err)
+			os.Exit(2)
+		}
 	}
 	if viper.GetString("auth-failed-banner") != "" {
 		tmpl, err := ioutil.ReadFile(viper.GetString("auth-failed-banner"))
@@ -168,30 +183,28 @@ func main() {
 			os.Exit(2)
 		}
 		auth.template = string(tmpl)
-		sshConfig.KeyboardInteractiveCallback = auth.keyboardInteractiveCallback
+		server.KeyboardInteractiveHandler = auth.keyboardInteractiveHandler
 	}
 
-	if viper.GetString("sentry-dsn") != "" {
-		if err := raven.SetDSN(viper.GetString("sentry-dsn")); err != nil {
-			log.Fatal("Sentry initialisation failed", err)
+	server.ConnCallback = func(ctx ssh.Context, conn net.Conn) net.Conn {
+		if verbosity >= 2 {
+			log.Printf("inbound connection from %s", conn.RemoteAddr())
 		}
+		return conn
 	}
 
-	server, err := sshproxy.New(
-		viper.GetString("dir"),
+	server.Handle(makeHandler(
 		viper.GetString("shell"),
-		strings.Split(viper.GetString("allow-env"), ","),
 		shellCreds,
-		viper.GetInt("verbosity"),
-		sshConfig,
-		func(err error, tags map[string]string) {
-			log.Printf("ERROR: %s", err)
-			raven.CaptureError(err, tags)
-		})
-	if err != nil {
-		log.Fatal("Error creating Server instance", err)
+		strings.Split(viper.GetString("allow-env"), ","),
+		verbosity,
+	))
+
+	if verbosity >= 1 {
+		log.Printf("starting ssh server on %s", viper.GetString("bind"))
 	}
-	if err := server.Listen(viper.GetString("port")); err != nil {
-		log.Fatal("Error binding to port", err)
+	if err := server.ListenAndServe(); err != nil {
+		fmt.Fprintf(os.Stderr, "%s", err)
+		os.Exit(1)
 	}
 }

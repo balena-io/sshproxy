@@ -19,14 +19,14 @@ package main
 import (
 	"bytes"
 	"crypto/md5"
-	"crypto/subtle"
 	"errors"
 	"fmt"
 	"strings"
 	"text/template"
 
 	pinejs "github.com/balena-io/pinejs-client-go"
-	"golang.org/x/crypto/ssh"
+	"github.com/gliderlabs/ssh"
+	gossh "golang.org/x/crypto/ssh"
 )
 
 type authHandler struct {
@@ -44,7 +44,7 @@ func newAuthHandler(baseURL, apiKey string) authHandler {
 	}
 }
 
-func (a *authHandler) getUserKeys(username string) ([]ssh.PublicKey, error) {
+func (a *authHandler) getUserKeys(username string) ([]gossh.PublicKey, error) {
 	url := fmt.Sprintf("%s/%s", a.baseURL, "v5")
 	client := pinejs.NewClient(url, a.apiKey)
 
@@ -67,9 +67,9 @@ func (a *authHandler) getUserKeys(username string) ([]ssh.PublicKey, error) {
 		return nil, errors.New("Invalid User")
 	}
 
-	keys := make([]ssh.PublicKey, 0)
+	keys := make([]gossh.PublicKey, 0)
 	for _, user := range users {
-		if key, _, _, _, err := ssh.ParseAuthorizedKey([]byte(user["public_key"].(string))); err == nil {
+		if key, _, _, _, err := gossh.ParseAuthorizedKey([]byte(user["public_key"].(string))); err == nil {
 			keys = append(keys, key)
 		}
 	}
@@ -77,24 +77,24 @@ func (a *authHandler) getUserKeys(username string) ([]ssh.PublicKey, error) {
 	return keys, nil
 }
 
-func (a *authHandler) publicKeyCallback(meta ssh.ConnMetadata, key ssh.PublicKey) (*ssh.Permissions, error) {
-	keys, err := a.getUserKeys(meta.User())
+func (a *authHandler) publicKeyHandler(ctx ssh.Context, key ssh.PublicKey) bool {
+	keys, err := a.getUserKeys(ctx.User())
 	if err != nil {
-		return nil, errors.New("Unauthorised")
+		return false
 	}
 
 	for _, k := range keys {
-		if subtle.ConstantTimeCompare(k.Marshal(), key.Marshal()) == 1 {
-			return nil, nil
+		if ssh.KeysEqual(k, key) {
+			return true
 		}
 	}
 
-	return nil, errors.New("Unauthorised")
+	return false
 }
 
-func (a *authHandler) keyboardInteractiveCallback(meta ssh.ConnMetadata, client ssh.KeyboardInteractiveChallenge) (*ssh.Permissions, error) {
+func (a *authHandler) keyboardInteractiveHandler(ctx ssh.Context, challenger gossh.KeyboardInteractiveChallenge) bool {
 	// check if this session has already been rejected, only send the banner once
-	sessionKey := string(meta.SessionID())
+	sessionKey := string(ctx.SessionID())
 	if _, ok := a.rejectedSessions[sessionKey]; ok {
 		// this operates on the assumption that `keyboard-interactive` will be attempted three times
 		// and then cleans up the state
@@ -102,21 +102,21 @@ func (a *authHandler) keyboardInteractiveCallback(meta ssh.ConnMetadata, client 
 		if a.rejectedSessions[sessionKey] == 3 {
 			delete(a.rejectedSessions, sessionKey)
 		}
-		return nil, errors.New("Unauthorised")
+		return false
 	}
 	a.rejectedSessions[sessionKey] = 1
 
 	// fetch user's keys...
-	keys, err := a.getUserKeys(meta.User())
+	keys, err := a.getUserKeys(ctx.User())
 	if err != nil {
-		return nil, errors.New("Unauthorised")
+		return false
 	}
 	// ...and generate their fingerprints
 	fingerprints := make([]string, 0)
 	for _, key := range keys {
 		hash := md5.New()
 		if _, err := hash.Write(key.Marshal()); err != nil {
-			return nil, err
+			return false
 		}
 		fingerprint := fmt.Sprintf("%x", hash.Sum(nil))
 		fingerprints = append(fingerprints, fingerprint)
@@ -125,14 +125,14 @@ func (a *authHandler) keyboardInteractiveCallback(meta ssh.ConnMetadata, client 
 	tmpl := template.Must(template.New("auth_failed_template").Parse(a.template))
 	msg := bytes.NewBuffer(nil)
 	// pass `user` and `fingerprints` vars to template and render
-	if err := tmpl.Execute(msg, map[string]interface{}{"user": meta.User(), "fingerprints": fingerprints}); err != nil {
-		return nil, err
+	if err := tmpl.Execute(msg, map[string]interface{}{"user": ctx.User(), "fingerprints": fingerprints}); err != nil {
+		return false
 	}
 
 	// send the rendered template as an auth challenge with no questions
-	if _, err := client(meta.User(), msg.String(), nil, nil); err != nil {
-		return nil, err
+	if _, err := challenger(ctx.User(), msg.String(), nil, nil); err != nil {
+		return false
 	}
 
-	return nil, errors.New("Unauthorised")
+	return false
 }
