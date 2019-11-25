@@ -12,7 +12,7 @@ work dir. The following config file formats are supported:
 * [HCL](https://github.com/hashicorp/hcl) (`sshproxy.hcl`)
 * [Java .properties](https://en.wikipedia.org/wiki/.properties) (`sshproxy.properties`)
 
-There are a total of 13 configuration options and with the exception of `dir`
+There are a total of 14 configuration options and with the exception of `dir`
 they can all be set via commandline, environment or config file.
 
 | Name               | Commandline                 | Environment                   | Config               |
@@ -25,6 +25,7 @@ they can all be set via commandline, environment or config file.
 | Shell              | `--shell` `-s`              | `SSHPROXY_SHELL`              | `shell`              |
 | Shell UID          | `--shell-uid` `-u`          | `SSHPROXY_SHELL_UID`          | `shell-uid`          |
 | Shell GID          | `--shell-gid` `-g`          | `SSHPROXY_SHELL_GID`          | `shell-gid`          |
+| Idle Timeout       | `--idle-timeout`, `-i`      | `SSHPROXY_IDLE_TIMEOUT`       | `idle-timeout`       |
 | Auth Failed Banner | `--auth-failed-banner` `-b` | `SSHPROXY_AUTH_FAILED_BANNER` | `auth-failed-banner` |
 | Max Auth Tries     | `--max-auth-tries` `-m`     | `SSHPROXY_MAX_AUTH_TRIES`     | `max-auth-tries`     |
 | Allow Env          | `--allow-env` `-E`          | `SSHPROXY_ALLOW_ENV`          | `allow-env`          |
@@ -39,6 +40,7 @@ Usage of sshproxy:
   -P, --apiport string              Balena API Port (default "443")
   -b, --auth-failed-banner string   Path to template displayed after failed authentication
   -d, --dir string                  Work dir, holds ssh keys and sshproxy config (default "/etc/sshproxy")
+  -i, --idle-timeout int            Idle timeout (seconds, 0 = none)
   -m, --max-auth-tries int          Maximum number of authentication attempts per connection (default 0; unlimited)
   -p, --port int                    Port the ssh service will listen on (default 22)
   -S, --sentry-dsn string           Sentry DSN for error reporting
