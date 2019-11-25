@@ -1,6 +1,5 @@
 USERNAME ?= balena-io
 PROJECT ?= sshproxy
-PACKAGE ?= balena
 EXECUTABLE ?= sshproxy
 VERSION := $(shell git describe --abbrev=0 --tags)
 BUILD_PLATFORMS ?= darwin/amd64 linux/386 linux/arm linux/arm64 linux/amd64
@@ -53,10 +52,10 @@ clean:
 
 # binary
 bin/$(EXECUTABLE): dep
-	go build -ldflags="-X main.version=$(VERSION)" -o "$@" -v ./$(PACKAGE)
+	go build -ldflags="-X main.version=$(VERSION)" -o "$@" -v ./
 # release binaries
 build/%/$(EXECUTABLE): dep
-	gox -parallel=1 -osarch=$(subst _,/,$(subst build/,,$(@:/$(EXECUTABLE)=))) -ldflags="-X main.version=$(VERSION)" -output="build/{{.OS}}_{{.Arch}}/$(EXECUTABLE)" ./$(PACKAGE)
+	gox -parallel=1 -osarch=$(subst _,/,$(subst build/,,$(@:/$(EXECUTABLE)=))) -ldflags="-X main.version=$(VERSION)" -output="build/{{.OS}}_{{.Arch}}/$(EXECUTABLE)" ./
 # compressed artifacts
 build/$(EXECUTABLE)-$(VERSION)_%.tar.gz: build/%/$(EXECUTABLE)
 	tar -zcf "$@" -C "$(dir $<)" $(EXECUTABLE)
