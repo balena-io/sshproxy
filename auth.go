@@ -21,6 +21,7 @@ import (
 	"crypto/md5"
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 	"text/template"
 
@@ -33,14 +34,16 @@ type authHandler struct {
 	baseURL, apiKey  string
 	template         string
 	rejectedSessions map[string]int
+	verbosity        int
 }
 
-func newAuthHandler(baseURL, apiKey string) authHandler {
+func newAuthHandler(baseURL, apiKey string, verbosity int) authHandler {
 	return authHandler{
 		baseURL:          baseURL,
 		apiKey:           apiKey,
 		template:         "",
 		rejectedSessions: map[string]int{},
+		verbosity:        verbosity,
 	}
 }
 
@@ -89,10 +92,15 @@ func (a *authHandler) publicKeyHandler(ctx ssh.Context, key ssh.PublicKey) bool 
 		}
 	}
 
+	if a.verbosity >= 3 {
+		log.Printf("auth failed for %s@%s", ctx.User(), ctx.RemoteAddr().String())
+	}
+
 	return false
 }
 
 func (a *authHandler) keyboardInteractiveHandler(ctx ssh.Context, challenger gossh.KeyboardInteractiveChallenge) bool {
+	log.Println("authHandler.keyboardInteractiveHandler")
 	// check if this session has already been rejected, only send the banner once
 	sessionKey := string(ctx.SessionID())
 	if _, ok := a.rejectedSessions[sessionKey]; ok {

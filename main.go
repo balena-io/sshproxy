@@ -169,7 +169,7 @@ func main() {
 	}
 
 	verbosity := viper.GetInt("verbosity")
-	auth := newAuthHandler(apiURL, viper.GetString("apikey"))
+	auth := newAuthHandler(apiURL, viper.GetString("apikey"), verbosity)
 	sshConfig := &gossh.ServerConfig{
 		MaxAuthTries: viper.GetInt("max-auth-tries"),
 	}
