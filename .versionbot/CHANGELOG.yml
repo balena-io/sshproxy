@@ -1,4 +1,52 @@
 - commits:
+    - subject: do not generate host keys
+      hash: 76a33b2fcf3652ded0ac0e826add86546e5a820c
+      body: ''
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+    - subject: add prometheus metrics server and basic metrics gathering
+      hash: f7678e383d5590675af46312c155d65b55c7be73
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+    - subject: add `idle-timeout` config option
+      hash: 28c9395ca38a0c90405ddf905a1cfc85278dbbbf
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+    - subject: switch to gliderlabs/ssh library
+      hash: 6f460eab649f1fde880a34ab7b8ce96d41e3d831
+      body: ''
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+    - subject: update to Go v1.13.5
+      hash: 1e18b590a61cb8ed4ff2d2e707423ef6938ee20e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 4.0.0
+  date: 2020-01-06T14:57:40.600Z
+- commits:
     - subject: update to Go v1.13.4
       hash: bb0fcb19321b89008fdc0ee578853b78f3ba536e
       body: ''
