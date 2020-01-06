@@ -21,7 +21,6 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -35,16 +34,6 @@ import (
 
 func addHostKey(s *ssh.Server, dir string, keyType string) error {
 	keyPath := filepath.Join(dir, fmt.Sprintf("id_%s", keyType))
-	if _, err := os.Stat(keyPath); os.IsNotExist(err) {
-		if err := os.MkdirAll(filepath.Dir(keyPath), os.ModePerm); err != nil {
-			return err
-		}
-		err := exec.Command("ssh-keygen", "-f", keyPath, "-t", keyType, "-N", "", "-m", "PEM").Run()
-		if err != nil {
-			return err
-		}
-	}
-
 	raw, err := ioutil.ReadFile(keyPath)
 	if err != nil {
 		return err
@@ -53,7 +42,6 @@ func addHostKey(s *ssh.Server, dir string, keyType string) error {
 	if err != nil {
 		return err
 	}
-
 	s.AddHostKey(pkey)
 	return nil
 }
