@@ -31,6 +31,7 @@ import (
 
 	raven "github.com/getsentry/raven-go"
 	"github.com/gliderlabs/ssh"
+	proxyproto "github.com/wrboyce/go-proxyproto"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
@@ -40,20 +41,21 @@ import (
 var version string
 
 func init() {
-	pflag.CommandLine.StringP("apihost", "H", "api.balena-cloud.com", "Balena API Host")
-	pflag.CommandLine.StringP("apiport", "P", "443", "Balena API Port")
-	pflag.CommandLine.StringP("apikey", "K", "", "Balena API Key (required)")
-	pflag.CommandLine.StringP("dir", "d", "/etc/sshproxy", "Work dir, holds ssh keys and sshproxy config")
-	pflag.CommandLine.StringP("bind", "b", ":22", "Address the ssh service will bind to")
-	pflag.CommandLine.StringP("shell", "s", "shell.sh", "Path to shell to execute post-authentication")
-	pflag.CommandLine.Int64P("shell-uid", "u", -1, "User to run shell as (default: current uid)")
-	pflag.CommandLine.Int64P("shell-gid", "g", -1, "Group to run shell as (default: current gid)")
-	pflag.CommandLine.IntP("idle-timeout", "i", 0, "Idle timeout (seconds, 0 = none)")
-	pflag.CommandLine.StringP("auth-failed-banner", "B", "", "Path to template displayed after failed authentication")
-	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
 	pflag.CommandLine.StringP("allow-env", "E", "", "List of environment variables to pass from client to shell (default: None)")
+	pflag.CommandLine.StringP("apihost", "H", "api.balena-cloud.com", "Balena API Host")
+	pflag.CommandLine.StringP("apikey", "K", "", "Balena API Key (required)")
+	pflag.CommandLine.StringP("apiport", "P", "443", "Balena API Port")
+	pflag.CommandLine.StringP("auth-failed-banner", "B", "", "Path to template displayed after failed authentication")
+	pflag.CommandLine.StringP("bind", "b", ":22", "Address the ssh service will bind to")
+	pflag.CommandLine.StringP("dir", "d", "/etc/sshproxy", "Work dir, holds ssh keys and sshproxy config")
+	pflag.CommandLine.IntP("idle-timeout", "i", 0, "Idle timeout (seconds, 0 = none)")
+	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
 	pflag.CommandLine.StringP("metrics-bind", "M", "", "Address the prometheus metrics server should bind to (default: disabled)")
 	pflag.CommandLine.StringP("sentry-dsn", "S", "", "Sentry DSN for error reporting")
+	pflag.CommandLine.StringP("shell", "s", "shell.sh", "Path to shell to execute post-authentication")
+	pflag.CommandLine.Int64P("shell-gid", "g", -1, "Group to run shell as (default: current gid)")
+	pflag.CommandLine.Int64P("shell-uid", "u", -1, "User to run shell as (default: current uid)")
+	pflag.CommandLine.BoolP("use-proxyprotocol", "p", false, "Enable Proxy Protocol support")
 	pflag.CommandLine.IntP("verbosity", "v", 1, "Set verbosity level (0 = quiet, 1 = normal, 2 = verbose, 3 = debug, default: 1)")
 	pflag.CommandLine.BoolP("version", "", false, "Display version and exit")
 
@@ -63,40 +65,31 @@ func init() {
 		if err := viper.BindPFlags(pflag.CommandLine); err != nil {
 			return err
 		}
-		if err := viper.BindEnv("apihost", "BALENA_API_HOST"); err != nil {
+		if err := viper.BindEnv("allow-env", "SSHPROXY_ALLOW_ENV"); err != nil {
 			return err
 		}
-		if err := viper.BindEnv("apiport", "BALENA_API_PORT"); err != nil {
+		if err := viper.BindEnv("apihost", "BALENA_API_HOST"); err != nil {
 			return err
 		}
 		if err := viper.BindEnv("apikey", "SSHPROXY_API_KEY"); err != nil {
 			return err
 		}
-		if err := viper.BindEnv("dir"); err != nil {
-			return err
-		}
-		if err := viper.BindEnv("bind"); err != nil {
-			return err
-		}
-		if err := viper.BindEnv("shell"); err != nil {
-			return err
-		}
-		if err := viper.BindEnv("verbosity"); err != nil {
-			return err
-		}
-		if err := viper.BindEnv("shell-uid", "SSHPROXY_SHELL_UID"); err != nil {
-			return err
-		}
-		if err := viper.BindEnv("shell-gid", "SSHPROXY_SHELL_GID"); err != nil {
+		if err := viper.BindEnv("apiport", "BALENA_API_PORT"); err != nil {
 			return err
 		}
 		if err := viper.BindEnv("auth-failed-banner", "SSHPROXY_AUTH_FAILED_BANNER"); err != nil {
 			return err
 		}
-		if err := viper.BindEnv("max-auth-tries", "SSHPROXY_MAX_AUTH_TRIES"); err != nil {
+		if err := viper.BindEnv("bind"); err != nil {
 			return err
 		}
-		if err := viper.BindEnv("allow-env", "SSHPROXY_ALLOW_ENV"); err != nil {
+		if err := viper.BindEnv("dir"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("idle-timeout", "SSHPROXY_IDLE_TIMEOUT"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("max-auth-tries", "SSHPROXY_MAX_AUTH_TRIES"); err != nil {
 			return err
 		}
 		if err := viper.BindEnv("metrics-bind", "SSHPROXY_METRICS_BIND"); err != nil {
@@ -105,10 +98,26 @@ func init() {
 		if err := viper.BindEnv("sentry-dsn", "SSHPROXY_SENTRY_DSN"); err != nil {
 			return err
 		}
+		if err := viper.BindEnv("shell"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("shell-gid", "SSHPROXY_SHELL_GID"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("shell-uid", "SSHPROXY_SHELL_UID"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("use-proxyprotocol", "SSHPROXY_USE_PROXYPROTOCOL"); err != nil {
+			return err
+		}
+		if err := viper.BindEnv("verbosity"); err != nil {
+			return err
+		}
 		return nil
 	}()
 	if err != nil {
-		log.Fatal("Initialisation failed", err)
+		fmt.Fprintf(os.Stderr, "%s", err)
+		os.Exit(1)
 	}
 }
 
@@ -174,7 +183,6 @@ func main() {
 		MaxAuthTries: viper.GetInt("max-auth-tries"),
 	}
 	server := ssh.Server{
-		Addr:                 viper.GetString("bind"),
 		PublicKeyHandler:     auth.publicKeyHandler,
 		ServerConfigCallback: func(session ssh.Context) *gossh.ServerConfig { return sshConfig },
 	}
@@ -221,10 +229,19 @@ func main() {
 		go serveMetrics(metricsBind)
 	}
 
+	listener, err := net.Listen("tcp", viper.GetString("bind"))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s", err)
+		os.Exit(1)
+	}
+	if viper.GetBool("use-proxyprotocol") {
+		listener = &proxyproto.Listener{Listener: listener}
+	}
+
 	if verbosity >= 1 {
 		log.Printf("starting ssh server on %s", viper.GetString("bind"))
 	}
-	if err := server.ListenAndServe(); err != nil {
+	if err := server.Serve(listener); err != nil {
 		fmt.Fprintf(os.Stderr, "%s", err)
 		os.Exit(1)
 	}

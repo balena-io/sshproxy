@@ -17,21 +17,22 @@ they can all be set via commandline, environment or config file.
 
 | Name               | Commandline                 | Environment                   | Config               |
 |--------------------|-----------------------------|-------------------------------|----------------------|
-| API Host           | `--apihost` `-H`            | `BALENA_API_HOST`             | `apihost`            |
-| API Port           | `--apiport` `-P`            | `BALENA_API_PORT`             | `apiport`            |
-| API Key            | `--apikey` `-K`             | `SSHPROXY_API_KEY`            | `apikey`             |
-| Dir                | `--dir` `-d`                | `SSHPROXY_DIR`                |                      |
-| Port               | `--port` `-p`               | `SSHPROXY_PORT`               | `port`               |
-| Shell              | `--shell` `-s`              | `SSHPROXY_SHELL`              | `shell`              |
-| Shell UID          | `--shell-uid` `-u`          | `SSHPROXY_SHELL_UID`          | `shell-uid`          |
-| Shell GID          | `--shell-gid` `-g`          | `SSHPROXY_SHELL_GID`          | `shell-gid`          |
-| Idle Timeout       | `--idle-timeout`, `-i`      | `SSHPROXY_IDLE_TIMEOUT`       | `idle-timeout`       |
-| Auth Failed Banner | `--auth-failed-banner` `-b` | `SSHPROXY_AUTH_FAILED_BANNER` | `auth-failed-banner` |
-| Max Auth Tries     | `--max-auth-tries` `-m`     | `SSHPROXY_MAX_AUTH_TRIES`     | `max-auth-tries`     |
 | Allow Env          | `--allow-env` `-E`          | `SSHPROXY_ALLOW_ENV`          | `allow-env`          |
+| API Host           | `--apihost`, `-H`           | `BALENA_API_HOST`             | `apihost`            |
+| API Key            | `--apikey`, `-K`            | `SSHPROXY_API_KEY`            | `apikey`             |
+| API Port           | `--apiport`, `-P`           | `BALENA_API_PORT`             | `apiport`            |
+| Auth Failed Banner | `--auth-failed-banner` `-b` | `SSHPROXY_AUTH_FAILED_BANNER` | `auth-failed-banner` |
+| Bind               | `--bind`, `-b`              | `SSHPROXY_BIND`               | `bind`               |
+| Dir                | `--dir`, `-d`               | `SSHPROXY_DIR`                |                      |
+| Idle Timeout       | `--idle-timeout`, `-i`      | `SSHPROXY_IDLE_TIMEOUT`       | `idle-timeout`       |
+| Max Auth Tries     | `--max-auth-tries` `-m`     | `SSHPROXY_MAX_AUTH_TRIES`     | `max-auth-tries`     |
+| Metrics Bind       | `--metrics-bind`, `-M`      | `SSHPROXY_METRICS_BIND`       | `metrics-bind`       |
 | Sentry DSN         | `--sentry-dsn` `-S`         | `SSHPROXY_SENTRY_DSN`         | `sentry-dsn`         |
+| Shell              | `--shell`, `-s`             | `SSHPROXY_SHELL`              | `shell`              |
+| Shell GID          | `--shell-gid`, `-g`         | `SSHPROXY_SHELL_GID`          | `shell-gid`          |
+| Shell UID          | `--shell-uid`, `-u`         | `SSHPROXY_SHELL_UID`          | `shell-uid`          |
+| Use Proxy Protocol | `--use-proxyprotocol`, `-p` | `SSHPROXY_USE_PROXYPROTOCOL`  | `use-proxyprotocol`  |
 | Verbosity          | `--verbosity`, `-v`         | `SSHPROXY_VERBOSITY`          | `verbosity`	 	  |
-| Metrics Port       | `--metrics-port`, `-M`      | `SSHPROXY_METRICS_PORT`       | `metrics-port`       |
 
 ```
 Usage of sshproxy:
@@ -39,15 +40,17 @@ Usage of sshproxy:
   -H, --apihost string              Balena API Host (default "api.balena-cloud.com")
   -K, --apikey string               Balena API Key (required)
   -P, --apiport string              Balena API Port (default "443")
-  -b, --auth-failed-banner string   Path to template displayed after failed authentication
+  -B, --auth-failed-banner string   Path to template displayed after failed authentication
+  -b, --bind string                 Address the ssh service will bind to (default ":22")
   -d, --dir string                  Work dir, holds ssh keys and sshproxy config (default "/etc/sshproxy")
   -i, --idle-timeout int            Idle timeout (seconds, 0 = none)
   -m, --max-auth-tries int          Maximum number of authentication attempts per connection (default 0; unlimited)
-  -p, --port int                    Port the ssh service will listen on (default 22)
+  -M, --metrics-bind string         Address the prometheus metrics server should bind to (default: disabled)
   -S, --sentry-dsn string           Sentry DSN for error reporting
   -s, --shell string                Path to shell to execute post-authentication (default "shell.sh")
   -g, --shell-gid int               Group to run shell as (default: current gid) (default -1)
   -u, --shell-uid int               User to run shell as (default: current uid) (default -1)
+  -p, --use-proxyprotocol           Enable Proxy Protocol support
   -v, --verbosity int               Set verbosity level (0 = quiet, 1 = normal, 2 = verbose, 3 = debug, default: 1) (default 1)
       --version                     Display version and exit
 ```
