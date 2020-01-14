@@ -1,4 +1,25 @@
 - commits:
+    - subject: Update to Go v1.13.6
+      hash: 2917a1421bad4a8f60baf2f43a69e1471d5b3a9c
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+    - subject: add Proxy Protocol support
+      hash: d38d9670748ea0e2b4f112ceb6f409ff3a2cbcfc
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 4.1.0
+  date: 2020-01-14T14:52:29.393Z
+- commits:
     - subject: do not generate host keys
       hash: 76a33b2fcf3652ded0ac0e826add86546e5a820c
       body: ''
