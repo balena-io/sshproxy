@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: /go/src/github.com/balena-io/sshproxy
     docker:
-      - image: golang:1.13.5
+      - image: golang:1.13.6
     steps:
       - checkout
       - run:
