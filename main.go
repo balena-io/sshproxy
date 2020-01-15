@@ -31,7 +31,7 @@ import (
 
 	raven "github.com/getsentry/raven-go"
 	"github.com/gliderlabs/ssh"
-	proxyproto "github.com/wrboyce/go-proxyproto"
+	proxyproto "github.com/pires/go-proxyproto"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
