@@ -1,4 +1,25 @@
 - commits:
+    - subject: 'golang: update to v1.14'
+      hash: 1b1f114601f1028762570b752c6e1e571016cc2c
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+    - subject: 'circleci: update to v2.1 syntax'
+      hash: 56bdae21e3a75bd9d16a720096f7e668986bd2e2
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 4.1.2
+  date: 2020-03-17T14:14:43.745Z
+- commits:
     - subject: revert to pires proxyproto library
       hash: 07e7777d02fda0d6a8249499b46f7171cecb9a38
       body: ''
