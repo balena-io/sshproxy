@@ -1,24 +1,64 @@
 ---
-version: 2
-jobs:
-  build:
-    working_directory: /go/src/github.com/balena-io/sshproxy
+version: 2.1
+
+executors:
+  golang:
     docker:
       - image: golang:1.13.6
+    working_directory: /go/src/github.com/balena-io/sshproxy
+
+jobs:
+  deps:
+    executor: golang
     steps:
       - checkout
       - run:
           name: Install Dependencies
           command: make dep
+  lint:
+    executor: golang
+    steps:
       - run:
           name: Lint Code
           command: make lint
+  test:
+    executor: golang
+    steps:
       - run:
           name: Run Tests
           command: make test
+  build:
+    executor: golang
+    steps:
       - run:
           name: Build Releases
           command: make -j release
+  upload:
+    executor: golang
+    steps:
       - deploy:
           name: Upload Releases
           command: if git describe --exact-match --tags 2>/dev/null; then make upload; fi
+
+workflows:
+  version: 2
+    test:
+      jobs:
+        - deps
+        - lint:
+            requires:
+              - deps
+        - test:
+            requires:
+              - deps
+        - build:
+            requires:
+              - lint
+              - test
+        - upload:
+            requires:
+              - build
+            filters:
+              tags:
+                only:
+                  - /^v\d+\.\d+\.\d+$/
