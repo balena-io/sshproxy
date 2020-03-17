@@ -1,7 +1,7 @@
 USERNAME ?= balena-io
 PROJECT ?= sshproxy
 EXECUTABLE ?= sshproxy
-VERSION := $(shell git describe --abbrev=0 --tags)
+VERSION ?= $(shell git describe --abbrev=0 --tags --exact-match 2>/dev/null || git describe)
 BUILD_PLATFORMS ?= darwin/amd64 linux/386 linux/arm linux/arm64 linux/amd64
 SHASUM ?= sha256sum
 

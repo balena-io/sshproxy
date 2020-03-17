@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: /go/src/github.com/balena-io/sshproxy
     docker:
-      - image: golang:1.13.6
+      - image: golang:1.14
     steps:
       - checkout
       - run:
@@ -19,6 +19,21 @@ jobs:
       - run:
           name: Build Releases
           command: make -j release
+      - store_artifacts:
+          name: Store Builds
+          path: build/
       - deploy:
           name: Upload Releases
           command: if git describe --exact-match --tags 2>/dev/null; then make upload; fi
+workflows:
+  version: 2
+  main:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - /.+-build-[0-9a-f]+/
+            tags:
+              only:
+                - /^v\d+\.\d+\.\d+$/
