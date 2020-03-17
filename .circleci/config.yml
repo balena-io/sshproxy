@@ -19,6 +19,9 @@ jobs:
       - run:
           name: Build Releases
           command: make -j release
+      - store_artifacts:
+          name: Store Builds
+          path: build/
       - deploy:
           name: Upload Releases
           command: if git describe --exact-match --tags 2>/dev/null; then make upload; fi
