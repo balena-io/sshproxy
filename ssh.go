@@ -98,6 +98,7 @@ func makeHandler(
 
 			go io.Copy(terminal, session)
 			go io.Copy(session, terminal)
+			defer terminal.Close()
 		} else {
 			stdout, err := cmd.StdoutPipe()
 			if err != nil {
