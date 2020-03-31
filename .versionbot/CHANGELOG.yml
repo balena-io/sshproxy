@@ -1,4 +1,25 @@
 - commits:
+    - subject: update to Go v1.14.1
+      hash: 8584121d478460be727fa6f981905769ffe7eaa2
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+    - subject: explicitly close Pty when Session ends
+      hash: afd93490ab417fe48b51f8141a9fc1d76d107559
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Will Boyce <will@balena.io>
+        signed-off-by: Will Boyce <will@balena.io>
+      author: Will Boyce
+  version: 4.2.0
+  date: 2020-03-31T10:44:33.575Z
+- commits:
     - subject: 'golang: update to v1.14'
       hash: 1b1f114601f1028762570b752c6e1e571016cc2c
       body: ''
