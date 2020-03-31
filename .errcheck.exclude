@@ -1,3 +1,4 @@
+(*github.com/balena-io-modules/gexpect/pty.Terminal).Close
 (*github.com/balena-io-modules/gexpect/pty.Terminal).SetWinSize
 io.Copy
 (*os/exec.Cmd).Wait
