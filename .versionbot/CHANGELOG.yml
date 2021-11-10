@@ -1,4 +1,14 @@
 - commits:
+    - subject: Update to golang v1.15.15
+      hash: f83ec7cd9253c47196a816375148adb40c55d241
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 4.2.2
+  date: 2021-11-10T21:33:15.103Z
+- commits:
     - subject: update to Go v1.14.6
       hash: f332a04ef89f460ce6ba2c884be49ade6aa477bd
       body: ''
