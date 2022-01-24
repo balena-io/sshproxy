@@ -1,4 +1,14 @@
 - commits:
+    - subject: Delete CODEOWNERS
+      hash: ca62c7b6c0c5367fddd43d5c8a0de27295e2439c
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Vipul Gupta
+  version: 4.2.3
+  date: 2022-01-24T16:41:54.035Z
+- commits:
     - subject: Update to golang v1.17.3
       hash: fc568a7c1335ef04b4e3c6b769e85c33a1871596
       body: ''
