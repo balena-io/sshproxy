@@ -1,4 +1,15 @@
 - commits:
+    - subject: Fix release uploading
+      hash: 942c212ce20327f2a7eb422a357e570ef035e169
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 4.2.5
+  title: "'Fix release uploading'"
+  date: 2022-04-04T12:31:56.098Z
+- commits:
     - subject: Update to golang v1.18.0
       hash: 0b78ed7f5377677cb3236bc36384e70c16b9f563
       body: ""
