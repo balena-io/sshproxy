@@ -33,7 +33,7 @@ release: $(addsuffix .tar.gz,$(addprefix build/$(EXECUTABLE)-$(VERSION)_,$(subst
 release: $(addsuffix .tar.gz.sha256,$(addprefix build/$(EXECUTABLE)-$(VERSION)_,$(subst /,_,$(BUILD_PLATFORMS))))
 
 upload-dep:
-	go get github.com/aktau/github-release
+	go install github.com/aktau/github-release@latest
 
 upload: lint test upload-dep
 ifndef GITHUB_TOKEN
