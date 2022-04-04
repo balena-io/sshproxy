@@ -9,12 +9,12 @@ all: bin/$(EXECUTABLE)
 
 dep:
 	go get -v ./...
-	go get github.com/mitchellh/gox
+	go install github.com/mitchellh/gox@latest
 
 lint-dep: dep
-	go get github.com/kisielk/errcheck
-	go get golang.org/x/lint/golint
-	go get golang.org/x/tools/cmd/goimports
+	go install github.com/kisielk/errcheck@latest
+	go install golang.org/x/lint/golint@latest
+	go install golang.org/x/tools/cmd/goimports@latest
 
 lint: lint-dep
 	goimports -d .
