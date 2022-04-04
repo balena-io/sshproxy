@@ -1,7 +1,18 @@
 - commits:
+    - subject: Update to golang v1.18.0
+      hash: 0b78ed7f5377677cb3236bc36384e70c16b9f563
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 4.2.4
+  title: "'Update to golang v1.18.0'"
+  date: 2022-04-04T12:18:43.147Z
+- commits:
     - subject: Delete CODEOWNERS
       hash: ca62c7b6c0c5367fddd43d5c8a0de27295e2439c
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -11,7 +22,7 @@
 - commits:
     - subject: Update to golang v1.17.3
       hash: fc568a7c1335ef04b4e3c6b769e85c33a1871596
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -21,7 +32,7 @@
 - commits:
     - subject: update to Go v1.14.6
       hash: f332a04ef89f460ce6ba2c884be49ade6aa477bd
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -33,7 +44,7 @@
 - commits:
     - subject: update to Go v1.14.1
       hash: 8584121d478460be727fa6f981905769ffe7eaa2
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -42,7 +53,7 @@
       author: Will Boyce
     - subject: explicitly close Pty when Session ends
       hash: afd93490ab417fe48b51f8141a9fc1d76d107559
-      body: ''
+      body: ""
       footer:
         Change-type: minor
         change-type: minor
@@ -52,18 +63,18 @@
   version: 4.2.0
   date: 2020-03-31T10:44:33.575Z
 - commits:
-    - subject: 'golang: update to v1.14'
+    - subject: "golang: update to v1.14"
       hash: 1b1f114601f1028762570b752c6e1e571016cc2c
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
         Signed-off-by: Will Boyce <will@balena.io>
         signed-off-by: Will Boyce <will@balena.io>
       author: Will Boyce
-    - subject: 'circleci: update to v2.1 syntax'
+    - subject: "circleci: update to v2.1 syntax"
       hash: 56bdae21e3a75bd9d16a720096f7e668986bd2e2
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -75,7 +86,7 @@
 - commits:
     - subject: revert to pires proxyproto library
       hash: 07e7777d02fda0d6a8249499b46f7171cecb9a38
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -87,7 +98,7 @@
 - commits:
     - subject: Update to Go v1.13.6
       hash: 2917a1421bad4a8f60baf2f43a69e1471d5b3a9c
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -96,7 +107,7 @@
       author: Will Boyce
     - subject: add Proxy Protocol support
       hash: d38d9670748ea0e2b4f112ceb6f409ff3a2cbcfc
-      body: ''
+      body: ""
       footer:
         Change-type: minor
         change-type: minor
@@ -108,7 +119,7 @@
 - commits:
     - subject: do not generate host keys
       hash: 76a33b2fcf3652ded0ac0e826add86546e5a820c
-      body: ''
+      body: ""
       footer:
         Change-type: major
         change-type: major
@@ -117,7 +128,7 @@
       author: Will Boyce
     - subject: add prometheus metrics server and basic metrics gathering
       hash: f7678e383d5590675af46312c155d65b55c7be73
-      body: ''
+      body: ""
       footer:
         Change-type: minor
         change-type: minor
@@ -126,7 +137,7 @@
       author: Will Boyce
     - subject: add `idle-timeout` config option
       hash: 28c9395ca38a0c90405ddf905a1cfc85278dbbbf
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -135,7 +146,7 @@
       author: Will Boyce
     - subject: switch to gliderlabs/ssh library
       hash: 6f460eab649f1fde880a34ab7b8ce96d41e3d831
-      body: ''
+      body: ""
       footer:
         Change-type: major
         change-type: major
@@ -144,7 +155,7 @@
       author: Will Boyce
     - subject: update to Go v1.13.5
       hash: 1e18b590a61cb8ed4ff2d2e707423ef6938ee20e
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -156,7 +167,7 @@
 - commits:
     - subject: update to Go v1.13.4
       hash: bb0fcb19321b89008fdc0ee578853b78f3ba536e
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -168,7 +179,7 @@
 - commits:
     - subject: Update to Go v1.12.9
       hash: bc55a3d59f30e9af538fa414ed2896ba9900ec7d
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -180,7 +191,7 @@
 - commits:
     - subject: allow specifying a whitelist of env vars to pass from client
       hash: a987f393909888154daaf07fb8a90468454990e7
-      body: ''
+      body: ""
       footer:
         Change-type: major
         change-type: major
@@ -192,10 +203,10 @@
 - commits:
     - subject: default to PEM format when calling ssh-keygen
       hash: c24dd88a1cd403fcdcdccff7058ed3e109d7e60f
-      body: ''
+      body: ""
       footer:
-        Connects-to: '#56'
-        connects-to: '#56'
+        Connects-to: "#56"
+        connects-to: "#56"
         Change-type: patch
         change-type: patch
         Signed-off-by: Will Boyce <will@balena.io>
@@ -206,7 +217,7 @@
 - commits:
     - subject: update to Go v1.12.7
       hash: f187e72ea4b53f0ba16bed7af10fe88f6cd41126
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -215,7 +226,7 @@
       author: Will Boyce
     - subject: ignore common tcp errors at low verbosity levels
       hash: ebd640d11e1beb14216468e05104fcb0bdd3a32e
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -227,7 +238,7 @@
 - commits:
     - subject: do not pass EOF errors to handler
       hash: c8b3030a9b24c07410390e16ee0a5be7ea2d4d4d
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -239,7 +250,7 @@
 - commits:
     - subject: update to Go v1.12.4
       hash: 81ca621e164d6df9504027bc6aa5b2fe189b271f
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -251,7 +262,7 @@
 - commits:
     - subject: update to Go v1.12.1
       hash: e48f09efc60fe777ab09cac24ed2d2fa738c85ec
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -261,9 +272,9 @@
   version: 2.1.6
   date: 2019-04-01T11:55:30.280Z
 - commits:
-    - subject: 'versionbot: Remove `v` version prefix in CHANGELOG.yml'
+    - subject: "versionbot: Remove `v` version prefix in CHANGELOG.yml"
       hash: 51d4bfc96e2d5a99c2279fc418deb0c1a71b977a
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -275,7 +286,7 @@
 - commits:
     - subject: update to Go v1.12
       hash: 0e1b4572b6b4954c080c7dcd925c28956261885a
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -284,7 +295,7 @@
       author: Will Boyce
     - subject: add CODEOWNERS @wrboyce @hedss @Page-
       hash: e70e6a1df4a4cd91273fa00e6eab6bceab2a65e6
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -294,9 +305,9 @@
   version: 2.1.4
   date: 2019-03-14T09:28:57.999Z
 - commits:
-    - subject: 'versionbot: Add CHANGELOG.yml (for nested changelogs)'
+    - subject: "versionbot: Add CHANGELOG.yml (for nested changelogs)"
       hash: 57b584e008bcf2275a3442d4bbbc277bbbedcd09
-      body: ''
+      body: ""
       footer:
         Change-type: patch
         change-type: patch
@@ -312,7 +323,7 @@
         signed-off-by: Will Boyce <will@balena.io>
       hash: 502131a8eb3165f4845d810f0ed470593d3821c4
       subject: update to Go v1.11.5
-  date: '2019-01-29T09:55:27Z'
+  date: 2019-01-29T09:55:27Z
   version: 2.1.2
 - commits:
     - author: Will Boyce
@@ -321,7 +332,7 @@
         signed-off-by: Will Boyce <will@balena.io>
       hash: 04ebb1df3b8b078e257ef5453b745b1a0926ad56
       subject: Add verbosity flag with 4 levels (0-3)
-  date: '2019-01-29T09:30:31Z'
+  date: 2019-01-29T09:30:31Z
   version: 2.1.1
 - commits:
     - author: Will Boyce
@@ -336,7 +347,7 @@
         signed-off-by: Will Boyce <will@balena.io>
       hash: cd75b7cf6c81f31bf7fc8fbae3988ee7fefb7297
       subject: use Balena api v5 endpoints
-  date: '2018-12-18T22:20:27Z'
+  date: 2018-12-18T22:20:27Z
   version: 2.1.0
 - commits:
     - author: Pagan Gazzard
@@ -344,7 +355,7 @@
         change-type: patch
       hash: 80f8463b9c234d34c0c9340cb1f77a93987789a5
       subject: Remove unnecessary brackets from filter
-  date: '2018-12-18T16:57:29Z'
+  date: 2018-12-18T16:57:29Z
   version: 2.0.1
 - commits:
     - author: Will Boyce
@@ -352,24 +363,24 @@
         change-type: patch
         signed-off-by: Will Boyce <will@balena.io>
       hash: e7706b0fe46758ad82c5fdbe781090dd5ad32ee1
-      subject: 'golang: update to Go v1.11.2'
+      subject: "golang: update to Go v1.11.2"
     - author: Will Boyce
       footers:
         change-type: major
         signed-off-by: Will Boyce <will@balena.io>
       hash: e1ba5f9e36db000190e3aabcd19ed64e76e802f1
-      subject: 'rename: s/resin/balena'
-  date: '2018-11-20T14:54:15Z'
+      subject: "rename: s/resin/balena"
+  date: 2018-11-20T14:54:15Z
   version: 2.0.0
 - commits:
     - author: Will Boyce
       footers:
         change-type: minor
-        connects-to: '#37'
+        connects-to: "#37"
         signed-off-by: Will Boyce <will@balena.io>
       hash: a4840bf0d278f5752a64d09c35d6298db6ab15da
       subject: fix incorrect parsing of payload lengths
-  date: '2018-11-20T13:53:06Z'
+  date: 2018-11-20T13:53:06Z
   version: 1.5.0
 - commits:
     - author: Gergely Imreh
@@ -378,7 +389,7 @@
         signed-off-by: Gergely Imreh <imrehg@gmail.com>
       hash: e7d9e4ae64d3f1dfddc9f6b55e507e91fa06cdb3
       subject: let exec sessions also send replies to the client if requested
-  date: '2018-06-11T15:28:59Z'
+  date: 2018-06-11T15:28:59Z
   version: 1.4.5
 - commits:
     - author: Gergely Imreh
@@ -391,7 +402,7 @@
         change-type: patch
       hash: b70441bbbb08564b11fe0ae62b8bb152e1e9e230
       subject: moving to golang 1.10.2 and update testing setup
-  date: '2018-06-11T15:18:12Z'
+  date: 2018-06-11T15:18:12Z
   version: 1.4.4
 - commits:
     - author: Alexis Svinartchouk
@@ -400,8 +411,7 @@
 
         Change-Type: patch
 
-        Changelog-Entry: Wait until all channels/requests have been serviced
-        before closing connection
+        Changelog-Entry: Wait until all channels/requests have been serviced before closing connection
       hash: d60d43c8c5f8068db44175d8503c08efeb8ef7da
       subject: Wait before closing connection
     - author: Will Boyce
@@ -409,17 +419,17 @@
         change-type: patch
       hash: 7e5ddb97c7d63f59005c90ebbca86663f16b58ab
       subject: Remove excessively verbose logging
-  date: '2018-02-02T19:05:19Z'
+  date: 2018-02-02T19:05:19Z
   version: 1.4.3
 - commits:
     - author: Andreas Fitzek
       footers:
         change-type: patch
-        connects-to: '#27'
+        connects-to: "#27"
         signed-off-by: Andreas Fitzek <andreas@resin.io>
       hash: 6946659c3b8356c00dd7423f9f28a7bca37c8b63
       subject: Use keyType during key generation to create correct key type
-  date: '2017-11-30T08:59:25Z'
+  date: 2017-11-30T08:59:25Z
   version: 1.4.2
 - commits:
     - author: Will Boyce
@@ -427,7 +437,7 @@
         change-type: patch
       hash: 3d8cfcaf161093bf6791cc1e67e656b6d98d7475
       subject: expose version information to build and add --version flag
-  date: '2017-07-11T15:20:47Z'
+  date: 2017-07-11T15:20:47Z
   version: 1.4.1
 - commits:
     - author: Will Boyce
@@ -436,7 +446,7 @@
         Change-Type: minor
       hash: 5af8666e4da0b096c9642823b18ff13298295f5d
       subject: Add support for running shell with alternative credentials
-  date: '2017-07-10T11:38:08Z'
+  date: 2017-07-10T11:38:08Z
   version: 1.4.0
 - commits:
     - author: Will Boyce
@@ -458,28 +468,28 @@
         * Respond to window-change requests
       footers:
         change-type: minor
-        fixes: '#22'
+        fixes: "#22"
       hash: 8e81debd0228dba7d1ed27a185cd1592971ff0cd
       subject: Improve pseudo-terminal handling
     - author: Will Boyce
       footers:
         change-type: minor
-        fixes: '#9'
+        fixes: "#9"
       hash: 79c60b5a02927f71ad22eb6858fa8230256a039f
       subject: Improve error handling
     - author: Will Boyce
       footers:
         change-type: minor
-        fixes: '#14'
+        fixes: "#14"
       hash: c4544b9eb1a429c5e4d0a91ce6885673332039b9
       subject: Kill running command if requesting channel dies
     - author: Will Boyce
       footers:
         change-type: patch
-        fixes: '#21'
+        fixes: "#21"
       hash: aa6e2c45ff7a3b0e0a977454710101cbf255a47d
       subject: Reflect command exit status in 'exit-status' request
-  date: '2017-06-20T10:48:47Z'
+  date: 2017-06-20T10:48:47Z
   version: 1.3.0
 - commits:
     - author: Will Boyce
@@ -488,7 +498,7 @@
         Change-Type: patch
       hash: e3d9e309e61965c01b05676719261af2d5ed1d55
       subject: Remove debug code from Makefile
-  date: '2017-06-07T13:11:39Z'
+  date: 2017-06-07T13:11:39Z
   version: 1.2.1
 - commits:
     - author: Will Boyce
@@ -513,7 +523,7 @@
         change-type: patch
       hash: 2929e916ae189c96bd2848c5ef20059098384475
       subject: Update README
-  date: '2017-06-07T12:48:37Z'
+  date: 2017-06-07T12:48:37Z
   version: 1.2.0
 - commits:
     - author: Will Boyce
@@ -522,7 +532,7 @@
         Change-Type: patch
       hash: 0a2981e93c51a53d455aaef1143ea9b09c72c7a0
       subject: Also use ecdsa and dsa host keys
-  date: '2017-05-18T17:06:50Z'
+  date: 2017-05-18T17:06:50Z
   version: 1.1.2
 - commits:
     - author: Will Boyce
@@ -543,7 +553,7 @@
         Change-Type: patch
       hash: ca98bff77837816e261bdcf410c300d3d99d2b28
       subject: fix issue where sshproxy would fail to start if no banner was specified
-  date: '2017-05-17T18:16:51Z'
+  date: 2017-05-17T18:16:51Z
   version: 1.1.1
 - commits:
     - author: Will Boyce
@@ -552,5 +562,5 @@
         Change-Type: minor
       hash: a2e65d12d44c1814d81f9d258b404f5a7df0f439
       subject: add support for displaying a banner to user after failed authentication
-  date: '2017-05-15T11:44:09Z'
+  date: 2017-05-15T11:44:09Z
   version: 1.1.0
