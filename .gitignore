@@ -27,3 +27,6 @@ vendor/
 bin/*
 build/*
 release/*
+
+## Other
+.DS_Store

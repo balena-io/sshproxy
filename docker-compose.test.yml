@@ -1,0 +1,17 @@
+---
+version: "2.4"
+
+services:
+  sut:
+    image: golang:1.18.0
+    volumes:
+      - .:/go/src/github.com/balena-io/sshproxy
+    working_dir: /go/src/github.com/balena-io/sshproxy
+    entrypoint:
+      - /bin/bash
+      - "-c"
+    command:
+      - |
+        set -axe
+
+        make -j $$(nproc) clean dep lint test

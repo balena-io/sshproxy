@@ -2,7 +2,8 @@ USERNAME ?= balena-io
 PROJECT ?= sshproxy
 EXECUTABLE ?= sshproxy
 VERSION ?= $(shell git describe --abbrev=0 --tags --exact-match 2>/dev/null || git describe)
-BUILD_PLATFORMS ?= darwin/amd64 linux/386 linux/arm linux/arm64 linux/amd64
+# https://github.com/golang/go/blob/master/src/go/build/syslist.go
+BUILD_PLATFORMS ?= darwin/amd64 darwin/arm64 linux/arm linux/arm64 linux/amd64
 SHASUM ?= sha256sum
 
 all: bin/$(EXECUTABLE)
@@ -32,21 +33,6 @@ test: test-dep
 release: $(addsuffix .tar.gz,$(addprefix build/$(EXECUTABLE)-$(VERSION)_,$(subst /,_,$(BUILD_PLATFORMS))))
 release: $(addsuffix .tar.gz.sha256,$(addprefix build/$(EXECUTABLE)-$(VERSION)_,$(subst /,_,$(BUILD_PLATFORMS))))
 
-upload-dep:
-	go install github.com/aktau/github-release@latest
-
-upload: lint test upload-dep
-ifndef GITHUB_TOKEN
-		$(error GITHUB_TOKEN is undefined)
-endif
-	git describe --exact-match --tags >/dev/null
-
-	git log --format='* %s' --grep='change-type:' --regexp-ignore-case $(shell git describe --tag --abbrev=0 $(VERSION)^)...$(VERSION) | \
-		github-release release -u $(USERNAME) -r $(PROJECT) -t $(VERSION) -n $(VERSION) -d - || true
-	$(foreach FILE, $(addsuffix .tar.gz,$(addprefix build/$(EXECUTABLE)-$(VERSION)_,$(subst /,_,$(BUILD_PLATFORMS)))), \
-		github-release upload -u $(USERNAME) -r $(PROJECT) -t $(VERSION) -n $(notdir $(FILE)) -f $(FILE) && \
-		github-release upload -u $(USERNAME) -r $(PROJECT) -t $(VERSION) -n $(notdir $(addsuffix .sha256,$(FILE))) -f $(addsuffix .sha256,$(FILE)) ;)
-
 clean:
 	rm -vrf bin/* build/*
 
@@ -63,4 +49,4 @@ build/$(EXECUTABLE)-$(VERSION)_%.tar.gz: build/%/$(EXECUTABLE)
 %.sha256: %
 	cd $(dir $<) && $(SHASUM) $(notdir $<) > $(addsuffix .sha256,$(notdir $<))
 
-.PHONY: dep lint-dep lint test-dep test release upload-dep upload clean
+.PHONY: dep lint-dep lint test-dep test release clean
