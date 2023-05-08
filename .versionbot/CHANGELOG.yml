@@ -1,4 +1,16 @@
 - commits:
+    - subject: Pin actions/upload-artifact action to 0b7f8ab
+      hash: b5d2033688cc4ddb5988c519bfa1d0516555e667
+      body: |
+        Pin actions/upload-artifact
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+  version: 4.2.8
+  title: ""
+  date: 2023-05-08T23:22:40.240Z
+- commits:
     - subject: Update golang.org/x/crypto digest to a4e9841 [SECURITY]
       hash: ca424ef082d57b426b436ae19294a56a34fc2319
       body: |
