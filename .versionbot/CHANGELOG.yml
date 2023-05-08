@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/prometheus/client_golang to v1.11.1 [SECURITY]
+      hash: b061f62aaca126a41833dd6886161710e2145bfb
+      body: |
+        Update github.com/prometheus/client_golang from 1.11.0 to 1.11.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+  version: 4.2.9
+  title: ""
+  date: 2023-05-08T23:41:33.885Z
+- commits:
     - subject: Pin actions/upload-artifact action to 0b7f8ab
       hash: b5d2033688cc4ddb5988c519bfa1d0516555e667
       body: |
