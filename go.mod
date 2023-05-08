@@ -8,7 +8,7 @@ require (
 	github.com/getsentry/raven-go v0.2.0
 	github.com/gliderlabs/ssh v0.3.3
 	github.com/pires/go-proxyproto v0.6.1
-	github.com/prometheus/client_golang v1.11.0
+	github.com/prometheus/client_golang v1.11.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.9.0
 	golang.org/x/crypto v0.8.1-0.20230508170749-a4e984136a63
