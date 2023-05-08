@@ -1,0 +1,39 @@
+---
+name: build and draft GitHub release
+# https://github.com/product-os/flowzone/tree/master/.github/actions
+inputs:
+  json:
+    description: "JSON stringified object containing all the inputs from the calling workflow"
+    required: true
+  secrets:
+    description: "JSON stringified object containing all the secrets from the calling workflow"
+    required: true
+  variables:
+    description: "JSON stringified object containing all the variables from the calling workflow"
+    required: true
+
+runs:
+  # https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        docker compose -f docker-compose.test.yml run sut 'make -j $(nproc) dep release'
+
+        # expecting five (5) of each
+        binaries="$(find build -type f -name '*.tar.gz' | wc -l)"
+        checksums="$(find build -type f -name '*.sha256' | wc -l)"
+
+        if [[ $binaries -lt $checksums ]] || [[ $binaries -lt 5 ]]; then
+            find build -type f
+            false
+        fi
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: gh-release-${{ github.event.pull_request.head.sha || github.event.head_commit.id }}
+        path: |
+          build/*.sha256
+          build/*.tar.gz
+        retention-days: 1
