@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update golang.org/x/crypto digest to a4e9841 [SECURITY]
+      hash: ca424ef082d57b426b436ae19294a56a34fc2319
+      body: |
+        Update golang.org/x/crypto
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+  version: 4.2.7
+  title: ""
+  date: 2023-05-08T22:23:46.266Z
+- commits:
     - subject: build with Flowzone
       hash: 77148d1b853575f39d7c57ab41cbc959a5d6539e
       body: ""
