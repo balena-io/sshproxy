@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/gliderlabs/ssh to v0.3.5
+      hash: f6e7c650acd7a85fbca02b68d263a103699232b7
+      body: |
+        Update github.com/gliderlabs/ssh from 0.3.3 to 0.3.5
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Renovate Bot
+  version: 4.3.0
+  title: ""
+  date: 2023-05-09T00:37:52.630Z
+- commits:
     - subject: Update module github.com/prometheus/client_golang to v1.11.1 [SECURITY]
       hash: b061f62aaca126a41833dd6886161710e2145bfb
       body: |
