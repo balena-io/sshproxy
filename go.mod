@@ -7,7 +7,7 @@ require (
 	github.com/balena-io/pinejs-client-go v0.0.0-20170412165724-ac4f79c5f7e7
 	github.com/getsentry/raven-go v0.2.0
 	github.com/gliderlabs/ssh v0.3.5
-	github.com/pires/go-proxyproto v0.6.1
+	github.com/pires/go-proxyproto v0.7.0
 	github.com/prometheus/client_golang v1.11.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.9.0
