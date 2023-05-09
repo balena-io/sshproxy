@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/pires/go-proxyproto to v0.7.0
+      hash: 2a8b050bdf13ff1207c578707ac78aaf05d8be45
+      body: |
+        Update github.com/pires/go-proxyproto from 0.6.1 to 0.7.0
+      footer:
+        Change-type: major
+        change-type: major
+      author: Renovate Bot
+  version: 5.0.0
+  title: ""
+  date: 2023-05-09T14:39:18.438Z
+- commits:
     - subject: Update module github.com/gliderlabs/ssh to v0.3.5
       hash: f6e7c650acd7a85fbca02b68d263a103699232b7
       body: |
