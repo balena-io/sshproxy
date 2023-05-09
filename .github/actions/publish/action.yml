@@ -18,7 +18,8 @@ runs:
   steps:
     - shell: bash
       run: |
-        docker compose -f docker-compose.test.yml run sut 'make -j $(nproc) dep release'
+        docker compose -f docker-compose.test.yml run sut \
+          'git config --global --add safe.directory $(pwd); make -j $(nproc) dep release'
 
         # expecting five (5) of each
         binaries="$(find build -type f -name '*.tar.gz' | wc -l)"
