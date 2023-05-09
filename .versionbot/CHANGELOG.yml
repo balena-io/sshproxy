@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module golang.org/x/crypto to v0.9.0
+      hash: 1676e952a7c553f474bd757f2647f585739a6fb3
+      body: >
+        Update golang.org/x/crypto from 0.8.1-0.20230508170749-a4e984136a63 to
+        0.9.0
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Renovate Bot
+  version: 5.3.0
+  title: ""
+  date: 2023-05-09T17:40:45.888Z
+- commits:
     - subject: Update module github.com/spf13/viper to v1.15.0
       hash: c5cdc66485c989bfd67a1dc85a69e640cb252feb
       body: |
