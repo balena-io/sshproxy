@@ -3,7 +3,7 @@ version: "2.4"
 
 services:
   sut:
-    image: golang:1.18.0
+    image: golang:1.20.4
     volumes:
       - .:/go/src/github.com/balena-io/sshproxy
     working_dir: /go/src/github.com/balena-io/sshproxy
@@ -13,5 +13,7 @@ services:
     command:
       - |
         set -axe
+
+        git config --global --add safe.directory $(pwd)
 
         make -j $$(nproc) clean dep lint test
