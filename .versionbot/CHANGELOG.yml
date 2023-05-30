@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/spf13/viper to v1.16.0
+      hash: 4a28da1ead930a844c12a819b7d2cdb32c08ae7d
+      body: |
+        Update github.com/spf13/viper from 1.15.0 to 1.16.0
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Self-hosted Renovate Bot
+  version: 5.5.0
+  title: ""
+  date: 2023-05-30T11:12:26.655Z
+- commits:
     - subject: Update golang Docker tag to v1.20.4
       hash: 78960efb588832d59dc6cadbb8dd75780335f05f
       body: |
