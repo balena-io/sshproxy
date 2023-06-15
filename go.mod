@@ -8,7 +8,7 @@ require (
 	github.com/getsentry/raven-go v0.2.0
 	github.com/gliderlabs/ssh v0.3.5
 	github.com/pires/go-proxyproto v0.7.0
-	github.com/prometheus/client_golang v1.15.1
+	github.com/prometheus/client_golang v1.16.0
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.16.0
 	golang.org/x/crypto v0.9.0
@@ -31,7 +31,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/common v0.42.0 // indirect
-	github.com/prometheus/procfs v0.9.0 // indirect
+	github.com/prometheus/procfs v0.10.1 // indirect
 	github.com/resin-io/pinejs-client-go v0.0.0-20170412165724-ac4f79c5f7e7 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
 	github.com/spf13/cast v1.5.1 // indirect
