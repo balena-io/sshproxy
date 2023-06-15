@@ -29,3 +29,7 @@ jobs:
       # open-balena-base/GLIBC compatibility
       custom_runs_on: |
         [["ubuntu-20.04"]]
+      docker_runs_on: |
+        {
+          "linux/amd64": ["ubuntu-20.04"]
+        }
