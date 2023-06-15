@@ -26,3 +26,6 @@ jobs:
       repo_config: true
       repo_description: "sshproxy is a simple ssh server library exposing an even simpler API"
       docker_images: ""
+      # open-balena-base/GLIBC compatibility
+      custom_runs_on: |
+        [["ubuntu-20.04"]]
