@@ -1,4 +1,14 @@
 - commits:
+    - subject: Build on Ubuntu 20 to force GCLIB compatibility
+      hash: f634b6ea4fcf4b210dae015ad4f72d764fd82ed0
+      body: ""
+      footer:
+        change-type: patch
+      author: Anton Belodedenko
+  version: 5.6.1
+  title: ""
+  date: 2023-06-16T00:06:06.814Z
+- commits:
     - subject: Update module github.com/prometheus/client_golang to v1.16.0
       hash: bc474ba04365dd96cf336ead86ab50c70eabefe4
       body: |
