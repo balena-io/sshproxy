@@ -10,6 +10,9 @@ services:
     entrypoint:
       - /bin/bash
       - "-c"
+    environment:
+      # make static binary
+      CGO_ENABLED: 0
     command:
       - |
         set -axe
