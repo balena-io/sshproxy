@@ -1,4 +1,14 @@
 - commits:
+    - subject: Build static binary
+      hash: 74b5a66845be7af3a5892c054248c205d8fe1744
+      body: ""
+      footer:
+        change-type: patch
+      author: Anton Belodedenko
+  version: 5.6.2
+  title: ""
+  date: 2023-06-20T23:09:25.163Z
+- commits:
     - subject: Build on Ubuntu 20 to force GCLIB compatibility
       hash: f634b6ea4fcf4b210dae015ad4f72d764fd82ed0
       body: ""
