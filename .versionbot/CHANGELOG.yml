@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update golang Docker tag to v1.20.5
+      hash: 2675fafd15b7b55b2a11d5885da69941d14c6463
+      body: |
+        Update golang from 1.20.4 to 1.20.5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.2
+  title: ""
+  date: 2023-07-05T23:29:41.322Z
+- commits:
     - subject: downgrade golang:1.20.4
       hash: 185971116dd20ba540272de94c8ef70023772a50
       body: >
