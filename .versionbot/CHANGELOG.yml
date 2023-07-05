@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module golang.org/x/crypto to v0.11.0
+      hash: ee86a5556eb762825e3ee41b09a86af4528023ae
+      body: |
+        Update golang.org/x/crypto from 0.10.0 to 0.11.0
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Self-hosted Renovate Bot
+  version: 6.1.0
+  title: ""
+  date: 2023-07-05T14:29:16.353Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.10.0
       hash: 9025984c33ed84c9980a6042039166375cd7f12e
       body: |
