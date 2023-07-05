@@ -3,16 +3,13 @@ version: "2.4"
 
 services:
   sut:
-    image: golang:1.20.5
+    image: golang:1.20.4
     volumes:
       - .:/go/src/github.com/balena-io/sshproxy
     working_dir: /go/src/github.com/balena-io/sshproxy
     entrypoint:
       - /bin/bash
       - "-c"
-    environment:
-      # make static binary
-      CGO_ENABLED: 0
     command:
       - |
         set -axe
