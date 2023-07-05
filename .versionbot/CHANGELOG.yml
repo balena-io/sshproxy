@@ -1,4 +1,18 @@
 - commits:
+    - subject: downgrade golang:1.20.4
+      hash: 185971116dd20ba540272de94c8ef70023772a50
+      body: >
+        * build against GLIBC 2.31 to maintain compatibility with balena-proxy
+        running in debian:bullseye
+
+        * build dynamic binary
+      footer:
+        change-type: patch
+      author: Anton Belodedenko
+  version: 6.1.1
+  title: ""
+  date: 2023-07-05T23:03:11.860Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.11.0
       hash: ee86a5556eb762825e3ee41b09a86af4528023ae
       body: |
