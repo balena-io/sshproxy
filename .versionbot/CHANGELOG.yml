@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/upload-artifact digest to a8a3f3a
+      hash: 170a1582bb6dd1601e3e4de0e922d6a57fe4e06d
+      body: |
+        Update actions/upload-artifact
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.7
+  title: ""
+  date: 2023-09-06T21:19:25.414Z
+- commits:
     - subject: Update golang Docker tag to v1.21.1
       hash: c88ce28f6f7cc0381f93214f1401504881eea345
       body: |
