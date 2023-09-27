@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/prometheus/client_golang to v1.17.0
+      hash: 1d9f09a52c54ccd5409697c43d98a9e42a8201f8
+      body: |
+        Update github.com/prometheus/client_golang from 1.16.0 to 1.17.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.8
+  title: ""
+  date: 2023-09-27T13:21:10.429Z
+- commits:
     - subject: Update actions/upload-artifact digest to a8a3f3a
       hash: 170a1582bb6dd1601e3e4de0e922d6a57fe4e06d
       body: |
