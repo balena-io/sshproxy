@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update golang Docker tag to v1.21.3
+      hash: e3aa9cb4bbdf338c1e7e42df6431b6a79c47b64b
+      body: |
+        Update golang from 1.21.2 to 1.21.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.11
+  title: ""
+  date: 2023-10-10T20:12:39.396Z
+- commits:
     - subject: Update module github.com/spf13/viper to v1.17.0
       hash: 23502566644ab8d9b91f184551d55465759833de
       body: |
