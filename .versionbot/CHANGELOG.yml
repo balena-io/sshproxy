@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/spf13/viper to v1.18.2
+      hash: 304d691739ecc8769f2fd8d48842a2c7f485e568
+      body: |
+        Update github.com/spf13/viper from 1.18.1 to 1.18.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.16
+  title: ""
+  date: 2023-12-18T19:01:21.908Z
+- commits:
     - subject: Update module github.com/spf13/viper to v1.18.1
       hash: 9fa6db8737fa6cf02f72a2391807dc03c42544a5
       body: |
