@@ -10,7 +10,7 @@ require (
 	github.com/pires/go-proxyproto v0.7.0
 	github.com/prometheus/client_golang v1.17.0
 	github.com/spf13/pflag v1.0.5
-	github.com/spf13/viper v1.18.1
+	github.com/spf13/viper v1.18.2
 	golang.org/x/crypto v0.16.0
 )
 
