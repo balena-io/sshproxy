@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/gliderlabs/ssh to v0.3.6
+      hash: 2df31c3e08593a55e481d6b0bf319fc8c78d82bc
+      body: |
+        Update github.com/gliderlabs/ssh from 0.3.5 to 0.3.6
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.17
+  title: ""
+  date: 2023-12-19T06:00:06.183Z
+- commits:
     - subject: Update module github.com/spf13/viper to v1.18.2
       hash: 304d691739ecc8769f2fd8d48842a2c7f485e568
       body: |
