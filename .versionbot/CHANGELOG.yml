@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/upload-artifact action to v4
+      hash: 4b9042ca4d6f5385c62e8180f5a9161c3f308dcb
+      body: |
+        Update actions/upload-artifact from 3 to 4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.18
+  title: ""
+  date: 2023-12-19T18:44:25.872Z
+- commits:
     - subject: Update module github.com/gliderlabs/ssh to v0.3.6
       hash: 2df31c3e08593a55e481d6b0bf319fc8c78d82bc
       body: |
