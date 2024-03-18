@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/gliderlabs/ssh to v0.3.7
+      hash: d3aeba339196d953143989b24e8fc87b83e0fc16
+      body: |
+        Update github.com/gliderlabs/ssh from 0.3.6 to 0.3.7
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.30
+  title: ""
+  date: 2024-03-18T22:58:51.767Z
+- commits:
     - subject: Update golang Docker tag to v1.22.1
       hash: 90263d7816c0bd978b1869fd414e35f669c4b67a
       body: |
@@ -975,7 +987,8 @@
 
         Change-Type: patch
 
-        Changelog-Entry: Wait until all channels/requests have been serviced before closing connection
+        Changelog-Entry: Wait until all channels/requests have been serviced
+        before closing connection
       hash: d60d43c8c5f8068db44175d8503c08efeb8ef7da
       subject: Wait before closing connection
     - author: Will Boyce
