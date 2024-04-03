@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update golang Docker tag to v1.22.2
+      hash: d0fd929194925a3844947fcd01d7fee37c101e9b
+      body: |
+        Update golang from 1.22.1 to 1.22.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.31
+  title: ""
+  date: 2024-04-03T18:01:13.692Z
+- commits:
     - subject: Update module github.com/gliderlabs/ssh to v0.3.7
       hash: d3aeba339196d953143989b24e8fc87b83e0fc16
       body: |
