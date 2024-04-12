@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module golang.org/x/crypto to v0.22.0
+      hash: 67660a4c2a669ea41f0e403cca005cda60e3de39
+      body: |
+        Update golang.org/x/crypto from 0.17.0 to 0.22.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.32
+  title: ""
+  date: 2024-04-12T17:26:09.799Z
+- commits:
     - subject: Update golang Docker tag to v1.22.2
       hash: d0fd929194925a3844947fcd01d7fee37c101e9b
       body: |
