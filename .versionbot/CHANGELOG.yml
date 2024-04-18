@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/upload-artifact digest to 1746f4a
+      hash: d95b1033eaea7b605591908ead3cfdf8e27f8c76
+      body: |
+        Update actions/upload-artifact
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.33
+  title: ""
+  date: 2024-04-18T15:59:08.407Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.22.0
       hash: 67660a4c2a669ea41f0e403cca005cda60e3de39
       body: |
