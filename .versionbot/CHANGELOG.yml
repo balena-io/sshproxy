@@ -1,4 +1,14 @@
 - commits:
+    - subject: Switch to new custom syntax
+      hash: 43588cb61d28cbfa2f66e585e38b25fa322558f9
+      body: ""
+      footer:
+        change-type: patch
+      author: Anton Belodedenko
+  version: 6.1.40
+  title: ""
+  date: 2024-07-22T23:58:55.434Z
+- commits:
     - subject: Update actions/upload-artifact digest to 0b2256b
       hash: ea0082a5b23ec1bdec168616fca4fed7c3ff77dc
       body: |
