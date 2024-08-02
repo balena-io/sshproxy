@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/upload-artifact digest to 89ef406
+      hash: 69f60bb4d365bfdd9cafea57b803dc94fd0b115d
+      body: |
+        Update actions/upload-artifact
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.41
+  title: ""
+  date: 2024-08-02T15:01:08.082Z
+- commits:
     - subject: Switch to new custom syntax
       hash: 43588cb61d28cbfa2f66e585e38b25fa322558f9
       body: ""
