@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/prometheus/client_golang to v1.20.4
+      hash: bf6438bfc97855b085cb19854a8594f52dc11970
+      body: |
+        Update github.com/prometheus/client_golang from 1.20.3 to 1.20.4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.50
+  title: ""
+  date: 2024-09-17T09:07:24.372Z
+- commits:
     - subject: Update golang Docker tag to v1.23.1
       hash: a8f3e874d9adc82e4d174ea57eb555cd813eeb9c
       body: |
