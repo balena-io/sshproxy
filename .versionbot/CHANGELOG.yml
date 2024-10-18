@@ -1,4 +1,22 @@
 - commits:
+    - subject: Update from v5 to v7 api usage
+      hash: b91a728082c82ea6209a921cb3bd0c3602f7ca64
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+    - subject: Create pinejs client using `NewClientWithToken`
+      hash: 429d0b7c83986417afd8dd93ab9ca538ea04dcfe
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 6.1.56
+  title: ""
+  date: 2024-10-18T15:27:55.492Z
+- commits:
     - subject: Update module github.com/prometheus/client_golang to v1.20.5
       hash: 1c1124fdaff02b0a5a149c247b9567ac75e05dd5
       body: |
