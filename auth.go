@@ -48,8 +48,8 @@ func newAuthHandler(baseURL, apiKey string, verbosity int) authHandler {
 }
 
 func (a *authHandler) getUserKeys(username string) ([]gossh.PublicKey, error) {
-	url := fmt.Sprintf("%s/%s", a.baseURL, "v5")
-	client := pinejs.NewClient(url, a.apiKey)
+	url := fmt.Sprintf("%s/%s", a.baseURL, "v7")
+	client := pinejs.NewClientWithToken(url, a.apiKey)
 
 	users := make([]map[string]interface{}, 1)
 	users[0] = make(map[string]interface{})
