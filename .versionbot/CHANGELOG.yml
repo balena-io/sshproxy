@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module golang.org/x/crypto to v0.28.0
+      hash: dc0f0b5d31b14b6fc572a80291a0f6ea350a293e
+      body: |
+        Update golang.org/x/crypto from 0.26.0 to 0.28.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.57
+  title: ""
+  date: 2024-10-21T16:03:32.152Z
+- commits:
     - subject: Update from v5 to v7 api usage
       hash: b91a728082c82ea6209a921cb3bd0c3602f7ca64
       body: ""
