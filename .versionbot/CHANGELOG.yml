@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/pires/go-proxyproto to v0.8.0
+      hash: 9c7bf221677c7e67f3d59486a6b8be0264883f17
+      body: |
+        Update github.com/pires/go-proxyproto from 0.7.0 to 0.8.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+  version: 6.1.58
+  title: ""
+  date: 2024-10-22T18:42:42.310Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.28.0
       hash: dc0f0b5d31b14b6fc572a80291a0f6ea350a293e
       body: |
