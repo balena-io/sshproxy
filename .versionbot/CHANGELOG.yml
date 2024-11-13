@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module golang.org/x/crypto to v0.29.0
+      hash: bc282585e1c3025e2ef4a717c682f2c44d63f2e2
+      body: |
+        Update golang.org/x/crypto from 0.28.0 to 0.29.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.1.59
+  title: ""
+  date: 2024-11-13T12:45:44.474Z
+- commits:
     - subject: Update module github.com/pires/go-proxyproto to v0.8.0
       hash: 9c7bf221677c7e67f3d59486a6b8be0264883f17
       body: |
