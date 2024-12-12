@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/gliderlabs/ssh to v0.3.8
+      hash: 3ec40893ba050f49e135b7e55f353e4b7b41b7ed
+      body: |
+        Update github.com/gliderlabs/ssh from 0.3.7 to 0.3.8
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.1.64
+  title: ""
+  date: 2024-12-12T07:13:32.861Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.31.0
       hash: 4a9a6f2be5bb04829f3ee521d2c6aa0f9950e04e
       body: |
