@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/upload-artifact digest to 6f51ac0
+      hash: 66d3ac09ae8547aaba6b3cd2903a49719d486a73
+      body: |
+        Update actions/upload-artifact
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.1.65
+  title: ""
+  date: 2024-12-17T23:03:12.234Z
+- commits:
     - subject: Update module github.com/gliderlabs/ssh to v0.3.8
       hash: 3ec40893ba050f49e135b7e55f353e4b7b41b7ed
       body: |
