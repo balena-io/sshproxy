@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module golang.org/x/crypto to v0.32.0
+      hash: 343ed3ee3228db03294c37bbb546305bf822b81d
+      body: |
+        Update golang.org/x/crypto from 0.31.0 to 0.32.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.1.66
+  title: ""
+  date: 2025-01-06T15:43:47.709Z
+- commits:
     - subject: Update actions/upload-artifact digest to 6f51ac0
       hash: 66d3ac09ae8547aaba6b3cd2903a49719d486a73
       body: |
