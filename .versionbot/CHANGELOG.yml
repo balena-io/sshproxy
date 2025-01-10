@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/upload-artifact digest to 65c4c4a
+      hash: 088f9ec4f01db080d1a07b7e441618b444b941dd
+      body: |
+        Update actions/upload-artifact
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.1.67
+  title: ""
+  date: 2025-01-10T17:02:01.079Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.32.0
       hash: 343ed3ee3228db03294c37bbb546305bf822b81d
       body: |
