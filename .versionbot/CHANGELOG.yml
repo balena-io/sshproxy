@@ -1,4 +1,23 @@
 - commits:
+    - subject: Remove runner distro requirement from build and test
+      hash: ba42624aa759bc33f4fc0d0e475cb99d360f082c
+      body: |
+        Ubuntu Focal 20.04 is EOL in May 2025 and open-balena-base
+        has been based on Debian Bookworm since July 2023.
+
+        Since we are building in a golang bookworm container for GLIBC
+        compatibility anyway, there is no need to limit the runners to
+        any specific distro.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+  version: 6.2.0
+  title: ""
+  date: 2025-02-13T19:53:02.171Z
+- commits:
     - subject: Update module github.com/spf13/pflag to v1.0.6
       hash: 6dd5395a45cc30037c0a82a811ffadabed8e3681
       body: |
