@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update golang Docker tag to v1.23.6
+      hash: 9ba72e57b0336fff4cc1f2da7d7b305b97087547
+      body: |
+        Update golang from 1.23.5 to 1.23.6
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.2.1
+  title: ""
+  date: 2025-02-13T20:04:33.615Z
+- commits:
     - subject: Remove runner distro requirement from build and test
       hash: ba42624aa759bc33f4fc0d0e475cb99d360f082c
       body: |
