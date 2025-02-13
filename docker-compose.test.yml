@@ -1,9 +1,8 @@
----
-version: "2.4"
 
 services:
   sut:
-    image: golang:1.23.5
+    build: .
+    image: sut
     volumes:
       - .:/go/src/github.com/balena-io/sshproxy
     working_dir: /go/src/github.com/balena-io/sshproxy

@@ -18,6 +18,7 @@ runs:
   steps:
     - shell: bash
       run: |
+        docker compose -f docker-compose.test.yml build
         docker compose -f docker-compose.test.yml run sut \
           'git config --global --add safe.directory $(pwd); make -j $(nproc) dep release'
 
