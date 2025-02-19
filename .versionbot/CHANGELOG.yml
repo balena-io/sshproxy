@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update golang Docker tag to v1.24.0
+      hash: 9e3cc99fb903050bf4db6b803e8b1aa1f28ab4de
+      body: |
+        Update golang from 1.23.6 to 1.24.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.2.5
+  title: ""
+  date: 2025-02-19T12:00:11.348Z
+- commits:
     - subject: Update dependency go to v1.24.0
       hash: 0a936293cd87675d0172b590d9d2c717788be1d6
       body: |
