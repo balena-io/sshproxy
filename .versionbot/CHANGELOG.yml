@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update dependency go to v1.24.0
+      hash: 0a936293cd87675d0172b590d9d2c717788be1d6
+      body: |
+        Update go from 1.23.6 to 1.24.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.2.4
+  title: ""
+  date: 2025-02-19T11:01:38.279Z
+- commits:
     - subject: Update module github.com/prometheus/client_golang to v1.21.0
       hash: 6cae2659ac79cc9177f6d06649f0bd0d3c3c3b17
       body: |
