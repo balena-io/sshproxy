@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/prometheus/client_golang to v1.21.0
+      hash: 6cae2659ac79cc9177f6d06649f0bd0d3c3c3b17
+      body: |
+        Update github.com/prometheus/client_golang from 1.20.5 to 1.21.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.2.3
+  title: ""
+  date: 2025-02-19T10:01:55.414Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.33.0
       hash: 6883557d1f605e44772f5268beefe58db8a0ac3d
       body: |
