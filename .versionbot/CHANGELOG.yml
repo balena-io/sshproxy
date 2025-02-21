@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/upload-artifact digest to 4cec3d8
+      hash: e904b276770332ce3d4f18970134110b62344d83
+      body: |
+        Update actions/upload-artifact
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.2.6
+  title: ""
+  date: 2025-02-21T20:01:30.240Z
+- commits:
     - subject: Update golang Docker tag to v1.24.0
       hash: 9e3cc99fb903050bf4db6b803e8b1aa1f28ab4de
       body: |
