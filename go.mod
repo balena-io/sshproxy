@@ -1,6 +1,6 @@
 module github.com/balena-io/sshproxy
 
-go 1.21
+go 1.23.0
 
 toolchain go1.24.0
 
@@ -13,7 +13,7 @@ require (
 	github.com/prometheus/client_golang v1.21.0
 	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.19.0
-	golang.org/x/crypto v0.33.0
+	golang.org/x/crypto v0.34.0
 )
 
 require (
