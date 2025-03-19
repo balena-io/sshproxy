@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/upload-artifact digest to ea165f8
+      hash: 3cd8a1d5c5fd2777215f2ca25edde9fefdfb449f
+      body: |
+        Update actions/upload-artifact
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.2.14
+  title: ""
+  date: 2025-03-19T19:07:46.752Z
+- commits:
     - subject: Update module github.com/spf13/viper to v1.20.0
       hash: 7a36568d4eb3d3bcbdd29028f4264a2a8523f0e7
       body: |
