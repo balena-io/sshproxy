@@ -1,4 +1,24 @@
 - commits:
+    - subject: Update golang Docker tag to v1.24.2
+      hash: 1bc208cb3514461760ce2bb7029dd2f168937024
+      body: |
+        Update golang from 1.24.1 to 1.24.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+    - subject: Update dependency go to v1.24.2
+      hash: 42c73c4959604736d940b8fde9f3ed1dff4f665b
+      body: |
+        Update go from 1.24.1 to 1.24.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.2.16
+  title: ""
+  date: 2025-04-01T18:03:39.688Z
+- commits:
     - subject: Update module github.com/spf13/viper to v1.20.1
       hash: 3d6adeaf8b972ff94c75ecc70ca4b589d822bc46
       body: |
