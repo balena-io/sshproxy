@@ -2,7 +2,7 @@ module github.com/balena-io/sshproxy
 
 go 1.23.0
 
-toolchain go1.24.1
+toolchain go1.24.2
 
 require (
 	github.com/balena-io-modules/gexpect v0.0.0-20170619124017-ca1f0041f820
