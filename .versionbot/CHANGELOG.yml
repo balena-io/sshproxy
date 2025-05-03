@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update module github.com/pires/go-proxyproto to v0.8.1
+      hash: 7c9594d1d0651c473924e9169c8c1caf473a7935
+      body: |
+        Update github.com/pires/go-proxyproto from 0.8.0 to 0.8.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.2.19
+  title: ""
+  date: 2025-05-03T14:02:34.945Z
+- commits:
     - subject: Update module github.com/prometheus/client_golang to v1.22.0
       hash: 26b7a8014e910a2c70c9a9d82768d8847ae5f075
       body: |
