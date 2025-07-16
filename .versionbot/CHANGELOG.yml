@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module github.com/spf13/pflag to v1.0.7
+      hash: d9f129c067921a57be1e764b5f2d5d7185e1e166
+      body: |
+        Update github.com/spf13/pflag from 1.0.6 to 1.0.7
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.29
+  title: ""
+  date: 2025-07-16T22:08:37.545Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.40.0
       hash: 14cea420313ad51c66176ceb79fee24472fbcd36
       body: |
