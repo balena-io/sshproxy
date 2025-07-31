@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module github.com/prometheus/client_golang to v1.23.0
+      hash: 1f969cc8119f83fd3e827b1bdf9db082d9a61638
+      body: |
+        Update github.com/prometheus/client_golang from 1.22.0 to 1.23.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.30
+  title: ""
+  date: 2025-07-31T11:08:10.673Z
+- commits:
     - subject: Update module github.com/spf13/pflag to v1.0.7
       hash: d9f129c067921a57be1e764b5f2d5d7185e1e166
       body: |
