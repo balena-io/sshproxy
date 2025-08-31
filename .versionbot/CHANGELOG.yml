@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module github.com/spf13/pflag to v1.0.8
+      hash: 71d59f67a0813be10afa559f409ca929f34d0e94
+      body: |
+        Update github.com/spf13/pflag from 1.0.7 to 1.0.8
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.36
+  title: ""
+  date: 2025-08-31T21:02:42.931Z
+- commits:
     - subject: Update golang Docker tag to v1.25.0
       hash: c40646bcb415e698d01824c9fe7a53e5fa11fed5
       body: |
