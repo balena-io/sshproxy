@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module github.com/spf13/pflag to v1.0.10
+      hash: 3f9b7f6bdad1844e68ca72443785a0f9add18022
+      body: |
+        Update github.com/spf13/pflag from 1.0.9 to 1.0.10
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.38
+  title: ""
+  date: 2025-09-02T19:13:04.906Z
+- commits:
     - subject: Update module github.com/spf13/pflag to v1.0.9
       hash: 8934bd534f2f614051677608a05322ecbcdc3ab6
       body: |
