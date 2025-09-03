@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency go to v1.25.1
+      hash: 30972c31dedf8120400735f1b23ea937ab881471
+      body: |
+        Update go from 1.25.0 to 1.25.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.39
+  title: ""
+  date: 2025-09-03T18:25:21.500Z
+- commits:
     - subject: Update module github.com/spf13/pflag to v1.0.10
       hash: 3f9b7f6bdad1844e68ca72443785a0f9add18022
       body: |
