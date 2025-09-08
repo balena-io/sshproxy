@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module golang.org/x/crypto to v0.42.0
+      hash: 82214bb23f3f33646a33c450e215446327925ada
+      body: |
+        Update golang.org/x/crypto from 0.41.0 to 0.42.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.43
+  title: ""
+  date: 2025-09-08T16:07:11.442Z
+- commits:
     - subject: Update module github.com/prometheus/client_golang to v1.23.2
       hash: d3ab06c1aa2d8640d21765fc4a0bb8770a611534
       body: |
