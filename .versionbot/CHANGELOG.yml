@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module github.com/spf13/viper to v1.21.0
+      hash: c3de05df3cbabcbd8307a690dc6a80a827bccfd6
+      body: |
+        Update github.com/spf13/viper from 1.20.1 to 1.21.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.44
+  title: ""
+  date: 2025-09-08T18:06:03.810Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.42.0
       hash: 82214bb23f3f33646a33c450e215446327925ada
       body: |
