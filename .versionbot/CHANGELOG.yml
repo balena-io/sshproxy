@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency go to v1.25.2
+      hash: b75cf4f0a58e569ac92e407095cc5c8f15059f75
+      body: |
+        Update go from 1.25.1 to 1.25.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.45
+  title: ""
+  date: 2025-10-07T19:08:24.860Z
+- commits:
     - subject: Update module github.com/spf13/viper to v1.21.0
       hash: c3de05df3cbabcbd8307a690dc6a80a827bccfd6
       body: |
