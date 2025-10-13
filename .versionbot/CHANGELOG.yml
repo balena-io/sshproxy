@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency go to v1.25.3
+      hash: 1cb3e8c02fbe9b64668016e255ec57afcd496748
+      body: |
+        Update go from 1.25.2 to 1.25.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.48
+  title: ""
+  date: 2025-10-13T22:15:31.334Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.43.0
       hash: 9bcde69e03455244883abd3e5d5fbd56374173c3
       body: |
