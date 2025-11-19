@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module golang.org/x/crypto to v0.45.0
+      hash: 71752198904140c6502a6fd12b43dfc924b1d15e
+      body: |
+        Update golang.org/x/crypto from 0.44.0 to 0.45.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.53
+  title: ""
+  date: 2025-11-19T20:10:11.602Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.44.0
       hash: 83c0de94c8c8404beabf2042adc30e9de3a56ee9
       body: |
