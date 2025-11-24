@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update actions/upload-artifact action to v5
+      hash: 59aa658236baeccde1a64223d85275af1ca3313c
+      body: |
+        Update actions/upload-artifact from 4 to 5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.54
+  title: ""
+  date: 2025-11-24T15:55:42.956Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.45.0
       hash: 71752198904140c6502a6fd12b43dfc924b1d15e
       body: |
