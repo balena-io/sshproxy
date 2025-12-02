@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency go to v1.25.5
+      hash: 3862bc94452b737971b247a4ce04c1071c4aa704
+      body: |
+        Update go from 1.25.4 to 1.25.5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.55
+  title: ""
+  date: 2025-12-02T17:16:57.616Z
+- commits:
     - subject: Update actions/upload-artifact action to v5
       hash: 59aa658236baeccde1a64223d85275af1ca3313c
       body: |
