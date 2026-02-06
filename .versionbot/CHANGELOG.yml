@@ -1,4 +1,16 @@
 - commits:
+    - subject: Forward original client IP on `SSH_CLIENT`
+      hash: 55103fb3942cdb842e92e5049f44550f77d4dcbf
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Otavio Jacobi
+      nested: []
+  version: 6.3.0
+  title: ""
+  date: 2026-02-06T15:25:26.441Z
+- commits:
     - subject: Update module github.com/pires/go-proxyproto to v0.10.0
       hash: 5ff96db8fa6add6337652b16fedfc199d6485790
       body: |
