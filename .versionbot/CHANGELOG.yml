@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module golang.org/x/crypto to v0.48.0
+      hash: 37f4069bcb3db1b4c288bc79e1a302e068b91fb8
+      body: |
+        Update golang.org/x/crypto from 0.47.0 to 0.48.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.3.1
+  title: ""
+  date: 2026-02-09T17:33:34.750Z
+- commits:
     - subject: Forward original client IP on `SSH_CLIENT`
       hash: 55103fb3942cdb842e92e5049f44550f77d4dcbf
       body: ""
