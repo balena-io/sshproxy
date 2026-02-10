@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency go to v1.26.0
+      hash: 0b400f4ddfe1f008b61a6062205b5f764ba2a860
+      body: |
+        Update go from 1.25.7 to 1.26.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.3.3
+  title: ""
+  date: 2026-02-10T19:37:59.524Z
+- commits:
     - subject: Update module github.com/pires/go-proxyproto to v0.11.0
       hash: 67754e6a7c349c3db1c42dbc79e91dad2327c6dd
       body: |
