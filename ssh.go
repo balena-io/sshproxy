@@ -21,6 +21,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -84,6 +85,13 @@ func makeHandler(
 		cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_USER=%s", session.User()))
 		cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_ORIGINAL_COMMAND=%s", session.RawCommand()))
 		cmd.Env = append(cmd.Env, fmt.Sprintf("SSH_CLIENT=%s", ip))
+
+		go func() {
+			<-session.Context().Done()
+			if cmd.Process != nil {
+				_ = cmd.Process.Signal(os.Signal(syscall.SIGTERM))
+			}
+		}()
 
 		if ptqReq, winCh, isPty := session.Pty(); isPty {
 			cmd.Env = append(cmd.Env, fmt.Sprintf("TERM=%s", ptqReq.Term))
