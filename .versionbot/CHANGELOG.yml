@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update actions/upload-artifact action to v7
+      hash: 76b67739097de13aed6d9544e4bcbf0a43f7b3f8
+      body: |
+        Update actions/upload-artifact from 6 to 7
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.3.6
+  title: ""
+  date: 2026-03-04T14:03:13.777Z
+- commits:
     - subject: Ensure ssh session is closed if client disconnects ungracefully
       hash: da3c1b153b8e3506f5e4ce4d74adbe03b615d225
       body: ""
