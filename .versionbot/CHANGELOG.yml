@@ -1,4 +1,17 @@
 - commits:
+    - subject: Pin product-os/flowzone action to a53cf4b
+      hash: 7ece71ec06a13def1d83f9740f0574d7c2a6e13f
+      body: |
+        Update product-os/flowzone
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.3.10
+  title: ""
+  date: 2026-03-24T18:41:35.610Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.49.0
       hash: b63c12543ffc0530c90e71124556f93a7fdab0f0
       body: |
