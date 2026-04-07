@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency go to v1.26.2
+      hash: 67eac3e3c7284cbb55def17f4dd4dd5efcc8f6ca
+      body: |
+        Update go from 1.26.1 to 1.26.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.3.25
+  title: ""
+  date: 2026-04-07T21:26:52.686Z
+- commits:
     - subject: Revert flowzone pinning to master
       hash: 608530bb49a11d36d5a6b60bcfb1bb2b5728a1f3
       body: ""
