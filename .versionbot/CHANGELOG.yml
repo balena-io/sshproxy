@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update go toolchain directive to v1.26.3
+      hash: 42e68d39bc23724e102815902cfe7837346adba2
+      body: |
+        Update go from 1.26.2 to 1.26.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.3.30
+  title: ""
+  date: 2026-05-07T16:48:30.361Z
+- commits:
     - subject: Update module github.com/pires/go-proxyproto to v0.12.0
       hash: d6aae289fd535058df1eca591b7f20e2a65e3ae3
       body: |
