@@ -1,4 +1,17 @@
 - commits:
+    - subject: Pin golang Docker tag to 252599a
+      hash: 613b431a85cb3a7afa5323fee87c59f296e89e3c
+      body: |
+        Update golang
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.3.33
+  title: ""
+  date: 2026-05-12T18:10:03.472Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.51.0
       hash: 1751f933cefe80259372fa6afc8f1abe64fa1c58
       body: |
