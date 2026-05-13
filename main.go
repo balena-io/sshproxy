@@ -189,7 +189,7 @@ func main() {
 	if viper.GetInt("idle-timeout") > 0 {
 		server.IdleTimeout = time.Duration(viper.GetInt("idle-timeout"))
 	}
-	for _, keyType := range []string{"ed25519", "rsa", "ecdsa", "dsa"} {
+	for _, keyType := range []string{"ed25519", "rsa", "ecdsa"} {
 		if err := addHostKey(&server, viper.GetString("dir"), keyType); err != nil {
 			fmt.Fprintf(os.Stderr, "%s", err)
 			os.Exit(2)
