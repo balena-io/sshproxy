@@ -1,4 +1,26 @@
 - commits:
+    - subject: Remove DSA host key loading
+      hash: f3851610aac3922fd0cff023822ddd762eca2c00
+      body: >
+        DSA/ssh-dss is deprecated and widely disabled by modern SSH clients due
+        to
+
+        its weak 1024-bit key size and SHA-1 based signature scheme. Stop
+        loading
+
+        id_dsa host keys and keep host key support limited to ed25519, rsa, and
+        ecdsa.
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Carlo Miguel F. Cruz <carloc@balena.io>
+        signed-off-by: Carlo Miguel F. Cruz <carloc@balena.io>
+      author: Carlo Miguel F. Cruz
+      nested: []
+  version: 7.0.0
+  title: ""
+  date: 2026-05-14T19:52:19.929Z
+- commits:
     - subject: Pin golang Docker tag to 252599a
       hash: 613b431a85cb3a7afa5323fee87c59f296e89e3c
       body: |
