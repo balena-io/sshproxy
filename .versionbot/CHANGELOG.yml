@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang:1.26.3-bookworm Docker digest to 42c54f6
+      hash: c834f60267e7ed47f00da8429c78098345299cfc
+      body: |
+        Update golang
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.1
+  title: ""
+  date: 2026-05-20T06:32:28.964Z
+- commits:
     - subject: Remove DSA host key loading
       hash: f3851610aac3922fd0cff023822ddd762eca2c00
       body: >
