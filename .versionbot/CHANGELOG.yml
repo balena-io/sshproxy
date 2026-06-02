@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update go toolchain directive to v1.26.4
+      hash: aae28048518941eb81baf3c514d7d53dedad8c63
+      body: |
+        Update go from 1.26.3 to 1.26.4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.6
+  title: ""
+  date: 2026-06-02T22:01:50.167Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.52.0
       hash: f93e01c110940293e88e7a3ba2f927ae26cfaa30
       body: |
