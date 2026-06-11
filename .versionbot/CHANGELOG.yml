@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang:1.26.4-bookworm Docker digest to 0db2a16
+      hash: 2643c9edbaf0dc4fc2d41b8e2772c29e3a3c8a8d
+      body: |
+        Update golang
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.9
+  title: ""
+  date: 2026-06-11T06:57:59.141Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.53.0
       hash: ea4f32ee3c539cc311838e6da6d79568ce2c7797
       body: |
