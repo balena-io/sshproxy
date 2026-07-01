@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module github.com/pires/go-proxyproto to v0.14.0
+      hash: 5777e17891d36cc98363c63d2a95f73452c3ccd3
+      body: |
+        Update github.com/pires/go-proxyproto from 0.13.0 to 0.14.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.18
+  title: ""
+  date: 2026-07-01T23:32:31.937Z
+- commits:
     - subject: Update module github.com/pires/go-proxyproto to v0.13.0
       hash: 6259aa437b448eedf9a4d85def25c862c0e65506
       body: |
