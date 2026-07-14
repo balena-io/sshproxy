@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang:1.26.5-bookworm Docker digest to 1a15e02
+      hash: c852194bebf50a59174aa8185d9c6a569a6614e7
+      body: |
+        Update golang
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.24
+  title: ""
+  date: 2026-07-14T08:48:15.346Z
+- commits:
     - subject: Update module github.com/pires/go-proxyproto to v0.15.0
       hash: 1ca324904e57f534bc461cbfc059182d8e28d971
       body: |
