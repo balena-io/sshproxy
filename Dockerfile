@@ -1,3 +1,3 @@
 
 # retain GLIBC compatibility with debian:bookworm used by open-balena-base
-FROM golang:1.26.5-bookworm@sha256:349ad04971da5f200a537641ae2c70774a592ca21fad4b513b65f813f546781a
+FROM golang:1.26.5-bookworm@sha256:1ecb7edf62a0408027bd5729dfd6b1b8766e578e8df93995b225dfd0944eb651
