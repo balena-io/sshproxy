@@ -1,4 +1,26 @@
 - commits:
+    - subject: Update module golang.org/x/crypto to v0.55.0
+      hash: 3ab978ea2f957aa4fbc3e5db83af9ea04272def2
+      body: |
+        Update golang.org/x/crypto from 0.54.0 to 0.55.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+    - subject: Update golang:1.26.5-bookworm Docker digest to 53eeac8
+      hash: e8829e42aa7fa8c00ede138dae770dadd77a1af5
+      body: |
+        Update golang
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.34
+  title: ""
+  date: 2026-08-11T19:32:14.248Z
+- commits:
     - subject: Update golang:1.26.5-bookworm Docker digest to 6c5605a
       hash: 21c48d26539d7a0453feffd3eff5e54df43ccb20
       body: |
