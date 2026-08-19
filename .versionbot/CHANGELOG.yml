@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update go toolchain directive to v1.27.0
+      hash: f9af6f34a921fc3782ad02f1beb1d032bf0f4c8d
+      body: |
+        Update go from 1.26.7 to 1.27.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.38
+  title: ""
+  date: 2026-08-19T17:24:01.797Z
+- commits:
     - subject: Update go toolchain directive to v1.26.7
       hash: 410ea38dd9b119780272d3bba677724627353bcb
       body: |
