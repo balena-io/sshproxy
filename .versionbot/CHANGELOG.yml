@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module golang.org/x/crypto to v0.56.0
+      hash: fde755dedad491a483f46e8e3d1b54711b452769
+      body: |
+        Update golang.org/x/crypto from 0.55.0 to 0.56.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.48
+  title: ""
+  date: 2026-09-02T19:22:13.022Z
+- commits:
     - subject: Update golang Docker tag to v1.27.1
       hash: 95946872dea2b7c0d91c124a87eff9d2d3810610
       body: |
