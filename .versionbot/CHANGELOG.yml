@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang:1.27.1-bookworm Docker digest to 6ed4849
+      hash: 367b668335abcac5bc2f9b0797b85d860dc21a47
+      body: |
+        Update golang
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.51
+  title: ""
+  date: 2026-09-19T08:14:47.061Z
+- commits:
     - subject: Update golang:1.27.1-bookworm Docker digest to 74138d2
       hash: e021d44301470f9829a97c368c40ce8659f9a0ef
       body: |
