@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update actions/upload-artifact digest to cf430e0
+      hash: 066af50acb09e6057f35da06283973c4e15b086a
+      body: |
+        Update actions/upload-artifact
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.56
+  title: ""
+  date: 2026-10-07T11:21:26.775Z
+- commits:
     - subject: Update golang:1.27.1-bookworm Docker digest to 8d48e12
       hash: 5966e232710e9ae4f34171ef4f0c5db25bebd54b
       body: |
