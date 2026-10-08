@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update go toolchain directive to v1.27.2
+      hash: cab6901fb470accfdf5a5a57e649c396911abd95
+      body: |
+        Update go from 1.27.1 to 1.27.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.58
+  title: ""
+  date: 2026-10-08T16:19:41.290Z
+- commits:
     - subject: Update module github.com/prometheus/client_golang to v1.25.0
       hash: 0382ff73c830cea4e323e3c42eb1a71a4d78e018
       body: |
