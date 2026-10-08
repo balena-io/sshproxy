@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module github.com/prometheus/client_golang to v1.25.0
+      hash: 0382ff73c830cea4e323e3c42eb1a71a4d78e018
+      body: |
+        Update github.com/prometheus/client_golang from 1.24.1 to 1.25.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.57
+  title: ""
+  date: 2026-10-08T13:32:58.350Z
+- commits:
     - subject: Update actions/upload-artifact digest to cf430e0
       hash: 066af50acb09e6057f35da06283973c4e15b086a
       body: |
