@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang Docker tag to v1.27.2
+      hash: a0b6a544a81e403e7faaa2e1ce0bddc7e4f31573
+      body: |
+        Update golang from 1.27.1 to 1.27.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.61
+  title: ""
+  date: 2026-10-19T21:30:28.075Z
+- commits:
     - subject: Update module github.com/pires/go-proxyproto to v0.16.0
       hash: 5e35f2e494404c541fbb76d0800e4d59a989b243
       body: |
