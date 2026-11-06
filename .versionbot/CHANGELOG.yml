@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update module github.com/spf13/pflag to v1.1.0
+      hash: 0035a33c88c20735f43feb1f877ba0e7265f9406
+      body: |
+        Update github.com/spf13/pflag from 1.0.10 to 1.1.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.73
+  title: ""
+  date: 2026-11-06T09:07:49.978Z
+- commits:
     - subject: Update golang:1.27.3-bookworm Docker digest to dc0963f
       hash: 806648d5f19a39cc17831fedf15e874299b29934
       body: |
