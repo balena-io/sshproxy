@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update go toolchain directive to v1.27.4
+      hash: a9be67cd11dd2adabe9d29d95bf10d0f8e62666b
+      body: |
+        Update go from 1.27.3 to 1.27.4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.74
+  title: ""
+  date: 2026-11-10T19:11:00.037Z
+- commits:
     - subject: Update module github.com/spf13/pflag to v1.1.0
       hash: 0035a33c88c20735f43feb1f877ba0e7265f9406
       body: |
