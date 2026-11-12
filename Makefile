@@ -24,10 +24,7 @@ lint: lint-dep
 	go vet .
 	errcheck -exclude .errcheck.exclude -verbose ./...
 
-test-dep: dep
-	go test -buildvcs=false -i -v ./...
-
-test: test-dep
+test: dep
 	go test -buildvcs=false -v ./...
 
 release: $(addsuffix .tar.gz,$(addprefix build/$(EXECUTABLE)-$(VERSION)_,$(subst /,_,$(BUILD_PLATFORMS))))
@@ -49,4 +46,4 @@ build/$(EXECUTABLE)-$(VERSION)_%.tar.gz: build/%/$(EXECUTABLE)
 %.sha256: %
 	cd $(dir $<) && $(SHASUM) $(notdir $<) > $(addsuffix .sha256,$(notdir $<))
 
-.PHONY: dep lint-dep lint test-dep test release clean
+.PHONY: dep lint-dep lint test release clean
