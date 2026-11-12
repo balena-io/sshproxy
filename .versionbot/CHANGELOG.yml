@@ -1,4 +1,49 @@
 - commits:
+    - subject: "Makefile: Remove the test-dep target"
+      hash: fc885931e4f209d225f29e27ced5890a3ebd2f5e
+      body: |
+        test-dep ran `go test -i`, which pre-compiled and installed the packages
+        imported by the tests (without running them) to speed up later builds.
+        The build cache added in Go 1.10 made that pointless, so the flag was
+        deprecated in Go 1.16 and removed in Go 1.20. Newer go test passes the
+        unknown `-i` on to the test binary instead, so `make test` failed as
+        soon as there was a test to run. Fetching the dependencies is already
+        done by `dep`, so `test` now depends on it directly.
+
+        https://go.dev/doc/go1.16#go-command
+        https://go.dev/doc/go1.20#go-command
+
+        Tested with `make -j clean dep lint test`, as run by
+        docker-compose.test.yml.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Otavio Jacobi
+      nested: []
+    - subject: Fix the idle timeout never being applied
+      hash: fe9b6135f59cb092e91b992f79e3569d55ec7eb7
+      body: |
+        The idle timeout was read with `viper.GetInt`, which returns 0 for a
+        duration like `30s` (as in balena-proxy's sshproxy.yml), so there was no
+        idle timeout and idle sessions were kept forever. Had it been a number,
+        `time.Duration(n)` would have made it nanoseconds rather than seconds.
+        It now accepts a number of seconds, as before, or a duration, from the
+        flag, env var or config file, and an invalid value is an error.
+
+        Tested with a built binary and a client that stays silent: with
+        `idle-timeout: 2s` in the config, master never closed the connection,
+        now it is closed after 2s; `SSHPROXY_IDLE_TIMEOUT=3` and `-i 1` close
+        it after 3s and 1s, and `soon` fails to start. Added a unit test for
+        the parsing; go vet and gofmt pass.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Otavio Jacobi
+      nested: []
+  version: 7.0.77
+  title: ""
+  date: 2026-11-12T11:37:41.358Z
+- commits:
     - subject: Update module golang.org/x/crypto to v0.59.0
       hash: 4b1e3b932eac4eb754af974bd05190478d3dd85d
       body: |
