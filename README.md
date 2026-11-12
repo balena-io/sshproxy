@@ -43,7 +43,7 @@ Usage of sshproxy:
   -B, --auth-failed-banner string   Path to template displayed after failed authentication
   -b, --bind string                 Address the ssh service will bind to (default ":22")
   -d, --dir string                  Work dir, holds ssh keys and sshproxy config (default "/etc/sshproxy")
-  -i, --idle-timeout int            Idle timeout (seconds, 0 = none)
+  -i, --idle-timeout string         Idle timeout, in seconds or as a duration such as 30s (0 = none) (default "0")
   -m, --max-auth-tries int          Maximum number of authentication attempts per connection (default 0; unlimited)
   -M, --metrics-bind string         Address the prometheus metrics server should bind to (default: disabled)
   -S, --sentry-dsn string           Sentry DSN for error reporting
