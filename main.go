@@ -25,6 +25,7 @@ import (
 	"os"
 	"path"
 	"runtime"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -48,7 +49,7 @@ func init() {
 	pflag.CommandLine.StringP("auth-failed-banner", "B", "", "Path to template displayed after failed authentication")
 	pflag.CommandLine.StringP("bind", "b", ":22", "Address the ssh service will bind to")
 	pflag.CommandLine.StringP("dir", "d", "/etc/sshproxy", "Work dir, holds ssh keys and sshproxy config")
-	pflag.CommandLine.IntP("idle-timeout", "i", 0, "Idle timeout (seconds, 0 = none)")
+	pflag.CommandLine.StringP("idle-timeout", "i", "0", "Idle timeout, in seconds or as a duration such as 30s (0 = none)")
 	pflag.CommandLine.IntP("max-auth-tries", "m", 0, "Maximum number of authentication attempts per connection (default 0; unlimited)")
 	pflag.CommandLine.StringP("metrics-bind", "M", "", "Address the prometheus metrics server should bind to (default: disabled)")
 	pflag.CommandLine.StringP("sentry-dsn", "S", "", "Sentry DSN for error reporting")
@@ -186,8 +187,13 @@ func main() {
 		PublicKeyHandler:     auth.publicKeyHandler,
 		ServerConfigCallback: func(session ssh.Context) *gossh.ServerConfig { return sshConfig },
 	}
-	if viper.GetInt("idle-timeout") > 0 {
-		server.IdleTimeout = time.Duration(viper.GetInt("idle-timeout"))
+	idleTimeout, err := parseIdleTimeout(viper.GetString("idle-timeout"))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: invalid idle-timeout: %s\n", err)
+		os.Exit(2)
+	}
+	if idleTimeout > 0 {
+		server.IdleTimeout = idleTimeout
 	}
 	for _, keyType := range []string{"ed25519", "rsa", "ecdsa"} {
 		if err := addHostKey(&server, viper.GetString("dir"), keyType); err != nil {
@@ -245,4 +251,15 @@ func main() {
 		fmt.Fprintf(os.Stderr, "%s", err)
 		os.Exit(1)
 	}
+}
+
+// parseIdleTimeout accepts a number of seconds, or a duration such as `30s` or `5m`
+func parseIdleTimeout(value string) (time.Duration, error) {
+	if value == "" {
+		return 0, nil
+	}
+	if seconds, err := strconv.Atoi(value); err == nil {
+		return time.Duration(seconds) * time.Second, nil
+	}
+	return time.ParseDuration(value)
 }
