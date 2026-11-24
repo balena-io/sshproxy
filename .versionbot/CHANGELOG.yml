@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang:1.27.4-bookworm Docker digest to b754301
+      hash: f2f9d2e475b290bfaace1ed71d936284c85f1bbb
+      body: |
+        Update golang
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 7.0.78
+  title: ""
+  date: 2026-11-24T11:14:52.581Z
+- commits:
     - subject: "Makefile: Remove the test-dep target"
       hash: fc885931e4f209d225f29e27ced5890a3ebd2f5e
       body: |
